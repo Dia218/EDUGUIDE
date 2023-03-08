@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/guideBox1"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/line1"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:clickable="false"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/guideBox2"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/line2"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:clickable="false" />
+
+        <Button
+            android:id="@+id/guideBox3"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/nonBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:background="#00FFFFFF"
+            android:clickable="false" />
+
+        <Button
+            android:id="@+id/line3"
+            android:layout_width="wrap_content"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:background="@color/mainColor"
+            android:clickable="false"
+            android:rotation="90"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/guideBox4"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/line5"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:clickable="false"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/guideBox5"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/line4"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:clickable="false" />
+
+        <Button
+            android:id="@+id/guideBox6"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/line6"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:background="@color/mainColor"
+            android:clickable="false"
+            android:rotation="90"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/nonBox2"
+            android:layout_weight="4"
+            android:background="#00FFFFFF"
+            android:clickable="false" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/guideBox7"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/line7"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:clickable="false"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/guideBox8"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/line8"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:clickable="false" />
+
+        <Button
+            android:id="@+id/guideBox9"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:inputType="text"
+            android:text="Button" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</TableLayout>
