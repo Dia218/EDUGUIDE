@@ -3,8 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/drawable/ic_plus_circle.xml" value="0.255" />
         <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/drawable/plus_circle.xml" value="0.2435" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/activity_main.xml" value="0.23489583333333333" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/guidebox.xml" value="0.2675925925925926" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/guidegrid.xml" value="0.28802083333333334" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/guideline.xml" value="0.3026041666666667" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/guideline_horizon.xml" value="0.2675925925925926" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/guideline_vertical.xml" value="0.3026041666666667" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/layout.xml" value="0.21822916666666667" />
         <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/layout_guidetool.xml" value="0.25" />
+        <entry key="..\:/dia/TEAM/capston-team/EDUGUIDE/app/app/src/main/res/layout/tablerow_3box.xml" value="0.3026041666666667" />
       </map>
     </option>
   </component>
