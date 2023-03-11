@@ -13,7 +13,7 @@
             android:id="@+id/guideBox1"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -23,14 +23,14 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
             android:id="@+id/guideBox2"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -40,14 +40,14 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
             android:id="@+id/guideBox3"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -62,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:background="#00FFFFFF"
+            android:background="@color/emptyColor"
             android:clickable="false" />
 
         <Button
@@ -71,7 +71,7 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false"
             android:rotation="90" />
 
@@ -85,7 +85,7 @@
             android:id="@+id/guideBox4"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -95,7 +95,7 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
@@ -103,7 +103,7 @@
             android:id="@+id/guideBox5"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -113,14 +113,14 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
             android:id="@+id/guideBox6"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -137,7 +137,7 @@
             android:layout_width="0dp"
             android:layout_height="5dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
@@ -145,7 +145,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:background="#00FFFFFF"
+            android:background="@color/emptyColor"
             android:clickable="false" />
 
     </TableRow>
@@ -158,7 +158,7 @@
             android:id="@+id/guideBox7"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -168,7 +168,7 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
@@ -176,7 +176,7 @@
             android:id="@+id/guideBox8"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -186,14 +186,14 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
             android:id="@+id/guideBox9"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -208,7 +208,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:background="#00FFFFFF"
+            android:background="@color/emptyColor"
             android:clickable="false" />
 
         <Button
@@ -217,7 +217,7 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false"
             android:rotation="90" />
 
@@ -231,7 +231,7 @@
             android:id="@+id/guideBox12"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -241,14 +241,14 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
             android:id="@+id/guideBox11"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -258,14 +258,14 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
             android:id="@+id/guideBox10"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -281,7 +281,7 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false"
             android:rotation="90" />
 
@@ -290,7 +290,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:background="#00FFFFFF"
+            android:background="@color/emptyColor"
             android:clickable="false" />
 
     </TableRow>
@@ -303,7 +303,7 @@
             android:id="@+id/guideBox13"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -313,14 +313,14 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false" />
 
         <Button
             android:id="@+id/guideBox14"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button" />
 
@@ -330,7 +330,7 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:clickable="false"
             android:visibility="invisible" />
 
@@ -339,7 +339,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00FFFFFF"
+            android:background="@color/emptyColor"
             android:padding="0dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_plus_circle" />
@@ -348,7 +348,7 @@
             android:id="@+id/guideBox15"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@color/mainColor"
+            android:background="@color/guideColor"
             android:inputType="text"
             android:text="Button"
             android:visibility="gone" />
