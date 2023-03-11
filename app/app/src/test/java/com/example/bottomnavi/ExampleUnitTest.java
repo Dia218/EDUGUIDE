@@ -1,4 +1,4 @@
-package com.capston.eduguide;
+package com.example.bottomnavi;
 
 import org.junit.Test;
 
