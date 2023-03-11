@@ -342,7 +342,8 @@
             android:background="@color/emptyColor"
             android:padding="0dp"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_plus_circle" />
+            app:srcCompat="@drawable/ic_plus_circle"
+            app:tint="@color/guideColor" />
 
         <Button
             android:id="@+id/guideBox15"
