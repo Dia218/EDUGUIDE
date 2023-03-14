@@ -1,359 +1,389 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:alignmentMode="alignBounds"
+    android:columnCount="5"
+    android:rowCount="9">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!-- 기본 제공 박스 -->
+    <!-- 1번째 줄 (1 박스라인) -->
+    <Button
+        android:id="@+id/guideBox1"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-        <Button
-            android:id="@+id/guideBox1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <Button
+        android:id="@+id/line1"
+        android:layout_height="5dp"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false" />
 
-        <Button
-            android:id="@+id/line1"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/guideBox2"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-        <Button
-            android:id="@+id/guideBox2"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <Button
+        android:id="@+id/line2"
+        android:layout_height="5dp"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:visibility="visible" />
 
-        <Button
-            android:id="@+id/line2"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/guideBox3"
+        android:layout_row="0"
+        android:layout_column="4"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-        <Button
-            android:id="@+id/guideBox3"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <!-- 2번째 줄 (1 공백라인) -->
+    <Button
+        android:id="@+id/nonBox1"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_columnSpan="4"
+        android:layout_gravity="fill_horizontal"
+        android:background="@color/emptyColor"
+        android:clickable="false" />
 
-    </TableRow>
+    <Button
+        android:id="@+id/line3"
+        android:layout_height="5dp"
+        android:layout_row="1"
+        android:layout_column="4"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:rotation="90" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!-- 3번째 줄 (2 박스라인) -->
+    <Button
+        android:id="@+id/guideBox6"
+        android:layout_row="2"
+        android:layout_column="0"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-        <Button
-            android:id="@+id/nonBox1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:background="@color/emptyColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/line4"
+        android:layout_row="2"
+        android:layout_column="1"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false" />
 
-        <Button
-            android:id="@+id/line3"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false"
-            android:rotation="90" />
+    <Button
+        android:id="@+id/guideBox5"
+        android:layout_row="2"
+        android:layout_column="2"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-    </TableRow>
+    <Button
+        android:id="@+id/line5"
+        android:layout_row="2"
+        android:layout_column="3"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <Button
+        android:id="@+id/guideBox4"
+        android:layout_row="2"
+        android:layout_column="4"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-        <Button
-            android:id="@+id/guideBox4"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <!-- 4번째 줄 (2 공백라인) -->
+    <Button
+        android:id="@+id/line6"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:rotation="90" />
 
-        <Button
-            android:id="@+id/line5"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+    <Button
+        android:id="@+id/nonBox2"
+        android:layout_row="3"
+        android:layout_column="1"
+        android:layout_columnSpan="4"
+        android:layout_gravity="fill_horizontal"
+        android:background="@color/emptyColor"
+        android:clickable="false" />
 
-        <Button
-            android:id="@+id/guideBox5"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <!-- 5번째 줄 (3 박스라인) -->
+    <Button
+        android:id="@+id/guideBox7"
+        android:layout_row="4"
+        android:layout_column="0"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-        <Button
-            android:id="@+id/line4"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/line7"
+        android:layout_row="4"
+        android:layout_column="1"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false" />
 
-        <Button
-            android:id="@+id/guideBox6"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <Button
+        android:id="@+id/guideBox8"
+        android:layout_row="4"
+        android:layout_column="2"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-    </TableRow>
+    <Button
+        android:id="@+id/line8"
+        android:layout_row="4"
+        android:layout_column="3"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <Button
+        android:id="@+id/guideBox9"
+        android:layout_row="4"
+        android:layout_column="4"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
 
-        <Button
-            android:id="@+id/line6"
-            android:rotation="90"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
+    <!-- 6번째 줄 (3 공백라인) -->
+    <Button
+        android:id="@+id/nonBox3"
+        android:layout_row="5"
+        android:layout_column="0"
+        android:layout_columnSpan="4"
+        android:layout_gravity="fill_horizontal"
+        android:background="@color/emptyColor"
+        android:clickable="false" />
 
-        <Button
-            android:id="@+id/nonBox2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:background="@color/emptyColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/line9"
+        android:layout_row="5"
+        android:layout_column="4"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:rotation="90" />
 
-    </TableRow>
+    <!-- 추가 가능 박스 -->
+    <!-- 7번째 줄 (4 박스라인) -->
+    <Button
+        android:id="@+id/guideBox12"
+        android:layout_row="6"
+        android:layout_column="0"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button"
+        android:visibility="gone" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_row="6"
+        android:layout_column="0"
+        android:layout_height="wrap_content"
+        android:background="@color/emptyColor"
+        android:contentDescription="추가 버튼"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_plus_circle"
+        app:tint="@color/guideColor"
+        tools:visibility="gone" />
 
-        <Button
-            android:id="@+id/guideBox7"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <Button
+        android:id="@+id/line11"
+        android:layout_row="6"
+        android:layout_column="1"
+        android:layout_height="5dp"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/line7"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+    <Button
+        android:id="@+id/guideBox11"
+        android:layout_row="6"
+        android:layout_column="2"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button"
+        android:visibility="gone" />
 
-        <Button
-            android:id="@+id/guideBox8"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_row="6"
+        android:layout_column="2"
+        android:background="@color/emptyColor"
+        android:contentDescription="추가 버튼"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_plus_circle"
+        app:tint="@color/guideColor"
+        tools:visibility="gone" />
 
-        <Button
-            android:id="@+id/line8"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/line10"
+        android:layout_row="6"
+        android:layout_column="3"
+        android:layout_height="5dp"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/guideBox9"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <Button
+        android:id="@+id/guideBox10"
+        android:layout_row="6"
+        android:layout_column="4"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button"
+        android:visibility="gone" />
 
-    </TableRow>
+    <ImageButton
+        android:id="@+id/imageButton0"
+        android:layout_row="6"
+        android:layout_column="4"
+        android:background="@color/emptyColor"
+        android:contentDescription="추가 버튼"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_plus_circle"
+        app:tint="@color/guideColor" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+    <!-- 8번째 줄 (4 공백라인) -->
+    <Button
+        android:id="@+id/line12"
+        android:layout_row="7"
+        android:layout_column="0"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:rotation="90"
+        android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/nonBox3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:background="@color/emptyColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/nonBox4"
+        android:layout_row="7"
+        android:layout_column="1"
+        android:layout_columnSpan="4"
+        android:layout_gravity="fill_horizontal"
+        android:background="@color/emptyColor"
+        android:clickable="false" />
 
-        <Button
-            android:id="@+id/line9"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false"
-            android:rotation="90" />
+    <!-- 9번째 줄 (5 박스라인) -->
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_row="7"
+        android:layout_column="0"
+        android:background="@color/emptyColor"
+        android:contentDescription="추가 버튼"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_plus_circle"
+        app:tint="@color/guideColor"
+        tools:visibility="gone" />
 
-    </TableRow>
+    <Button
+        android:id="@+id/guideBox13"
+        android:layout_row="7"
+        android:layout_column="0"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button"
+        android:visibility="gone" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <Button
+        android:id="@+id/line13"
+        android:layout_row="7"
+        android:layout_column="1"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/guideBox12"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_row="7"
+        android:layout_column="2"
+        android:layout_height="wrap_content"
+        android:background="@color/emptyColor"
+        android:contentDescription="추가 버튼"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_plus_circle"
+        app:tint="@color/guideColor"
+        tools:visibility="gone" />
 
-        <Button
-            android:id="@+id/line11"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
+    <Button
+        android:id="@+id/guideBox14"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button"
+        android:visibility="gone" />
 
-        <Button
-            android:id="@+id/guideBox11"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <Button
+        android:id="@+id/line14"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/line10"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/emptyColor"
+        android:contentDescription="추가 버튼"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_plus_circle"
+        app:tint="@color/guideColor"
+        tools:visibility="gone" />
 
-        <Button
-            android:id="@+id/guideBox10"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
+    <Button
+        android:id="@+id/guideBox15"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button"
+        android:visibility="gone" />
 
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/line12"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false"
-            android:rotation="90" />
-
-        <Button
-            android:id="@+id/nonBox4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:background="@color/emptyColor"
-            android:clickable="false" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/guideBox13"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/line13"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false" />
-
-        <Button
-            android:id="@+id/guideBox14"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/line14"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:clickable="false"
-            android:visibility="invisible" />
-
-        <ImageButton
-            android:id="@+id/imageButton15"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/emptyColor"
-            android:padding="0dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_plus_circle"
-            app:tint="@color/guideColor" />
-
-        <Button
-            android:id="@+id/guideBox15"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/guideColor"
-            android:inputType="text"
-            android:text="Button"
-            android:visibility="gone" />
-
-    </TableRow>
-
-</TableLayout>
+</GridLayout>
