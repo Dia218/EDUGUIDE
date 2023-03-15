@@ -22,4 +22,5 @@ public class Frag3Activity extends Fragment {
 
         return view;
     }
+
 }

@@ -5,6 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:columnCount="5"
+    android:longClickable="false"
     android:rowCount="9">
 
     <!-- 기본 제공 박스 -->
@@ -21,8 +22,8 @@
 
     <Button
         android:id="@+id/line1"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="0"
         android:layout_column="1"
         android:layout_gravity="center|center_vertical"
@@ -40,8 +41,8 @@
 
     <Button
         android:id="@+id/line2"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="0"
         android:layout_column="3"
         android:layout_gravity="center|center_vertical"
@@ -92,8 +93,8 @@
 
     <Button
         android:id="@+id/line4"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="2"
         android:layout_column="1"
         android:layout_gravity="center|center_vertical"
@@ -111,8 +112,8 @@
 
     <Button
         android:id="@+id/line5"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="2"
         android:layout_column="3"
         android:layout_gravity="center|center_vertical"
@@ -164,8 +165,8 @@
 
     <Button
         android:id="@+id/line7"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="4"
         android:layout_column="1"
         android:layout_gravity="center|center_vertical"
@@ -183,8 +184,8 @@
 
     <Button
         android:id="@+id/line8"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="4"
         android:layout_column="3"
         android:layout_gravity="center|center_vertical"
@@ -236,7 +237,7 @@
         android:visibility="gone" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/addButton2"
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="0"
@@ -250,8 +251,8 @@
 
     <Button
         android:id="@+id/line11"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="1"
@@ -272,7 +273,7 @@
         android:visibility="gone" />
 
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/addButton1"
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="2"
@@ -286,8 +287,8 @@
 
     <Button
         android:id="@+id/line10"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="3"
@@ -308,7 +309,7 @@
         android:visibility="gone" />
 
     <ImageButton
-        android:id="@+id/imageButton0"
+        android:id="@+id/addButton0"
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="4"
@@ -330,7 +331,7 @@
         android:background="@color/guideColor"
         android:clickable="false"
         android:rotation="90"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/nonBox4"
@@ -344,7 +345,7 @@
 
     <!-- 9번째 줄 (5 박스라인) -->
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/addButton3"
         android:layout_row="8"
         android:layout_rowWeight="1"
         android:layout_column="0"
@@ -354,7 +355,7 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/guideBox13"
@@ -368,8 +369,8 @@
 
     <Button
         android:id="@+id/line13"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="8"
         android:layout_column="1"
         android:layout_gravity="center|center_vertical"
@@ -378,10 +379,11 @@
         android:visibility="invisible" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/addButton4"
         android:layout_row="8"
         android:layout_rowWeight="1"
         android:layout_column="2"
+        android:layout_gravity="fill"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
         android:scaleType="fitCenter"
@@ -401,8 +403,8 @@
 
     <Button
         android:id="@+id/line14"
-        android:layout_height="5dp"
         android:layout_width="50dp"
+        android:layout_height="5dp"
         android:layout_row="8"
         android:layout_rowWeight="1"
         android:layout_column="3"
@@ -412,18 +414,17 @@
         android:visibility="invisible" />
 
     <ImageButton
-        android:id="@+id/imageButton5"
+        android:id="@+id/addButton5"
         android:layout_row="8"
         android:layout_rowWeight="1"
         android:layout_column="4"
-        android:layout_gravity="fill_horizontal"
         android:layout_gravity="fill_horizontal"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/guideBox15"
