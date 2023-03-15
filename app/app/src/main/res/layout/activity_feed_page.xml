@@ -7,7 +7,7 @@
     android:padding="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".FeedPage"
-    tools:showIn="@layout/activity_feed_page">
+    >
 
     <ListView
         android:id="@+id/listview1"
