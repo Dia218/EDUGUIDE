@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:columnCount="5"
+    android:rowCount="2">
+
+    <!-- 기본 제공 박스 -->
+    <!-- 1번째 줄 (1 박스라인) -->
+    <Button
+        android:id="@+id/guideBox1"
+        android:layout_row="0"
+        android:layout_rowWeight="1"
+        android:layout_column="0"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/line1"
+        android:layout_height="5dp"
+        android:layout_width="50dp"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_gravity="center|center_vertical"
+        android:background="@color/guideColor"
+        android:clickable="false" />
+
+    <Button
+        android:id="@+id/guideBox2"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/line2"
+        android:layout_height="5dp"
+        android:layout_width="50dp"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:layout_gravity="center|center_vertical"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/guideBox3"
+        android:layout_row="0"
+        android:layout_column="4"
+        android:background="@color/guideColor"
+        android:inputType="text"
+        android:text="Button" />
+
+    <!-- 2번째 줄 (1 공백라인) -->
+    <Button
+        android:id="@+id/nonBox1"
+        android:layout_row="1"
+        android:layout_rowWeight="1"
+        android:layout_column="0"
+        android:background="@color/emptyColor"
+        android:clickable="false" />
+
+    <Button
+        android:id="@+id/line3"
+        android:layout_height="5dp"
+        android:layout_row="1"
+        android:layout_column="4"
+        android:layout_gravity="center|center_vertical"
+        android:background="@color/guideColor"
+        android:clickable="false"
+        android:rotation="90" />
+
+</GridLayout>

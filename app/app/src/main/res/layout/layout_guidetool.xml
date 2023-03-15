@@ -2,9 +2,8 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:alignmentMode="alignBounds"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:columnCount="5"
     android:rowCount="9">
 
@@ -13,7 +12,9 @@
     <Button
         android:id="@+id/guideBox1"
         android:layout_row="0"
+        android:layout_rowWeight="1"
         android:layout_column="0"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
@@ -21,9 +22,10 @@
     <Button
         android:id="@+id/line1"
         android:layout_height="5dp"
+        android:layout_width="50dp"
         android:layout_row="0"
         android:layout_column="1"
-        android:layout_gravity="center"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false" />
 
@@ -31,6 +33,7 @@
         android:id="@+id/guideBox2"
         android:layout_row="0"
         android:layout_column="2"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
@@ -38,9 +41,10 @@
     <Button
         android:id="@+id/line2"
         android:layout_height="5dp"
+        android:layout_width="50dp"
         android:layout_row="0"
         android:layout_column="3"
-        android:layout_gravity="center"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:visibility="visible" />
@@ -49,6 +53,7 @@
         android:id="@+id/guideBox3"
         android:layout_row="0"
         android:layout_column="4"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
@@ -57,9 +62,10 @@
     <Button
         android:id="@+id/nonBox1"
         android:layout_row="1"
+        android:layout_rowWeight="1"
         android:layout_column="0"
         android:layout_columnSpan="4"
-        android:layout_gravity="fill_horizontal"
+        android:layout_gravity="fill"
         android:background="@color/emptyColor"
         android:clickable="false" />
 
@@ -68,7 +74,7 @@
         android:layout_height="5dp"
         android:layout_row="1"
         android:layout_column="4"
-        android:layout_gravity="center"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:rotation="90" />
@@ -77,17 +83,20 @@
     <Button
         android:id="@+id/guideBox6"
         android:layout_row="2"
+        android:layout_rowWeight="1"
         android:layout_column="0"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
 
     <Button
         android:id="@+id/line4"
+        android:layout_height="5dp"
+        android:layout_width="50dp"
         android:layout_row="2"
         android:layout_column="1"
-        android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false" />
 
@@ -95,16 +104,18 @@
         android:id="@+id/guideBox5"
         android:layout_row="2"
         android:layout_column="2"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
 
     <Button
         android:id="@+id/line5"
+        android:layout_height="5dp"
+        android:layout_width="50dp"
         android:layout_row="2"
         android:layout_column="3"
-        android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
@@ -113,6 +124,7 @@
         android:id="@+id/guideBox4"
         android:layout_row="2"
         android:layout_column="4"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
@@ -120,10 +132,11 @@
     <!-- 4번째 줄 (2 공백라인) -->
     <Button
         android:id="@+id/line6"
-        android:layout_row="3"
-        android:layout_column="0"
         android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_row="3"
+        android:layout_rowWeight="1"
+        android:layout_column="0"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:rotation="90" />
@@ -131,9 +144,10 @@
     <Button
         android:id="@+id/nonBox2"
         android:layout_row="3"
+        android:layout_rowWeight="1"
         android:layout_column="1"
         android:layout_columnSpan="4"
-        android:layout_gravity="fill_horizontal"
+        android:layout_gravity="fill"
         android:background="@color/emptyColor"
         android:clickable="false" />
 
@@ -141,17 +155,20 @@
     <Button
         android:id="@+id/guideBox7"
         android:layout_row="4"
+        android:layout_rowWeight="1"
         android:layout_column="0"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
 
     <Button
         android:id="@+id/line7"
+        android:layout_height="5dp"
+        android:layout_width="50dp"
         android:layout_row="4"
         android:layout_column="1"
-        android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false" />
 
@@ -159,16 +176,18 @@
         android:id="@+id/guideBox8"
         android:layout_row="4"
         android:layout_column="2"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
 
     <Button
         android:id="@+id/line8"
+        android:layout_height="5dp"
+        android:layout_width="50dp"
         android:layout_row="4"
         android:layout_column="3"
-        android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false" />
 
@@ -176,6 +195,7 @@
         android:id="@+id/guideBox9"
         android:layout_row="4"
         android:layout_column="4"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button" />
@@ -184,18 +204,20 @@
     <Button
         android:id="@+id/nonBox3"
         android:layout_row="5"
+        android:layout_rowWeight="1"
         android:layout_column="0"
         android:layout_columnSpan="4"
-        android:layout_gravity="fill_horizontal"
+        android:layout_gravity="fill"
         android:background="@color/emptyColor"
         android:clickable="false" />
 
     <Button
         android:id="@+id/line9"
-        android:layout_row="5"
-        android:layout_column="4"
         android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_row="5"
+        android:layout_rowWeight="1"
+        android:layout_column="4"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:rotation="90" />
@@ -205,7 +227,9 @@
     <Button
         android:id="@+id/guideBox12"
         android:layout_row="6"
+        android:layout_rowWeight="1"
         android:layout_column="0"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
@@ -214,21 +238,24 @@
     <ImageButton
         android:id="@+id/imageButton2"
         android:layout_row="6"
+        android:layout_rowWeight="1"
         android:layout_column="0"
-        android:layout_height="wrap_content"
+        android:layout_gravity="fill"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
-        android:padding="0dp"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="gone" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/line11"
-        android:layout_row="6"
-        android:layout_column="1"
         android:layout_height="5dp"
+        android:layout_width="50dp"
+        android:layout_row="6"
+        android:layout_rowWeight="1"
+        android:layout_column="1"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:visibility="invisible" />
@@ -236,7 +263,9 @@
     <Button
         android:id="@+id/guideBox11"
         android:layout_row="6"
+        android:layout_rowWeight="1"
         android:layout_column="2"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
@@ -245,19 +274,24 @@
     <ImageButton
         android:id="@+id/imageButton1"
         android:layout_row="6"
+        android:layout_rowWeight="1"
         android:layout_column="2"
+        android:layout_gravity="fill"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="gone" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/line10"
-        android:layout_row="6"
-        android:layout_column="3"
         android:layout_height="5dp"
+        android:layout_width="50dp"
+        android:layout_row="6"
+        android:layout_rowWeight="1"
+        android:layout_column="3"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:visibility="invisible" />
@@ -265,7 +299,9 @@
     <Button
         android:id="@+id/guideBox10"
         android:layout_row="6"
+        android:layout_rowWeight="1"
         android:layout_column="4"
+        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
@@ -274,7 +310,9 @@
     <ImageButton
         android:id="@+id/imageButton0"
         android:layout_row="6"
+        android:layout_rowWeight="1"
         android:layout_column="4"
+        android:layout_gravity="fill_horizontal"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
         android:scaleType="fitCenter"
@@ -284,18 +322,20 @@
     <!-- 8번째 줄 (4 공백라인) -->
     <Button
         android:id="@+id/line12"
-        android:layout_row="7"
-        android:layout_column="0"
         android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_row="7"
+        android:layout_rowWeight="1"
+        android:layout_column="0"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:rotation="90"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/nonBox4"
         android:layout_row="7"
+        android:layout_rowWeight="1"
         android:layout_column="1"
         android:layout_columnSpan="4"
         android:layout_gravity="fill_horizontal"
@@ -305,18 +345,21 @@
     <!-- 9번째 줄 (5 박스라인) -->
     <ImageButton
         android:id="@+id/imageButton3"
-        android:layout_row="7"
+        android:layout_row="8"
+        android:layout_rowWeight="1"
         android:layout_column="0"
+        android:layout_gravity="fill_horizontal"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/guideBox13"
-        android:layout_row="7"
+        android:layout_row="8"
+        android:layout_rowWeight="1"
         android:layout_column="0"
         android:background="@color/guideColor"
         android:inputType="text"
@@ -325,30 +368,32 @@
 
     <Button
         android:id="@+id/line13"
-        android:layout_row="7"
-        android:layout_column="1"
         android:layout_height="5dp"
-        android:layout_gravity="center"
+        android:layout_width="50dp"
+        android:layout_row="8"
+        android:layout_column="1"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/imageButton4"
-        android:layout_row="7"
+        android:layout_row="8"
+        android:layout_rowWeight="1"
         android:layout_column="2"
-        android:layout_height="wrap_content"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="gone" />
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/guideBox14"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_row="8"
+        android:layout_rowWeight="1"
+        android:layout_column="2"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
@@ -356,31 +401,35 @@
 
     <Button
         android:id="@+id/line14"
-        android:layout_width="0dp"
         android:layout_height="5dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
+        android:layout_width="50dp"
+        android:layout_row="8"
+        android:layout_rowWeight="1"
+        android:layout_column="3"
+        android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
         android:clickable="false"
         android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/imageButton5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_row="8"
+        android:layout_rowWeight="1"
+        android:layout_column="4"
+        android:layout_gravity="fill_horizontal"
+        android:layout_gravity="fill_horizontal"
         android:background="@color/emptyColor"
         android:contentDescription="추가 버튼"
-        android:padding="0dp"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/guideBox15"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_row="8"
+        android:layout_rowWeight="1"
+        android:layout_column="4"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
