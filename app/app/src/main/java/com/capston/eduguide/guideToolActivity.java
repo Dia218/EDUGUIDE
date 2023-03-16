@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Iterator;
@@ -91,7 +93,8 @@ public class guideToolActivity extends AppCompatActivity {
                     }
                 });
 
-                /*
+                /* 버튼 빼는건 구현 애매해서 냅둠
+                박스를 빼는 것보다 빈 값으로 저장하면 다음에 보여줄 때 빈 박스를 빼고 보여주는 게 나을 듯
                 if(guideVector.indexOf(guideBox) >= 9) {
                     guideBox.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
@@ -102,14 +105,27 @@ public class guideToolActivity extends AppCompatActivity {
                     });
                 }
                 */
-
             }
         }
 
     //guideBox의 터치 이벤트
     public void onClickGuide(View view) {
 
+        View guideDialogView = View.inflate(this, R.layout.guidebox_dialog, null);
 
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("내용입력");
+        dialogBuilder.setView(guideDialogView);
+        AlertDialog guideDialog = dialogBuilder.create();
+        guideDialog.show();
+
+        /*
+        findViewById(R.id.editGuide).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideDialog.dismiss();
+            }
+        });*/
     }
 
     //guideBox의 길게 누르기 이벤트
@@ -123,9 +139,9 @@ public class guideToolActivity extends AppCompatActivity {
             //클릭한 addButtion 없애기
             view.setVisibility(View.GONE);
             //guideBox 보이게 하기
-            addbuttonVector.get(10+indexAdd).setVisibility(View.VISIBLE);
+        guideVector.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
             //다음 line 보이게 하기
-        lineVector.get(10+indexAdd).setVisibility(View.VISIBLE);
+        lineVector.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
         //다음 addButton 보이게 하기
         addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
     }

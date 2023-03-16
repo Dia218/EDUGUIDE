@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
     android:columnCount="5"
     android:longClickable="false"
     android:rowCount="9">
@@ -25,6 +26,7 @@
         android:layout_width="50dp"
         android:layout_height="5dp"
         android:layout_row="0"
+        android:layout_rowWeight="1"
         android:layout_column="1"
         android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
@@ -33,6 +35,7 @@
     <Button
         android:id="@+id/guideBox2"
         android:layout_row="0"
+        android:layout_rowWeight="1"
         android:layout_column="2"
         android:layout_gravity="fill"
         android:background="@color/guideColor"
@@ -44,6 +47,7 @@
         android:layout_width="50dp"
         android:layout_height="5dp"
         android:layout_row="0"
+        android:layout_rowWeight="1"
         android:layout_column="3"
         android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
@@ -53,6 +57,7 @@
     <Button
         android:id="@+id/guideBox3"
         android:layout_row="0"
+        android:layout_rowWeight="1"
         android:layout_column="4"
         android:layout_gravity="fill"
         android:background="@color/guideColor"
@@ -74,6 +79,7 @@
         android:id="@+id/line3"
         android:layout_height="5dp"
         android:layout_row="1"
+        android:layout_rowWeight="1"
         android:layout_column="4"
         android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
@@ -96,6 +102,7 @@
         android:layout_width="50dp"
         android:layout_height="5dp"
         android:layout_row="2"
+        android:layout_rowWeight="1"
         android:layout_column="1"
         android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
@@ -104,6 +111,7 @@
     <Button
         android:id="@+id/guideBox5"
         android:layout_row="2"
+        android:layout_rowWeight="1"
         android:layout_column="2"
         android:layout_gravity="fill"
         android:background="@color/guideColor"
@@ -115,6 +123,7 @@
         android:layout_width="50dp"
         android:layout_height="5dp"
         android:layout_row="2"
+        android:layout_rowWeight="1"
         android:layout_column="3"
         android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
@@ -124,6 +133,7 @@
     <Button
         android:id="@+id/guideBox4"
         android:layout_row="2"
+        android:layout_rowWeight="1"
         android:layout_column="4"
         android:layout_gravity="fill"
         android:background="@color/guideColor"
@@ -168,6 +178,7 @@
         android:layout_width="50dp"
         android:layout_height="5dp"
         android:layout_row="4"
+        android:layout_rowWeight="1"
         android:layout_column="1"
         android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
@@ -176,6 +187,7 @@
     <Button
         android:id="@+id/guideBox8"
         android:layout_row="4"
+        android:layout_rowWeight="1"
         android:layout_column="2"
         android:layout_gravity="fill"
         android:background="@color/guideColor"
@@ -187,6 +199,7 @@
         android:layout_width="50dp"
         android:layout_height="5dp"
         android:layout_row="4"
+        android:layout_rowWeight="1"
         android:layout_column="3"
         android:layout_gravity="center|center_vertical"
         android:background="@color/guideColor"
@@ -195,6 +208,7 @@
     <Button
         android:id="@+id/guideBox9"
         android:layout_row="4"
+        android:layout_rowWeight="1"
         android:layout_column="4"
         android:layout_gravity="fill"
         android:background="@color/guideColor"
@@ -230,7 +244,6 @@
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="0"
-        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
@@ -247,7 +260,7 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/line11"
@@ -266,7 +279,6 @@
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="2"
-        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
@@ -283,7 +295,7 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/line10"
@@ -302,7 +314,6 @@
         android:layout_row="6"
         android:layout_rowWeight="1"
         android:layout_column="4"
-        android:layout_gravity="fill"
         android:background="@color/guideColor"
         android:inputType="text"
         android:text="Button"
@@ -355,7 +366,7 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/guideBox13"
@@ -389,7 +400,7 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/guideBox14"
@@ -424,7 +435,7 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_plus_circle"
         app:tint="@color/guideColor"
-        tools:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/guideBox15"
