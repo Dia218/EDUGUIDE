@@ -3,8 +3,9 @@ package com.capston.eduguide;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +17,7 @@ import com.example.bottomnavi.R;
 public class guideToolActivity extends AppCompatActivity {
 
     //가이드 박스 개수
-    int guideMaxNum = 15;
+    int guideMaxNum = 18;
     int guideMinNum = 9;
 
     //가이드 박스
@@ -31,7 +32,7 @@ public class guideToolActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.layout_guidetool);
 
-            //나중에 자바로 다시 짜는 게 나을 것 같음
+            //가이드박스 벡터에 저장
             guideVector.add((Button) findViewById(R.id.guideBox1));
             guideVector.add((Button) findViewById(R.id.guideBox2));
             guideVector.add((Button) findViewById(R.id.guideBox3));
@@ -47,7 +48,11 @@ public class guideToolActivity extends AppCompatActivity {
             guideVector.add((Button) findViewById(R.id.guideBox13));
             guideVector.add((Button) findViewById(R.id.guideBox14));
             guideVector.add((Button) findViewById(R.id.guideBox15));
+            guideVector.add((Button) findViewById(R.id.guideBox16));
+            guideVector.add((Button) findViewById(R.id.guideBox17));
+            guideVector.add((Button) findViewById(R.id.guideBox18));
 
+            //라인 벡터에 저장
             lineVector.add((Button) findViewById(R.id.line1));
             lineVector.add((Button) findViewById(R.id.line2));
             lineVector.add((Button) findViewById(R.id.line3));
@@ -62,13 +67,20 @@ public class guideToolActivity extends AppCompatActivity {
             lineVector.add((Button) findViewById(R.id.line12));
             lineVector.add((Button) findViewById(R.id.line13));
             lineVector.add((Button) findViewById(R.id.line14));
+            lineVector.add((Button) findViewById(R.id.line15));
+            lineVector.add((Button) findViewById(R.id.line16));
+            lineVector.add((Button) findViewById(R.id.line17));
 
+            //추가버튼 벡터에 저장
             addbuttonVector.add((ImageButton) findViewById(R.id.addButton0));
             addbuttonVector.add((ImageButton) findViewById(R.id.addButton1));
             addbuttonVector.add((ImageButton) findViewById(R.id.addButton2));
             addbuttonVector.add((ImageButton) findViewById(R.id.addButton3));
             addbuttonVector.add((ImageButton) findViewById(R.id.addButton4));
             addbuttonVector.add((ImageButton) findViewById(R.id.addButton5));
+            addbuttonVector.add((ImageButton) findViewById(R.id.addButton6));
+            addbuttonVector.add((ImageButton) findViewById(R.id.addButton7));
+            addbuttonVector.add((ImageButton) findViewById(R.id.addButton8));
 
             //addButton에 이벤트리스너 달기
             Iterator<ImageButton> addbuttonIt = addbuttonVector.iterator();
@@ -86,62 +98,77 @@ public class guideToolActivity extends AppCompatActivity {
             Iterator<Button> guideboxIt = guideVector.iterator();
             while (guideboxIt.hasNext()) {
                 Button guideBox = guideboxIt.next();
-                guideBox.setOnClickListener(new View.OnClickListener() {
+                guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
                     @Override
                     public void onClick(View v) {
                         onClickGuide(v);
                     }
                 });
 
-                /* 버튼 빼는건 구현 애매해서 냅둠
-                박스를 빼는 것보다 빈 값으로 저장하면 다음에 보여줄 때 빈 박스를 빼고 보여주는 게 나을 듯
-                if(guideVector.indexOf(guideBox) >= 9) {
-                    guideBox.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            onLongClickGuide(v);
-                            return true;
-                        }
-                    });
-                }
-                */
+                guideBox.setOnLongClickListener(new View.OnLongClickListener() { //길게 누르기 이벤트
+                    @Override
+                    public boolean onLongClick(View v) {
+                        onLongClickGuide(v);
+                        return true;
+                    }
+                });
             }
         }
 
     //guideBox의 터치 이벤트
     public void onClickGuide(View view) {
-
-        View guideDialogView = View.inflate(this, R.layout.guidebox_dialog, null);
-
+            //키워드 입력 창 띄우기
+        View guideDialogView = View.inflate(this, R.layout.guidebox_keyword, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("내용입력");
         dialogBuilder.setView(guideDialogView);
-        AlertDialog guideDialog = dialogBuilder.create();
-        guideDialog.show();
+        final AlertDialog keywordDialog = dialogBuilder.create();
+        keywordDialog.show();
 
-        /*
-        findViewById(R.id.editGuide).setOnClickListener(new View.OnClickListener() {
+        //키워드 입력 저장 버튼
+        guideDialogView.findViewById(R.id.editKeyword).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                guideDialog.dismiss();
+                String keyword = String.valueOf(((EditText)guideDialogView.findViewById(R.id.guideKeyword)).getText());
+                if( !keyword.trim().isEmpty() && keyword != "키워드") {
+                    ((Button) view).setText(keyword);
+                }
+                keywordDialog.dismiss();
             }
-        });*/
+        });
     }
 
     //guideBox의 길게 누르기 이벤트
     public void onLongClickGuide(View view) {
+            //설명글 입력창 띄우기
+        View guideDialogView = View.inflate(this, R.layout.guidebox_inform, null);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(guideDialogView);
+        final AlertDialog informDialog = dialogBuilder.create();
+        informDialog.show();
+
+        //설명글 입력 저장 버튼
+        guideDialogView.findViewById(R.id.editInform).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                informDialog.dismiss();
+            }
+        });
     }
 
     //addButtion의 터치 이벤트
     public void onClickAdd(View view) {
-            //클릭한 addButtion의 인덱스
-            int indexAdd = addbuttonVector.indexOf((ImageButton) view);
-            //클릭한 addButtion 없애기
-            view.setVisibility(View.GONE);
-            //guideBox 보이게 하기
+        //클릭한 addButtion의 인덱스
+        int indexAdd = addbuttonVector.indexOf((ImageButton) view);
+        //클릭한 addButtion 없애기
+        view.setVisibility(View.GONE);
+        //guideBox 보이게 하기
         guideVector.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
-            //다음 line 보이게 하기
-        lineVector.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
+
+        if(indexAdd == guideMaxNum-guideMinNum-1) //마지막 addbutton일 경우 뒷부분 생략
+            return;
+
+        //다음 line 보이게 하기
+        lineVector.get(guideMinNum + indexAdd).setVisibility(View.VISIBLE);
         //다음 addButton 보이게 하기
         addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
     }
