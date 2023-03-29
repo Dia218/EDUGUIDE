@@ -2,6 +2,9 @@ package com.capston.eduguide;
 
 import android.graphics.drawable.Drawable;
 
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 public class ListViewItem {
     private Drawable iconDrawable ;
     private Drawable userIcon;
@@ -9,9 +12,7 @@ public class ListViewItem {
     private String descStr ;
     private String username;
 
-    public void setIcon(Drawable icon) {
-        iconDrawable = icon ;
-    }
+    public void setIcon(Drawable icon) { iconDrawable = icon ;}
     public void setUserIcon(Drawable icon) {
         userIcon = icon;
     }

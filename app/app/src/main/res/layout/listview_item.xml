@@ -22,36 +22,47 @@
 
     </LinearLayout>
 
-    <ImageView
+    <com.capston.eduguide.MeasuredViewPager
+        android:id="@+id/vp"
+        android:contentDescription="\\뷰페이저-크기는 맞춤식(MeasuredViewPager사용)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/down_stroke">
+
+    </com.capston.eduguide.MeasuredViewPager>
+
+
+    <!--<ImageView
         android:id="@+id/guideImage"
         android:layout_width="match_parent"
-        android:layout_height="432dp" />
+        android:layout_height="wrap_content"/>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="124dp"
-
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/guideDesc"
-            android:layout_width="390dp"
-            android:layout_height="58dp"
-
-            android:gravity="center_vertical"
-            android:text="New Text"
-            android:textColor="#000000"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/tag"
-            android:layout_width="390dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="@drawable/down_stroke">
 
-            android:text="New Text"
-            android:textColor="#666666"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/guideDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="center_vertical"
+                android:text="New Text"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="New Text"
+                android:textColor="#666666"
+                android:textSize="16sp" />
+
     </LinearLayout>
 
 </LinearLayout>
