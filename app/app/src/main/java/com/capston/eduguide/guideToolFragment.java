@@ -12,11 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import java.util.Iterator;
-import java.util.Vector;
+
 import com.example.bottomnavi.R;
 
-public class guideToolActivity extends Fragment {
+import java.util.Iterator;
+import java.util.Vector;
+
+public class guideToolFragment extends Fragment {
 
     //가이드 박스 개수
     int guideMaxNum = 18;
