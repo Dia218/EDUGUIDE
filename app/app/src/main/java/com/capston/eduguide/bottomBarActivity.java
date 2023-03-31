@@ -2,6 +2,7 @@ package com.capston.eduguide;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -21,6 +22,8 @@ public class bottomBarActivity extends AppCompatActivity {
     private Frag3Activity frag3;
     private Frag4Activity frag4;
     private Frag5Activity frag5;
+    private Comment comment;
+    private Guide guide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class bottomBarActivity extends AppCompatActivity {
         frag3 = new Frag3Activity();
         frag4 = new Frag4Activity();
         frag5 = new Frag5Activity();
+        comment = new Comment();
+        guide = new Guide();
         setFrag(0);// 첫 프래그먼트 화면 지정
     }
 
@@ -62,6 +67,7 @@ public class bottomBarActivity extends AppCompatActivity {
     private void setFrag(int n) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
+
         switch (n) {
             case 0:
                 ft.replace(R.id.main_frame, frag1);
@@ -85,5 +91,11 @@ public class bottomBarActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+    //프래그먼트 내에서 다른 프래그먼트로 이동하는 메소드
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, fragment).commit();      // Fragment로 사용할 MainActivity내의 layout공간을 선택
     }
 }
