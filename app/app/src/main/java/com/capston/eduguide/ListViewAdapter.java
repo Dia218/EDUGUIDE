@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.graphics.drawable.Drawable;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,11 +47,19 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         public TextView tagText;
         //public ImageView iconImage;
         public ImageView userImage;
+        public Button like;
+        public TextView like_count;
+        public Button bookmark;
+        public TextView bookmark_count;
         public ViewPager vp;
 
         ViewHolder(View itemView){
             super(itemView);
             // 뷰 객체에 대한 참조.
+            like = itemView.findViewById(R.id.like_button);
+            like_count = itemView.findViewById(R.id.like_count);
+            bookmark = itemView.findViewById(R.id.bookmark_button);
+            bookmark_count = itemView.findViewById(R.id.bookmark_count);
             username = itemView.findViewById(R.id.userName);
             guideText = itemView.findViewById(R.id.guideDesc);
             tagText = itemView.findViewById(R.id.tag);
@@ -58,7 +67,41 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             userImage = itemView.findViewById(R.id.userImage);
             vp = (ViewPager) itemView.findViewById(R.id.vp);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.setSelected(!v.isSelected());
+                    if(v.isSelected()){
+                        int count = Integer.parseInt(like_count.getText().toString());
+                        like_count.setText(Integer.toString(++count));
+                    }
+                    else{
+                        int count = Integer.parseInt(like_count.getText().toString());
+                        if(count != 0){
+                            like_count.setText(Integer.toString(--count));
+                        }
+                    }
+                }
+            });
+
+            bookmark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.setSelected(!v.isSelected());
+                    if(v.isSelected()){
+                        int count = Integer.parseInt(bookmark_count.getText().toString());
+                        bookmark_count.setText(Integer.toString(++count));
+                    }
+                    else{
+                        int count = Integer.parseInt(bookmark_count.getText().toString());
+                        if(count != 0){
+                            bookmark_count.setText(Integer.toString(--count));
+                        }
+                    }
+                }
+            });
+
+            guideText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
@@ -113,6 +156,8 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         holder.username.setText(item.getUsername());
         holder.guideText.setText(item.getTitle());
         holder.tagText.setText(item.getDesc());
+        holder.like_count.setText(item.getLike_count());
+        holder.bookmark_count.setText(item.getBookmark_count());
         Glide
                 .with(context)
                 .load(item.getUserIcon())
@@ -142,7 +187,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     }
 
     // 아이템 데이터 추가를 위한 함수
-    public void addItem(/*Drawable icon,*/ Drawable userIcon, String username, String title, String desc) {
+    public void addItem(/*Drawable icon,*/ Drawable userIcon, String username, String title, String desc, String like_count, String bookmark_count) {
         ListViewItem item = new ListViewItem();
 
         //item.setIcon(icon);
@@ -150,6 +195,8 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         item.setUsername(username);
         item.setTitle(title);
         item.setDesc(desc);
+        item.setLike_count(like_count);
+        item.setBookmark_count(bookmark_count);
 
         listViewItemList.add(item);
     }
