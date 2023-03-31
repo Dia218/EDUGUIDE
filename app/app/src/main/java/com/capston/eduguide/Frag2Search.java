@@ -11,14 +11,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bottomnavi.R;
 
-public class Frag5Activity extends Fragment {
+public class Frag2Search extends Fragment {
 
     private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.frag5, container, false);
+        view=inflater.inflate(R.layout.frag2, container, false);
 
         return view;
     }

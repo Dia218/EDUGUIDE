@@ -59,7 +59,7 @@ public class Comment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((bottomBarActivity)getActivity()).replaceFragment(Frag1Activity.newInstance());
+                ((MainActivity)getActivity()).replaceFragment(Frag1Feed.newInstance());
             }
         });
 

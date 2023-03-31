@@ -4,15 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +18,14 @@ import com.example.bottomnavi.R;
 
 import java.util.ArrayList;
 
-public class Frag1Activity extends Fragment {
+public class Frag1Feed extends Fragment {
 
     ArrayList<ListViewItem> items;
     private Guide fragmentGuide;
     private SwipeRefreshLayout swipeRefreshLayout;
     // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
-    public static Frag1Activity newInstance(){
-        return new Frag1Activity();
+    public static Frag1Feed newInstance(){
+        return new Frag1Feed();
     }
 
     @Nullable
@@ -63,7 +59,7 @@ public class Frag1Activity extends Fragment {
             public void onRefresh() {
                 //swipe 시 수행할 동작
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(Frag1Activity.this).attach(Frag1Activity.this).commit();
+                ft.detach(Frag1Feed.this).attach(Frag1Feed.this).commit();
                 //업데이트 끝남.필수
                 swipeRefreshLayout.setRefreshing(false);
             }
