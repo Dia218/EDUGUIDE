@@ -14,6 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.bottomnavi.R;
 
@@ -32,6 +36,7 @@ public class Comment extends Fragment {
     private String mainStr;
     private String tagStr;
     private String usernameStr;
+    private ViewPager vp;
     ArrayList<CommentItem> comments;
 
 
@@ -45,6 +50,9 @@ public class Comment extends Fragment {
         tag = view.findViewById(R.id.tag);
         username = view.findViewById(R.id.userName);
         Button back = (Button)view.findViewById(R.id.back);
+        vp = (ViewPager) view.findViewById(R.id.vp);
+        vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
+        vp.setCurrentItem(0);
 
         if (getArguments() != null)
         {
@@ -88,10 +96,29 @@ public class Comment extends Fragment {
                 Drawable userImage = comment.getUserIcon();
                 String username = comment.getUsername();
                 String commentStr = comment.getComment();
+
+
             }
         });
 
 
         return view;
+    }
+
+    private class BannerPagerAdapter extends FragmentPagerAdapter {
+
+        public BannerPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return Guide.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
     }
 }
