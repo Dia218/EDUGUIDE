@@ -127,9 +127,16 @@ public class Guide extends Fragment {
             });
         }
 
+        if(MainActivity.getCurrentMenu() != "posting") {
+            setFixmode();
+        }
+
         return view;
     }
 
+    public void setFixmode() {
+        
+    }
 
     //guideBox의 터치 이벤트
     public void onClickGuide(View view) {
