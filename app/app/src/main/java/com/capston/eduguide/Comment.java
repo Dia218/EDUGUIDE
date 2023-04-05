@@ -1,13 +1,12 @@
 package com.capston.eduguide;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,8 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bottomnavi.R;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class Comment extends Fragment {
 
     //
-    public static Comment newInstance(){
+    /*public static Comment newInstance(){
         return new Comment();
     }
     private View view;
@@ -37,19 +37,113 @@ public class Comment extends Fragment {
     private String tagStr;
     private String usernameStr;
     private ViewPager vp;
-    ArrayList<CommentItem> comments;
+    private EditText comm;
+    private Integer gradeInt;
+    private ImageView userImage1;
+    private ImageView userImage;
+    ArrayList<CommentItem> comments = new ArrayList<>();
+    ArrayList<ReplyItem_unfinished> replyItems = new ArrayList<>();
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.frag1_comment, container, false);
+        View view=inflater.inflate(R.layout.frag1_comment, container, false);
 
+        main = view.findViewById(R.id.commentMain);
+        tag = view.findViewById(R.id.tag);
+        username = view.findViewById(R.id.userName);
+        comm = view.findViewById(R.id.commentDetail);
+        userImage = view.findViewById(R.id.userImage);
+        userImage1 = view.findViewById(R.id.userImage1);
+        Button back = (Button)view.findViewById(R.id.back);
+        Button input = (Button) view.findViewById(R.id.commentInput);
         Bundle bundle = getArguments();
+        if (getArguments() != null)
+        {
+            mainStr = bundle.getString("main_text"); // 프래그먼트1에서 받아온 값 넣기
+            main.setText(mainStr);
+            tagStr = bundle.getString("tag_text");
+            tag.setText(tagStr);
+            usernameStr = bundle.getString("user_name");
+            username.setText(usernameStr);
+            gradeInt =  bundle.getInt("user_grade");
+            userImage.setImageResource(grade(gradeInt));
+            //일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
+            userImage1.setImageResource(grade(gradeInt));
+        }
+        vp = (ViewPager) view.findViewById(R.id.vp);
+        vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
+        vp.setCurrentItem(0);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).replaceFragment(Frag1Feed.newInstance());
+            }
+        });
+
+        // 리스트 뷰 참조 및 Adapter 달기
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.commentList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // 리사이클러뷰에 SimpleTextAdapter 객체 지정
+        CommentAdapter adapter = new CommentAdapter(getContext(),comments,getChildFragmentManager());
+        recyclerView.setAdapter(adapter);
+
+        //아이템 추가
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디1","임시 댓글 내용1");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디2","임시 댓글 내용2");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        recyclerView.setAdapter(adapter);
+
+        input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //CommentItem recyclerItem = CommentAdapter.getSelected();
+                //if (recyclerItem == null) {
+                    //Toast.makeText(getContext(), "선택하세요", Toast.LENGTH_SHORT).show();
+                    //return;
+                //}
+                String comment = comm.getText().toString();
+                //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
+                String userId = bundle.getString("user_name");
+                Integer userGrade = bundle.getInt("user_grade");
+                comm.setText("");
+                adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),userId,comment);
+                //comments.add(new CommentItem(ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null), comment,userId));
+                adapter.notifyItemInserted(comments.size());
+                recyclerView.setAdapter(adapter);
+                recyclerView.scrollToPosition(comments.size()-1);
+                //Toast.makeText(getContext(), userId+comment+"추가합니다", Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
+        /*Bundle bundle = getArguments();
         main = view.findViewById(R.id.commentMain);
         tag = view.findViewById(R.id.tag);
         username = view.findViewById(R.id.userName);
         Button back = (Button)view.findViewById(R.id.back);
+        Button input = (Button) view.findViewById(R.id.commentInput);
+        comm = view.findViewById(R.id.commentDetail);
+        userImage1 = view.findViewById(R.id.userImage1);
+        userImage = view.findViewById(R.id.userImage);
         vp = (ViewPager) view.findViewById(R.id.vp);
         vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
         vp.setCurrentItem(0);
@@ -62,6 +156,10 @@ public class Comment extends Fragment {
             tag.setText(tagStr);
             usernameStr = bundle.getString("user_name");
             username.setText(usernameStr);
+            gradeInt =  bundle.getInt("user_grade");
+            userImage.setImageResource(grade(gradeInt));
+            //일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
+            userImage1.setImageResource(grade(gradeInt));
         }
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -74,35 +172,61 @@ public class Comment extends Fragment {
         ListView commentView;
         CommentAdapter adapter;
 
-        adapter = new CommentAdapter(getContext());
+        adapter = new CommentAdapter(getContext(),comments);
 
-        commentView = (ListView) view.findViewById(R.id.commentView);
+        commentView = (ListView) view.findViewById(R.id.commentList);
         commentView.setAdapter(adapter);
 
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디1","임시 댓글 내용1");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디2","임시 댓글 내용2");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-
-        commentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디1","임시 댓글 내용1");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디2","임시 댓글 내용2");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
+                "댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        commentView.setAdapter(adapter);
+        input.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CommentItem comment = (CommentItem) parent.getItemAtPosition(position);
-                Drawable userImage = comment.getUserIcon();
-                String username = comment.getUsername();
-                String commentStr = comment.getComment();
-
-
+            public void onClick(View v) {
+                String comment = comm.getText().toString();
+                //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
+                String userId = bundle.getString("user_name");
+                Integer userGrade = bundle.getInt("user_grade");
+                comm.setText("");
+                //adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null), comment,userId);
+                comments.add(new CommentItem(ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null), comment,userId));
+                adapter.notifyDataSetChanged();
+                commentView.setAdapter(adapter);
+                //Toast.makeText(getContext(), userId+comment+"추가합니다", Toast.LENGTH_SHORT).show();
             }
         });
 
 
-        return view;
+    //return view;
+    }*/
+
+    private int grade(Integer gradeInt) {
+        if(gradeInt < 10)
+            return R.drawable.grade1;
+        else if(gradeInt < 20)
+            return R.drawable.grade1;
+        else if(gradeInt < 30)
+            return R.drawable.grade1;
+        else if(gradeInt < 40)
+            return R.drawable.grade1;
+        else
+            return R.drawable.grade1;
     }
 
     private class BannerPagerAdapter extends FragmentPagerAdapter {
