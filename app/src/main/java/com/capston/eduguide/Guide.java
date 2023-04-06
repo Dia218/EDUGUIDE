@@ -152,7 +152,10 @@ public class Guide extends Fragment {
             @Override
             public void onClick(View v) {
                 String keyword = String.valueOf(((EditText)guideDialogView.findViewById(R.id.guideKeyword)).getText());
-                if( !keyword.trim().isEmpty() && keyword != "키워드") {
+                if( keyword.trim().isEmpty() || keyword.equals("키워드")) {
+                    ;
+                }
+                else {
                     ((Button) view).setText(keyword);
                 }
                 keywordDialog.dismiss();
@@ -187,11 +190,12 @@ public class Guide extends Fragment {
         //guideBox 보이게 하기
         guideVector.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
 
+        //다음 line 보이게 하기
+        lineVector.get(guideMinNum + indexAdd - 1).setVisibility(View.VISIBLE);
+
         if(indexAdd == guideMaxNum-guideMinNum-1) //마지막 addbutton일 경우 뒷부분 생략
             return;
 
-        //다음 line 보이게 하기
-        lineVector.get(guideMinNum + indexAdd).setVisibility(View.VISIBLE);
         //다음 addButton 보이게 하기
         addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
     }

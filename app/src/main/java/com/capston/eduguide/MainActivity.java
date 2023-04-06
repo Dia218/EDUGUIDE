@@ -5,12 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
 import android.view.MenuItem;
-
-import com.capston.eduguide.R;
 import com.google.android.material.navigation.NavigationBarView;
+import android.database.sqlite.SQLiteDatabase;
+import com.capston.eduguide.db.DatabaseHelper;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,11 +27,21 @@ public class MainActivity extends AppCompatActivity {
 
     private static String currentMenu; //현재 메뉴
 
+    private static DatabaseHelper helper; //디비
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //데이터베이스 생성
+        SQLiteDatabase db;
+        helper = new DatabaseHelper(MainActivity.this, "newdb.db", null, 1);
+        db = helper.getWritableDatabase();
+        helper.onCreate(db);
+
+        //하단바 뷰
         navigationBarView = findViewById(R.id.bottomNavi);
         navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -115,4 +125,8 @@ public class MainActivity extends AppCompatActivity {
     public static String getCurrentMenu() {
         return currentMenu;
     }
+
+    //디비 반환 메소드
+    public static DatabaseHelper getHelper() { return helper; }
+
 }
