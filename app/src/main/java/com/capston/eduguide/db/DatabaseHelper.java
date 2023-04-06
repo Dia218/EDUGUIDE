@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -17,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String userTable = "userDB";
         db.execSQL("create table if not exists " + userTable + " ("
-                + " userId text PRIMARY KEY autoincrement, "
+                + " userId integer PRIMARY KEY autoincrement, "
                 + " password text, "
                 + " email text, "
                 + " phone text);");
@@ -27,10 +25,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table if not exists " + postDB + " ("
                 + " postId integer PRIMARY KEY autoincrement, "
                 + " userId, "
+                + " postTitle text, "
                 + " postText text, "
                 + " postTag text, "
-                + " recommend int,"
-                + "FOREIGN KEY(userId) REFERENCES userTable(userId));");
+                + " recommend integer DEFAULT 0,"
+                + "FOREIGN KEY(userId) REFERENCES userTable(userId) ON UPDATE CASCADE ON DELETE SET NULL);");
 
         //가이드툴DB 생성 //가이드툴 = 가이드박스들의 집합
         String guideToolDB = "guideboxTBL";
@@ -39,7 +38,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " postId text, "
                 + " boxKeyword text, "
                 + " boxInfo text,"
-                + "FOREIGN KEY(postId) REFERENCES postTBL(postId));");
+                + "FOREIGN KEY(postId) REFERENCES postTBL(postId) ON UPDATE CASCADE ON DELETE CASCADE);");
+    }
+
+    public void connectDB(String querySQL) {
+
     }
 
     @Override

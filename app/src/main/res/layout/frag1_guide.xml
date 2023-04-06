@@ -234,7 +234,8 @@
             android:layout_gravity="center|center_vertical"
             android:background="@color/guideColor"
             android:clickable="false"
-            android:rotation="90" />
+            android:rotation="90"
+            android:visibility="invisible" />
 
         <!-- 추가 가능 박스 -->
         <!-- 7번째 줄 (4 박스라인) -->
@@ -251,6 +252,7 @@
 
         <ImageButton
             android:id="@+id/addButton2"
+            android:layout_height="50dp"
             android:layout_row="6"
             android:layout_rowWeight="1"
             android:layout_column="0"
@@ -287,6 +289,7 @@
 
         <ImageButton
             android:id="@+id/addButton1"
+            android:layout_height="50dp"
             android:layout_row="6"
             android:layout_rowWeight="1"
             android:layout_column="2"
@@ -323,6 +326,7 @@
 
         <ImageButton
             android:id="@+id/addButton0"
+            android:layout_height="50dp"
             android:layout_row="6"
             android:layout_rowWeight="1"
             android:layout_column="4"
@@ -360,6 +364,7 @@
         <!-- 9번째 줄 (5 박스라인) -->
         <ImageButton
             android:id="@+id/addButton3"
+            android:layout_height="50dp"
             android:layout_row="8"
             android:layout_rowWeight="1"
             android:layout_column="0"
@@ -395,6 +400,7 @@
 
         <ImageButton
             android:id="@+id/addButton4"
+            android:layout_height="50dp"
             android:layout_row="8"
             android:layout_rowWeight="1"
             android:layout_column="2"
@@ -431,6 +437,7 @@
 
         <ImageButton
             android:id="@+id/addButton5"
+            android:layout_height="50dp"
             android:layout_row="8"
             android:layout_rowWeight="1"
             android:layout_column="4"
@@ -480,7 +487,7 @@
 
         <ImageButton
             android:id="@+id/addButton6"
-            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:layout_row="10"
             android:layout_rowWeight="1"
             android:layout_column="4"
@@ -517,8 +524,7 @@
 
         <ImageButton
             android:id="@+id/addButton7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_row="10"
             android:layout_rowWeight="1"
             android:layout_column="2"
@@ -555,8 +561,7 @@
 
         <ImageButton
             android:id="@+id/addButton8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_row="10"
             android:layout_rowWeight="1"
             android:layout_column="0"

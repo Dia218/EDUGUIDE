@@ -9,14 +9,15 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/postTitle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:maxLines="1"
-            android:inputType="text"
+            android:background="@drawable/edittext_rounded_rectangle"
             android:hint="@string/title_please"
             android:importantForAutofill="no"
-            android:background="@drawable/edittext_rounded_rectangle"/>
+            android:inputType="text"
+            android:maxLines="1" />
 
         <com.capston.eduguide.MeasuredViewPager
             android:id="@+id/vp"
@@ -37,15 +38,16 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/postInfo"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginHorizontal="10dp"
-            android:inputType="textMultiLine"
-            android:scrollHorizontally="false"
+            android:background="@drawable/edittext_rounded_rectangle"
             android:gravity="top"
             android:hint="@string/content_please"
             android:importantForAutofill="no"
-            android:background="@drawable/edittext_rounded_rectangle"/>
+            android:inputType="textMultiLine"
+            android:scrollHorizontally="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,16 +58,18 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/postTag"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="10dp"
-            android:inputType="textMultiLine"
-            android:scrollHorizontally="false"
+            android:background="@drawable/edittext_rounded_rectangle"
             android:hint="@string/tag_please"
             android:importantForAutofill="no"
-            android:background="@drawable/edittext_rounded_rectangle"/>
+            android:inputType="textMultiLine"
+            android:scrollHorizontally="false" />
 
         <Button
+            android:id="@+id/postingSubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

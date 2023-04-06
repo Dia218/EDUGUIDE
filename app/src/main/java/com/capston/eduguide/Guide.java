@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import com.capston.eduguide.R;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -127,15 +126,29 @@ public class Guide extends Fragment {
             });
         }
 
-        if(MainActivity.getCurrentMenu() != "posting") {
-            setFixmode();
+        //게시글 작성 메뉴가 아닐 경우
+        if(!MainActivity.getCurrentMenu().equals("posting")) {
+            setFixmode(); //fix모드 메소드 호출
         }
 
         return view;
     }
 
     public void setFixmode() {
-        
+        //추가 버튼 나타나지 않게 함
+        addbuttonVector.get(0).setVisibility(View.GONE);
+
+        //짧게 터치 이벤트 비활성화
+        Iterator<Button> guideboxIt = guideVector.iterator();
+        while (guideboxIt.hasNext()) {
+            Button guideBox = guideboxIt.next();
+            guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
+                @Override
+                public void onClick(View v) {
+                    ;
+                }
+            });
+        }
     }
 
     //guideBox의 터치 이벤트
@@ -152,7 +165,10 @@ public class Guide extends Fragment {
             @Override
             public void onClick(View v) {
                 String keyword = String.valueOf(((EditText)guideDialogView.findViewById(R.id.guideKeyword)).getText());
-                if( !keyword.trim().isEmpty() && keyword != "키워드") {
+                if( keyword.trim().isEmpty() || keyword.equals("키워드")) {
+                    ;
+                }
+                else {
                     ((Button) view).setText(keyword);
                 }
                 keywordDialog.dismiss();
@@ -187,11 +203,12 @@ public class Guide extends Fragment {
         //guideBox 보이게 하기
         guideVector.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
 
+        //다음 line 보이게 하기
+        lineVector.get(guideMinNum + indexAdd - 1).setVisibility(View.VISIBLE);
+
         if(indexAdd == guideMaxNum-guideMinNum-1) //마지막 addbutton일 경우 뒷부분 생략
             return;
 
-        //다음 line 보이게 하기
-        lineVector.get(guideMinNum + indexAdd).setVisibility(View.VISIBLE);
         //다음 addButton 보이게 하기
         addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
     }
