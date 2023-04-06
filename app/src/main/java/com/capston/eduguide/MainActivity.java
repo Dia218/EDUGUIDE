@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private Comment comment;
     private Guide guide;
 
+    private static String currentMenu; //현재 메뉴
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,22 +73,27 @@ public class MainActivity extends AppCompatActivity {
         switch (n) {
             case 0:
                 ft.replace(R.id.main_frame, frag1);
+                this.setCurrentMenu("feed");
                 ft.commit();
                 break;
             case 1:
                 ft.replace(R.id.main_frame, frag2);
+                this.setCurrentMenu("search");
                 ft.commit();
                 break;
             case 2:
                 ft.replace(R.id.main_frame, frag3);
+                this.setCurrentMenu("posting");
                 ft.commit();
                 break;
             case 3:
                 ft.replace(R.id.main_frame, frag4);
+                this.setCurrentMenu("notice");
                 ft.commit();
                 break;
             case 4:
                 ft.replace(R.id.main_frame, frag5);
+                this.setCurrentMenu("user");
                 ft.commit();
                 break;
 
@@ -97,5 +104,15 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment).commit();      // Fragment로 사용할 MainActivity내의 layout공간을 선택
+    }
+
+    //현재 메뉴를 설정하는 메소드
+    public static void setCurrentMenu(String currentMenu) {
+        MainActivity.currentMenu = currentMenu;
+    }
+
+    //현재 메뉴를 반환하는 메소드
+    public static String getCurrentMenu() {
+        return currentMenu;
     }
 }
