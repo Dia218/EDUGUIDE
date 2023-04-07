@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.capston.eduguide.user.SettingsActivity;
+
 public class Frag5User extends Fragment {
 
     private View view;
@@ -27,12 +29,12 @@ public class Frag5User extends Fragment {
 
         ImageButton settingsButton = (ImageButton) view.findViewById(R.id.settings_icon);
 
-        /*
         settingsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
         });
 
+        /*
         // 저장된 닉네임과 자기소개 가져와서 TextView에 반영하기
         profileNameTextView = view.findViewById(R.id.profile_name);
         selfIntroTextView = view.findViewById(R.id.self_intro);
