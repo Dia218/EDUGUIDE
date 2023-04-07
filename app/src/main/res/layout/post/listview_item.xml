@@ -23,14 +23,14 @@
 
     </LinearLayout>
 
-    <com.capston.eduguide.MeasuredViewPager
+    <com.capston.eduguide.feed.MeasuredViewPager
         android:id="@+id/vp"
         android:contentDescription="\\뷰페이저-크기는 맞춤식(MeasuredViewPager사용)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/down_stroke">
 
-    </com.capston.eduguide.MeasuredViewPager>
+    </com.capston.eduguide.feed.MeasuredViewPager>
 
 
     <!--<ImageView

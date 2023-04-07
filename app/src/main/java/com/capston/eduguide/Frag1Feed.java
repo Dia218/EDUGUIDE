@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.capston.eduguide.R;
+import com.capston.eduguide.feed.ListViewAdapter;
+import com.capston.eduguide.feed.ListViewItem;
 
 import java.util.ArrayList;
 

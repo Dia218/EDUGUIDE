@@ -1,4 +1,4 @@
-package com.capston.eduguide;
+package com.capston.eduguide.feed;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,9 +16,11 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.capston.eduguide.Frag1Feed;
+import com.capston.eduguide.Guide;
+import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 
 import java.util.ArrayList;

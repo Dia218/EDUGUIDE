@@ -1,4 +1,4 @@
-package com.capston.eduguide;
+package com.capston.eduguide.feed;
 
 import android.content.Context;
 import android.util.AttributeSet;
