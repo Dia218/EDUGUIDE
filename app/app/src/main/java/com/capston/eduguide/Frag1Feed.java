@@ -1,6 +1,8 @@
 package com.capston.eduguide;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +25,12 @@ public class Frag1Feed extends Fragment {
     ArrayList<FeedViewItem> items;
     private Guide fragmentGuide;
     private SwipeRefreshLayout swipeRefreshLayout;
+    Parcelable recyclerViewState;
+    RecyclerView recyclerView;
     // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
-    public static Frag1Feed newInstance(){
+    /*public static Frag1Feed newInstance(){
         return new Frag1Feed();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    }*/
 
     @Nullable
     @Override
@@ -40,23 +39,26 @@ public class Frag1Feed extends Fragment {
         View rootView=inflater.inflate(R.layout.frag1, container, false);
 
         // 리스트 뷰 참조 및 Adapter 달기
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
         FeedViewAdapter adapter = new FeedViewAdapter(getChildFragmentManager(),getContext()) ;
         recyclerView.setAdapter(adapter);
+        if(recyclerViewState != null)
+            recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         //아이템 추가
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
                 ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
-                "사용자 아이디1","본문 내용 표시\n그리고 내용 추가\n내용 잘리는지 확인\n\n\n\n","#tag1","0","0");
+                "사용자 아이디1","피드 제목 표시1","메인 내용 표시할 거1","#tag1","0","0");
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
                 ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
-                "name2","desc2","tag2","12","0");
+                "name2","Title2","메인 내용 표시할 거1","tag2","12","0");
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
                 ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
-                "name3","desc3","tag3","0","4");
+                "name3","Title3","메인 내용 표시할 거1","tag3","0","4");
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -72,6 +74,8 @@ public class Frag1Feed extends Fragment {
 
         return rootView;
     }
+
+
 }
 
 

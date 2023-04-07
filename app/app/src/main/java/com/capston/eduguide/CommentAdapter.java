@@ -18,8 +18,8 @@ import com.example.bottomnavi.R;
 
 import java.util.ArrayList;
 
-/*public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
-
+public class CommentAdapter /*extends RecyclerView.Adapter<CommentAdapter.ViewHolder>*/ {
+    /*
     private Context context;
     public ArrayList<CommentItem> commentItemList = new ArrayList<>();
     //ArrayList<ReplyItem> replyItemList = new ArrayList<>();
@@ -212,5 +212,5 @@ import java.util.ArrayList;
             return R.drawable.grade1;
         else
             return R.drawable.grade1;
-    }
-}*/
+    }*/
+}
