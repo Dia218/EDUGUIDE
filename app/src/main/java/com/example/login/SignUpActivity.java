@@ -56,8 +56,8 @@ public class SignUpActivity extends AppCompatActivity {
     public void insertData(String id, String password, String email, String phone) {
         userDB = helper.getWritableDatabase();
 
-        String sql = ("insert into userDB(userId, password, email, phone) values " +
-                "(" +  "'" + id + "'" + "," + "'" + password + "'" + "," + "'" + email + "'" + "," + "'" + phone + "'" + ")");
+        String sql = "INSERT INTO userDB (userId, password, email, phone) VALUES " +
+                "('" + id + "', '" + password + "', '" + email + "', '" + phone + "')";
 
         userDB.execSQL(sql);
     }

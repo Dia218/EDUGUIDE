@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (isID.length() > 4 && isPass.length() > 4) {
                     searchData(isID, isPass);
                 } else {
-                    Toast.makeText(LoginActivity.this, "입력이 잘못되었습니다", Toast.LENGTH_SHORT);
+                    Toast.makeText(LoginActivity.this, "입력이 잘못되었습니다", Toast.LENGTH_SHORT).show();
                 }
 
                 if (userExit) {
@@ -80,19 +80,15 @@ public class LoginActivity extends AppCompatActivity {
 
     public void searchData (String isID, String isPass){
         userDB = helper.getReadableDatabase();
-        String sql = ("select userId, password from userDB");
-        Cursor cursor = userDB.rawQuery(sql, null);
+        String sql = ("select userId, password from userDB where userId=? and password=?");
+        Cursor cursor = userDB.rawQuery(sql, new String[] {isID, isPass});
 
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToNext();
-            String id = cursor.getString(0);
-            String password = cursor.getString(1);
-            if (id.equals(isID) && password.equals(isPass)) {
-                userId = id;
-                userExit = true;
-                break;
-            }
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            userId = cursor.getString(0);
+            userExit = true;
         }
 
+        cursor.close(); // cursor를 닫아주는 코드
     }
 }
