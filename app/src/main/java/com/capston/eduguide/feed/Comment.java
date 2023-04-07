@@ -19,8 +19,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.capston.eduguide.Frag1Feed;
-import com.capston.eduguide.Guide;
 import com.capston.eduguide.MainActivity;
+import com.capston.eduguide.guideTool.GuideTool;
 import com.capston.eduguide.R;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class Comment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.frag1_comment, container, false);
+        view=inflater.inflate(R.layout.post_comment, container, false);
 
         Bundle bundle = getArguments();
         main = view.findViewById(R.id.commentMain);
@@ -81,15 +81,15 @@ public class Comment extends Fragment {
         commentView = (ListView) view.findViewById(R.id.commentView);
         commentView.setAdapter(adapter);
 
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디1","임시 댓글 내용1");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디2","임시 댓글 내용2");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
-        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디1","임시 댓글 내용1");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디2","임시 댓글 내용2");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
+        adapter.addComment(ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),"댓글단 유저 아이디3","임시 댓글 내용3\n\n\n");
 
         commentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -115,7 +115,7 @@ public class Comment extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return Guide.newInstance(position);
+            return GuideTool.newInstance(position);
         }
 
         @Override

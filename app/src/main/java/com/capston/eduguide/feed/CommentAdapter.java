@@ -50,7 +50,7 @@ public class CommentAdapter extends BaseAdapter {
         // "comment_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null){
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            convertView = layoutInflater.inflate(R.layout.comment_item, parent, false);
+            convertView = layoutInflater.inflate(R.layout.post_comment_item, parent, false);
         }
 
         commentHolder = new CommentHolder();

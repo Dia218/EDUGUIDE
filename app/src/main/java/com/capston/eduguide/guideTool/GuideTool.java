@@ -1,4 +1,4 @@
-package com.capston.eduguide;
+package com.capston.eduguide.guideTool;
 
 
 import android.os.Bundle;
@@ -8,10 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import com.capston.eduguide.MainActivity;
+import com.capston.eduguide.R;
+
 import java.util.Iterator;
 import java.util.Vector;
 
-public class Guide extends Fragment {
+public class GuideTool extends Fragment {
 
 
     //가이드 박스 개수
@@ -26,8 +30,8 @@ public class Guide extends Fragment {
     Vector<ImageButton> addbuttonVector = new Vector<>(guideMaxNum-guideMinNum);
 
     private View view;
-    public static Guide newInstance(int param1){
-        Guide fg = new Guide();
+    public static GuideTool newInstance(int param1){
+        GuideTool fg = new GuideTool();
         Bundle args = new Bundle();
         args.putInt("param1", param1);
         fg.setArguments(args);
@@ -42,7 +46,7 @@ public class Guide extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.frag1_guide, container, false);
+        view=inflater.inflate(R.layout.guide_guidetool, container, false);
 
         //가이드박스 벡터에 저장
         guideVector.add((Button) view.findViewById(R.id.guideBox1));
@@ -154,7 +158,7 @@ public class Guide extends Fragment {
     //guideBox의 터치 이벤트
     public void onClickGuide(View view) {
         //키워드 입력 창 띄우기
-        View guideDialogView = View.inflate(getContext(), R.layout.guidebox_keyword, null);
+        View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_keyword, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         dialogBuilder.setView(guideDialogView);
         final AlertDialog keywordDialog = dialogBuilder.create();
@@ -179,7 +183,7 @@ public class Guide extends Fragment {
     //guideBox의 길게 누르기 이벤트
     public void onLongClickGuide(View view) {
         //설명글 입력창 띄우기
-        View guideDialogView = View.inflate(getContext(), R.layout.guidebox_inform, null);
+        View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_inform, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         dialogBuilder.setView(guideDialogView);
         final AlertDialog informDialog = dialogBuilder.create();

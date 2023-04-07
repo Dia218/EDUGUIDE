@@ -20,6 +20,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " email text, "
                 + " phone text);");
 
+        //마이페이지용 임시 DB
+        String personalinfoTable = "personal_info";
+        db.execSQL("create table if not exists " + personalinfoTable + " ("
+                + " _id integer primary key autoincrement, "
+                + " name text, "
+                + " birth text, "
+                + " phone text, "
+                + " email text );");
+
         //게시글DB 생성
         String postDB = "postTBL";
         db.execSQL("create table if not exists " + postDB + " ("
@@ -47,6 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS personal_info");
         db.execSQL("DROP TABLE IF EXISTS postTBL");
         db.execSQL("DROP TABLE IF EXISTS guideboxTBL");
         onCreate(db);

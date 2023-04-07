@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.capston.eduguide.Guide;
+import com.capston.eduguide.guideTool.GuideTool;
 import com.capston.eduguide.R;
 
 import java.util.ArrayList;
@@ -141,7 +141,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.listview_item, parent, false);
+        View view = inflater.inflate(R.layout.post_listview_item, parent, false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
     }
@@ -206,7 +206,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return Guide.newInstance(position);
+            return GuideTool.newInstance(position);
         }
 
         @Override

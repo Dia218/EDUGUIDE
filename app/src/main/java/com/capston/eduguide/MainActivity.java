@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.capston.eduguide.feed.Comment;
+import com.capston.eduguide.guideTool.GuideTool;
 import com.google.android.material.navigation.NavigationBarView;
 import android.database.sqlite.SQLiteDatabase;
 import com.capston.eduguide.db.DatabaseHelper;
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag4Notice frag4;
     private Frag5User frag5;
     private Comment comment;
-    private Guide guide;
+    private GuideTool guideTool;
 
     private static String currentMenu; //현재 메뉴
 
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         //데이터베이스 생성
         SQLiteDatabase db;
-        helper = new DatabaseHelper(MainActivity.this, "newdb.db", null, 1);
+        helper = new DatabaseHelper(com.capston.eduguide.MainActivity.this, "newdb.db", null, 1);
         db = helper.getWritableDatabase();
         helper.onCreate(db);
 
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         frag4 = new Frag4Notice();
         frag5 = new Frag5User();
         comment = new Comment();
-        guide = new Guide();
+        guideTool = new GuideTool();
         setFrag(0);// 첫 프래그먼트 화면 지정
     }
 
@@ -117,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
     //현재 메뉴를 설정하는 메소드
     public static void setCurrentMenu(String currentMenu) {
-        MainActivity.currentMenu = currentMenu;
+        com.capston.eduguide.MainActivity.currentMenu = currentMenu;
     }
 
     //현재 메뉴를 반환하는 메소드

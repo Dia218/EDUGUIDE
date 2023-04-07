@@ -51,7 +51,7 @@
                 android:contentDescription="\\뷰페이저-크기는 맞춤식(MeasuredViewPager사용)"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/down_stroke">
+                android:background="@drawable/post_down_stroke">
 
             </com.capston.eduguide.feed.MeasuredViewPager>
 
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/commentMain"
-                    android:background="@drawable/down_stroke"
+                    android:background="@drawable/post_down_stroke"
                     android:text="본문 태그 내용 표시"
                     android:textSize="15sp" />
 

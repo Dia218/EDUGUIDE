@@ -13,9 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.db.DatabaseHelper;
-
-import org.w3c.dom.Text;
+import com.capston.eduguide.guideTool.GuideTool;
 
 public class Frag3Posting extends Fragment {
 
@@ -24,7 +22,7 @@ public class Frag3Posting extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.frag3, container, false);
+        view=inflater.inflate(R.layout.frag3_posting, container, false);
 
         vp = (ViewPager) view.findViewById(R.id.vp);
         vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
@@ -47,7 +45,7 @@ public class Frag3Posting extends Fragment {
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
 
                 //게시글DB 등록
-                SQLiteDatabase db = MainActivity.getHelper().getWritableDatabase();
+                SQLiteDatabase db = com.capston.eduguide.MainActivity.getHelper().getWritableDatabase();
                 db.execSQL("INSERT INTO postTBL VALUES ("
                         + pWriterId + ", '"
                         + pTitle + "', '"
@@ -72,7 +70,7 @@ public class Frag3Posting extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return Guide.newInstance(position);
+            return GuideTool.newInstance(position);
         }
 
         @Override
