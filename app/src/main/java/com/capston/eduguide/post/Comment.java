@@ -1,4 +1,4 @@
-package com.capston.eduguide.feed;
+package com.capston.eduguide.post;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

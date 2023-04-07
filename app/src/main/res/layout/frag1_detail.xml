@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -22,7 +22,7 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/userImage"
+                    android:id="@+id/feedUserImage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentTop="true"
@@ -34,7 +34,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="유저의 아이디"
-                    android:layout_toRightOf="@id/userImage"/>
+                    android:layout_toRightOf="@id/feedUserImage"
+                    android:layout_centerVertical="true"/>
 
                 <Button
                     android:id="@+id/back"
@@ -46,14 +47,14 @@
 
             </RelativeLayout>
 
-            <com.capston.eduguide.post.MeasuredViewPager
+            <com.capston.eduguide.MeasuredViewPager
                 android:id="@+id/vp"
                 android:contentDescription="\\뷰페이저-크기는 맞춤식(MeasuredViewPager사용)"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/post_down_stroke">
+                android:background="@drawable/down_stroke">
 
-            </com.capston.eduguide.post.MeasuredViewPager>
+            </com.capston.eduguide.MeasuredViewPager>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -75,22 +76,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/commentMain"
-                    android:background="@drawable/post_down_stroke"
+                    android:background="@drawable/down_stroke"
                     android:text="본문 태그 내용 표시"
                     android:textSize="15sp" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/commentList"
+                    android:overScrollMode="never"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tag"
+                    android:layout_marginTop="3dp"/>
+
             </RelativeLayout>
 
-            <ListView
-                android:id="@+id/commentView"
-                android:layout_width="match_parent"
-                android:layout_height="559dp"
-                android:layout_below="@id/tag"
-                android:layout_marginTop="3dp" />
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -98,17 +102,19 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/userImage1"
+            android:id="@+id/userImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
             />
 
         <EditText
+            android:id="@+id/commentDetail"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="댓글을 입력하세요"/>
 
         <Button
+            android:id="@+id/commentInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="입력"/>

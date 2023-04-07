@@ -1,6 +1,7 @@
 package com.capston.eduguide;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,21 +15,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.capston.eduguide.feed.ListViewAdapter;
-import com.capston.eduguide.feed.ListViewItem;
 import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.post.ListViewAdapter;
+import com.capston.eduguide.post.FeedViewItem;
 
 import java.util.ArrayList;
 
 public class Frag1Feed extends Fragment {
 
-    ArrayList<ListViewItem> items;
-    private GuideTool fragmentGuideTool;
+    ArrayList<FeedViewItem> items;
+    private GuideTool fragmentGuide;
     private SwipeRefreshLayout swipeRefreshLayout;
+    Parcelable recyclerViewState;
+    RecyclerView recyclerView;
     // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
-    public static Frag1Feed newInstance(){
+    /*public static Frag1Feed newInstance(){
         return new Frag1Feed();
-    }
+    }*/
 
     @Nullable
     @Override

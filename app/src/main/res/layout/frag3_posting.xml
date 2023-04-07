@@ -19,14 +19,14 @@
             android:inputType="text"
             android:maxLines="1" />
 
-        <com.capston.eduguide.feed.MeasuredViewPager
+        <com.capston.eduguide.post.MeasuredViewPager
             android:id="@+id/vp"
             android:contentDescription="\\뷰페이저-크기는 맞춤식(MeasuredViewPager사용)"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/post_down_stroke">
 
-        </com.capston.eduguide.feed.MeasuredViewPager>
+        </com.capston.eduguide.post.MeasuredViewPager>
 
         <TextView
             android:layout_width="wrap_content"

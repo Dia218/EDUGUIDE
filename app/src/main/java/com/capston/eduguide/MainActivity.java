@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.capston.eduguide.feed.Comment;
 import com.capston.eduguide.guideTool.GuideTool;
 import com.google.android.material.navigation.NavigationBarView;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private Frag3Posting frag3;
     private Frag4Notice frag4;
     private Frag5User frag5;
-    private Comment comment;
     private GuideTool guideTool;
 
     private static String currentMenu; //현재 메뉴
@@ -72,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         frag3 = new Frag3Posting();
         frag4 = new Frag4Notice();
         frag5 = new Frag5User();
-        comment = new Comment();
         guideTool = new GuideTool();
         setFrag(0);// 첫 프래그먼트 화면 지정
     }
