@@ -27,14 +27,14 @@
 
     </LinearLayout>
 
-    <com.capston.eduguide.MeasuredViewPager
+    <com.capston.eduguide.post.MeasuredViewPager
         android:id="@+id/vp"
         android:contentDescription="\\뷰페이저-크기는 맞춤식(MeasuredViewPager사용)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/down_stroke">
 
-    </com.capston.eduguide.MeasuredViewPager>
+    </com.capston.eduguide.post.MeasuredViewPager>
 
 
     <!--<ImageView
@@ -57,7 +57,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_alignParentLeft="true"
-                    android:background="@drawable/like_icon"/>
+                    android:background="@drawable/post_like_icon"/>
                 <TextView
                     android:id="@+id/like_count"
                     android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="3dp"
                     android:layout_toRightOf="@id/like_count"
-                    android:background="@drawable/bookmark_icon"/>
+                    android:background="@drawable/post_bookmark_icon"/>
                 <TextView
                     android:id="@+id/bookmark_count"
                     android:layout_width="wrap_content"

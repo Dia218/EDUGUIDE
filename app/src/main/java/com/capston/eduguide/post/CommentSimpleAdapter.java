@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.R;
-import com.example.bottomnavi.R;
 
 import java.util.ArrayList;
 

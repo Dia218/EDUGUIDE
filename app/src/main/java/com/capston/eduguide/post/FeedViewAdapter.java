@@ -18,13 +18,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.FeedViewItem;
-import com.capston.eduguide.Guide;
 import com.capston.eduguide.R;
-import com.example.bottomnavi.R;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.capston.eduguide.guideTool.GuideTool;
+
 import java.util.ArrayList;
 
 public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHolder> {
@@ -223,7 +222,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return Guide.newInstance(position);
+            return GuideTool.newInstance(position);
         }
 
         @Override

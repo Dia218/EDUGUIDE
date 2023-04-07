@@ -12,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.R;
-import com.capston.eduguide.ReplyItem_unfinished;
-import com.example.bottomnavi.R;
 
 import java.util.ArrayList;
 

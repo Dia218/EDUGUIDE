@@ -22,12 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.CommentSimpleAdapter;
 import com.capston.eduguide.Frag1Feed;
-import com.capston.eduguide.Guide;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
-import com.example.bottomnavi.R;
+import com.capston.eduguide.guideTool.GuideTool;
 
 import java.util.ArrayList;
 
@@ -166,7 +164,7 @@ public class CommentSimple extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return Guide.newInstance(position);
+            return GuideTool.newInstance(position);
         }
 
         @Override

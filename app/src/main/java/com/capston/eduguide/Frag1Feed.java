@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capston.eduguide.guideTool.GuideTool;
-import com.capston.eduguide.post.ListViewAdapter;
+import com.capston.eduguide.post.FeedViewAdapter;
 import com.capston.eduguide.post.FeedViewItem;
 
 import java.util.ArrayList;
@@ -44,19 +44,19 @@ public class Frag1Feed extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
-        ListViewAdapter adapter = new ListViewAdapter(getChildFragmentManager(),getContext()) ;
+        FeedViewAdapter adapter = new FeedViewAdapter(getChildFragmentManager(),getContext()) ;
         recyclerView.setAdapter(adapter);
 
         //아이템 추가
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
-                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),
-                "사용자 아이디1","본문 내용 표시\n그리고 내용 추가\n내용 잘리는지 확인\n\n\n\n","#tag1","0","0");
+                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
+                "사용자 아이디1","피드 제목 표시1","메인 내용 표시할 거1","#tag1","0","0");
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
-                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),
-                "name2","desc2","tag2","12","0");
+                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
+                "name2","Title2","메인 내용 표시할 거1","tag2","12","0");
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
-                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.post_person,null),
-                "name3","desc3","tag3","0","4");
+                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
+                "name3","Title3","메인 내용 표시할 거1","tag3","0","4");
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
