@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         //로그인 화면 실행
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        startActivityForResult(intent,101);
+        startActivity(intent);
 
         //하단바 뷰
         navigationBarView = findViewById(R.id.bottomNavi);

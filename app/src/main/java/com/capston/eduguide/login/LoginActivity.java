@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             userId = cursor.getString(0);
             userExit = true;
         }
-        //userExit = true; //로그인 강제 성공 코드
+        userExit = true; //로그인 강제 성공 코드
         cursor.close(); // cursor를 닫아주는 코드
     }
 }
