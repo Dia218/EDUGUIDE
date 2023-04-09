@@ -1,4 +1,4 @@
-package com.capston.eduguide;
+package com.capston.eduguide.search;
 
 public class SearchItem{
     private String title;

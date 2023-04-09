@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.capston.eduguide.R;
+import com.capston.eduguide.login.LoginActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 

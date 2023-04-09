@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.db.DatabaseHelper;
+import com.capston.eduguide.search.SearchAdapter;
+import com.capston.eduguide.search.SearchItem;
 
 import java.util.ArrayList;
 
