@@ -2,7 +2,7 @@ package com.capston.eduguide.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginMainActivity extends AppCompatActivity {
+public class delete_LoginMainActivity extends AppCompatActivity {
 /*
     Button button;
     SQLiteDatabase userDB;

@@ -74,14 +74,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent, 203);
+                startActivity(intent);
             }
         });
     }
 
     public void searchData (String isID, String isPass){
         userDB = helper.getReadableDatabase();
-        String sql = ("select userId, password from userDB where userId=? and password=?");
+        String sql = ("select userId, password from userTBL where userId=? and password=?");
         Cursor cursor = userDB.rawQuery(sql, new String[] {isID, isPass});
 
         if (cursor.getCount() > 0) {
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             userId = cursor.getString(0);
             userExit = true;
         }
-
+        //userExit = true; //로그인 강제 성공 코드
         cursor.close(); // cursor를 닫아주는 코드
     }
 }
