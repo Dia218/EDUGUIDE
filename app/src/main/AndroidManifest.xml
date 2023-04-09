@@ -20,6 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.capston.eduguide.user.SettingsActivity" />
+        <activity android:name="com.capston.eduguide.user.EditpersonalinfoActivity" />
+        <activity android:name="com.capston.eduguide.user.EditProfileActivity" />
+        <activity android:name="com.capston.eduguide.user.ListinquiryActivity" />
+        <activity android:name="com.capston.eduguide.user.LoginActivity" />
+        <activity android:name="com.capston.eduguide.user.WriteNoticeActivity" />
     </application>
 
 </manifest>

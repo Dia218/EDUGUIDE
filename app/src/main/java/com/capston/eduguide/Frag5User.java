@@ -1,5 +1,6 @@
 package com.capston.eduguide;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,33 +26,36 @@ public class Frag5User extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.frag5_user, container, false);
+        View view = inflater.inflate(R.layout.frag5_user, container, false);
 
         ImageButton settingsButton = (ImageButton) view.findViewById(R.id.settings_icon);
 
         settingsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
-            startActivity(intent);
+            if (getActivity() != null) {
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
+            }
         });
 
-        /*
         // 저장된 닉네임과 자기소개 가져와서 TextView에 반영하기
         profileNameTextView = view.findViewById(R.id.profile_name);
         selfIntroTextView = view.findViewById(R.id.self_intro);
 
         updateProfileInfo();
-*/
+
         return view;
     }
-/*
-    public void updateProfileInfo() {
-        SharedPreferences sharedPreferences = getSharedPreferences("profile", MODE_PRIVATE);
-        String savedName = sharedPreferences.getString("name", "");
-        String savedIntro = sharedPreferences.getString("intro", "");
 
-        profileNameTextView.setText(savedName);
-        selfIntroTextView.setText(savedIntro);
+    public void updateProfileInfo() {
+        if (getActivity() != null) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("profile", Context.MODE_PRIVATE);
+            String savedName = sharedPreferences.getString("name", "");
+            String savedIntro = sharedPreferences.getString("intro", "");
+
+            profileNameTextView.setText(savedName);
+            selfIntroTextView.setText(savedIntro);
+        }
     }
-*/
+
 }
 
