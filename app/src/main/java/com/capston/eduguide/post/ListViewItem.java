@@ -16,13 +16,13 @@ public class ListViewItem {
         userIcon = icon;
     }
     public void setTitle(String title) {
-            titleStr = title;
+        titleStr = title;
     }
     public void setDesc(String desc) {
-            descStr = desc;
+        descStr = desc;
     }
     public void setUsername(String name) {
-            username = name;
+        username = name;
     }
     public void setLike_count(String count) { like_count = count; }
     public void setBookmark_count(String count) { bookmark_count = count; }
