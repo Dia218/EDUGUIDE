@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -23,7 +24,7 @@ public class FeedViewItem {
     private String like_count;
     private String bookmark_count;
     private Integer grade;
-    private BannerPagerAdapter viewPager;
+    private BannerPagerAdapter viewPagerAdapter;
 
 
     //public void setIcon(Drawable icon) { iconDrawable = icon;}
@@ -43,7 +44,7 @@ public class FeedViewItem {
     public void setLike_count(String count) { like_count = count; }
     public void setBookmark_count(String count) { bookmark_count = count; }
     public void setGrade(Integer grade) { this.grade = grade; }
-    public void setViewPager(BannerPagerAdapter bpa) { this.viewPager = bpa; }
+    public void setViewPagerAdapter(BannerPagerAdapter bpa) { this.viewPagerAdapter = bpa; }
 
 
     //public Drawable getIcon() { return this.iconDrawable ;}
@@ -67,31 +68,35 @@ public class FeedViewItem {
         return this.bookmark_count ;
     }
     public Integer getGrade() { return this.grade; }
-    public BannerPagerAdapter getViewPager() { return this.viewPager; }
+    public BannerPagerAdapter getViewPagerAdapter() { return this.viewPagerAdapter; }
 
 
 
-    private class BannerPagerAdapter extends FragmentStatePagerAdapter {
+    static class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        //Guide guide = new Guide();
+        GuideTool guide = new GuideTool();
         public BannerPagerAdapter(FragmentManager fm){
             super(fm);
         }
-        @NonNull
+
         @Override
         public Fragment getItem(int position) {
             //Guide guide = Guide.newInstance(position);
-            GuideTool guide = new GuideTool();
+            //Guide guide = new Guide();
+            return guide;
+        }
+
+        public void getGuide(int boxSize){
             Bundle bundle = new Bundle();
             ArrayList<String> key = new ArrayList<>();
-            for(int i=1;i<15;i++){
+            for(int i=0;i<15;i++){
                 key.add("keyword"+i);
             }
-            bundle.putInt("guideboxsize-1",12);
+            bundle.putInt("guideboxsize",boxSize);
             bundle.putInt("guidelinesize",9);
             bundle.putStringArrayList("key",key);
             guide.setArguments(bundle);
-            return guide;
+
         }
 
         @Override

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -130,6 +131,21 @@ public class GuideTool extends Fragment {
             });
         }
 
+        Bundle bundle = getArguments();
+        if(getArguments() != null){
+            Integer index = bundle.getInt("guideboxsize");
+            ArrayList<String> key = bundle.getStringArrayList("key");
+            addbuttonVector.get(0).setVisibility(View.GONE);
+            for(int num=0;num<(index);num++){
+                addGuide(num, key.get(num));
+                if(num > guideMinNum-1){
+                    //addbuttonVector.get(0).setVisibility(View.GONE);
+                    guideVector.get(num).setVisibility(View.VISIBLE);
+                    lineVector.get(num-1).setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
         //게시글 작성 메뉴가 아닐 경우
         if(!MainActivity.getCurrentMenu().equals("posting")) {
             setFixmode(); //fix모드 메소드 호출
@@ -215,6 +231,23 @@ public class GuideTool extends Fragment {
 
         //다음 addButton 보이게 하기
         addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
+    }
+
+    public void addGuide(int guideNum,String key){
+        //Log.v("size",""+addbuttonVector.capacity());
+        /*while(forGuideNum<guideNum-guideMinNum+1){
+            addbuttonVector.get(forGuideNum).setVisibility(View.GONE);
+            guideVector.get(guideMinNum+forGuideNum).setVisibility(View.VISIBLE);
+            if(guideNum>10){
+                lineVector.get(guideMinNum + forGuideNum).setVisibility(View.VISIBLE);
+            }
+            forGuideNum++;
+            if(forGuideNum<guideNum-guideMinNum){
+                lineVector.get(guideMinNum + forGuideNum).setVisibility(View.GONE);
+            }
+        }*/
+
+        guideVector.get(guideNum).setText(key);
     }
 }
 

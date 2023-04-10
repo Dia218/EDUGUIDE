@@ -33,30 +33,32 @@ public class Frag1Feed extends Fragment {
         return new Frag1Feed();
     }*/
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.frag1_feed, container, false);
-
-        // 리스트 뷰 참조 및 Adapter 달기
+            //rootView = inflater.inflate(R.layout.frag1_feed, container, false);
+            //rootView = inflater.inflate(R.layout.post_feedview_item,container,false);
+            // 리스트 뷰 참조 및 Adapter 달기
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
-        FeedViewAdapter adapter = new FeedViewAdapter(getChildFragmentManager(),getContext()) ;
+        FeedViewAdapter adapter = new FeedViewAdapter(getChildFragmentManager(), getContext());
         recyclerView.setAdapter(adapter);
 
         //아이템 추가
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
-                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
-                "사용자 아이디1","피드 제목 표시1","메인 내용 표시할 거1","#tag1","0","0");
+                ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null),
+                "사용자 아이디1", "피드 제목 표시1", "메인 내용 표시할 거1", "#tag1", "0", "0", 10);
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
-                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
-                "name2","Title2","메인 내용 표시할 거1","tag2","12","0");
+                ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null),
+                "name2", "Title2", "메인 내용 표시할 거1", "tag2", "12", "0", 12);
         adapter.addItem(/*ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.test,null),*/
-                ResourcesCompat.getDrawable(requireActivity().getResources(),R.drawable.grade1,null),
-                "name3","Title3","메인 내용 표시할 거1","tag3","0","4");
+                ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null),
+                "name3", "Title3", "메인 내용 표시할 거1", "tag3", "0", "4", 15);
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -69,7 +71,6 @@ public class Frag1Feed extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
         return rootView;
     }
 }
