@@ -148,7 +148,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.feedview_item, parent, false);
+        View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
     }
