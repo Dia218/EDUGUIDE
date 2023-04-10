@@ -4,20 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:contextClickable="true"
-        android:background="#F6F5F5"/>
+        android:background="#F6F5F5"
+        android:imeOptions="actionSearch"
+        android:queryHint="검색할 태그를 입력해주세요" />
+
+    <!--검색 결과를 보여주는 recycleview -->
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="285dp"
-        android:layout_height="168dp"
-        android:layout_marginStart="40dp"/>
-
+        android:id="@+id/recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="217dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
 
 </LinearLayout>

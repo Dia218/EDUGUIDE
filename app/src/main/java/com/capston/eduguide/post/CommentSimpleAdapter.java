@@ -78,7 +78,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.comment_item, parent, false);
+        View view = inflater.inflate(R.layout.post_comment_item, parent, false);
         ViewHolder cvh = new ViewHolder(view,mItemClickListener);
 
         return cvh;

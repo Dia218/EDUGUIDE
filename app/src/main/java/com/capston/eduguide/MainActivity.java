@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.login.LoginActivity;
 import com.google.android.material.navigation.NavigationBarView;
 import android.database.sqlite.SQLiteDatabase;
 import com.capston.eduguide.db.DatabaseHelper;
@@ -37,9 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         //데이터베이스 생성
         SQLiteDatabase db;
-        helper = new DatabaseHelper(com.capston.eduguide.MainActivity.this, "newdb.db", null, 1);
+        helper = new DatabaseHelper(com.capston.eduguide.MainActivity.this, "new-db.db", null, 1);
         db = helper.getWritableDatabase();
         helper.onCreate(db);
+
+        //로그인 화면 실행
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
 
         //하단바 뷰
         navigationBarView = findViewById(R.id.bottomNavi);
