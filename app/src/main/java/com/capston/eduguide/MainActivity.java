@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.MenuItem;
 
 import com.capston.eduguide.guideTool.GuideTool;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         //로그인 화면 실행
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
+
 
         //하단바 뷰
         navigationBarView = findViewById(R.id.bottomNavi);

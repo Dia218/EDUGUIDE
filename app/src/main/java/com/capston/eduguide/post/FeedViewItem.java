@@ -18,10 +18,10 @@ public class FeedViewItem {
     //private Drawable iconDrawable ;
     private Drawable userIcon;
     private String titleStr ;
-    private String descStr ;
+    private String textStr ;
     private String tagStr;
-    private String username;
-    private String like_count;
+    private String userId;
+    private Integer like_count;
     private String bookmark_count;
     private Integer grade;
     private BannerPagerAdapter viewPagerAdapter;
@@ -34,14 +34,14 @@ public class FeedViewItem {
     public void setTitle(String title) {
         titleStr = title;
     }
-    public void setDesc(String desc) {
-        descStr = desc;
+    public void setText(String text) {
+        textStr = text;
     }
     public void setTag(String tag){ tagStr = tag; }
-    public void setUsername(String name) {
-        username = name;
+    public void setUserId(String name) {
+        userId = name;
     }
-    public void setLike_count(String count) { like_count = count; }
+    public void setLike_count(Integer count) { like_count = count; }
     public void setBookmark_count(String count) { bookmark_count = count; }
     public void setGrade(Integer grade) { this.grade = grade; }
     public void setViewPagerAdapter(BannerPagerAdapter bpa) { this.viewPagerAdapter = bpa; }
@@ -54,14 +54,12 @@ public class FeedViewItem {
     public String getTitle() {
         return this.titleStr ;
     }
-    public String getDesc() {
-        return this.descStr ;
+    public String getText() {
+        return this.textStr ;
     }
     public String getTag(){ return this.tagStr; }
-    public String getUsername() {
-        return this.username ;
-    }
-    public String getLike_count() {
+    public String getUserId() { return this.userId ;}
+    public Integer getLike_count() {
         return this.like_count ;
     }
     public String getBookmark_count(){
@@ -72,7 +70,7 @@ public class FeedViewItem {
 
 
 
-    static class BannerPagerAdapter extends FragmentPagerAdapter {
+    public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
         GuideTool guide = new GuideTool();
         public BannerPagerAdapter(FragmentManager fm){

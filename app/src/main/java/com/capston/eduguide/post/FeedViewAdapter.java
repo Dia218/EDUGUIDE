@@ -119,16 +119,16 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     if(pos != RecyclerView.NO_POSITION){
                         FeedViewItem item = feedViewItemList.get(pos);
                         String titleStr = item.getTitle() ;
-                        String descStr = item.getDesc() ;
+                        String textStr = item.getText() ;
                         String tagStr = item.getTag();
-                        String usernameStr = item.getUsername();
+                        String usernameStr = item.getUserId();
                         Integer grade = userGrade;
 
                         // TODO : use item data.
                         Bundle bundle = new Bundle();
                         bundle.putInt("position",pos);
                         bundle.putString("title_text",titleStr);
-                        bundle.putString("main_text",descStr);
+                        bundle.putString("main_text",textStr);
                         bundle.putString("tag_text",tagStr);
                         bundle.putString("user_name",usernameStr);
                         bundle.putInt("user_grade",grade);
@@ -142,6 +142,18 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     }
                 }
             });
+        }
+        public void setItem(FeedViewItem item){
+            username.setText(item.getUserId());
+            titleText.setText(item.getTitle());
+            tagText.setText(item.getTag());
+            like_count.setText(String.valueOf(item.getLike_count()));
+            bookmark_count.setText(String.valueOf(item.getLike_count()));
+            Glide
+                    .with(context)
+                    .load(item.getUserIcon())
+                    .apply(new RequestOptions().override(50,50))
+                    .into(userImage);
         }
     }
 
@@ -161,21 +173,17 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FeedViewItem item = feedViewItemList.get(position);
-        holder.username.setText(item.getUsername());
+        holder.setItem(item);
+        /*holder.username.setText(item.getUserId());
         holder.titleText.setText(item.getTitle());
         holder.tagText.setText(item.getTag());
-        holder.like_count.setText(item.getLike_count());
-        holder.bookmark_count.setText(item.getBookmark_count());
+        holder.like_count.setText(String.valueOf(item.getLike_count()));
+        holder.bookmark_count.setText(String.valueOf(item.getLike_count()));
         Glide
                 .with(context)
                 .load(item.getUserIcon())
                 .apply(new RequestOptions().override(50,50))
-                .into(holder.userImage);
-        //viewHolder.guide
-        /*Glide
-                .with(context)
-                .load(item.getIcon())
-                .into(holder.iconImage);*/
+                .into(holder.userImage);*/
         //holder.bpa = new FeedViewItem.BannerPagerAdapter(fm);
         //holder.bpa.getGuide(12);
         holder.bpa = item.getViewPagerAdapter();
@@ -207,14 +215,14 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     }
 
     // 아이템 데이터 추가를 위한 함수
-    public void addItem(Drawable userIcon, String username, String title, String desc, String tag, String like_count, String bookmark_count,Integer boxSize) {
+    public void addItem(Drawable userIcon, String username, String title, String desc, String tag, Integer like_count, String bookmark_count,Integer boxSize) {
         FeedViewItem item = new FeedViewItem();
 
         //item.setIcon(icon);
         item.setUserIcon(userIcon);
-        item.setUsername(username);
+        item.setUserId(username);
         item.setTitle(title);
-        item.setDesc(desc);
+        item.setText(desc);
         item.setTag(tag);
         item.setLike_count(like_count);
         item.setBookmark_count(bookmark_count);
@@ -226,8 +234,21 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         feedViewItemList.add(item);
     }
 
+    public void setItems(ArrayList<FeedViewItem> items){
+        feedViewItemList = items;
+    }
 
+    public FeedViewItem getItem(int position){
+        return feedViewItemList.get(position);
+    }
 
+    public void setItem(int position, FeedViewItem item){
+        feedViewItemList.set(position, item);
+    }
+
+    public FragmentManager getFm(){
+        return fm;
+    }
 
     public int getPosition(){
         return position;
