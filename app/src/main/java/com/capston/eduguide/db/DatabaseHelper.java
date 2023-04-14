@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //마이페이지용 임시 DB
         String personalinfoTable = "personal_info";
         db.execSQL("create table if not exists " + personalinfoTable + " ("
-                + " _id integer primary key autoincrement, "
+                + " _id integer PRIMARY KEY autoincrement, "
                 + " name text, "
                 + " birth text, "
                 + " phone text, "

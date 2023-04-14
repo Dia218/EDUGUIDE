@@ -1,4 +1,4 @@
-package com.capston.eduguide.feed;
+package com.capston.eduguide.post;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -33,3 +33,4 @@ public class MeasuredViewPager extends ViewPager {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }
+
