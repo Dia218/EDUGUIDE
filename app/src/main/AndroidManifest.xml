@@ -39,6 +39,7 @@
         <activity android:name="com.capston.eduguide.user.EditProfileActivity" />
         <activity android:name="com.capston.eduguide.user.ListinquiryActivity" />
         <activity android:name="com.capston.eduguide.user.WriteNoticeActivity" />
+        <activity android:name="com.capston.eduguide.user.EditPasswordActivity" />
     </application>
 
 </manifest>
