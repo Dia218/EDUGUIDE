@@ -87,6 +87,7 @@ public class Frag1Feed extends Fragment implements onDatabaseCallback {
     @Override
     public ArrayList<FeedViewItem> selectAllFeed() {
         ArrayList<FeedViewItem> result = helper.selectAllFeed();
+        //가이드 툴 추가는 여기서(가이드 툴 db 받으면 게시글 db와 비교로 가져와서 넣기), 뱃지는 등급-팀원들과 상의 필요
         for(int i=0;i<result.size();i++){
             FeedViewItem item = result.get(i);
             FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(adapter.getFm());
