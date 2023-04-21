@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.view.MenuItem;
 
+import com.capston.eduguide.db.TestFirebase;
 import com.capston.eduguide.guideTool.GuideTool;
 import com.capston.eduguide.login.LoginActivity;
 import com.google.android.material.navigation.NavigationBarView;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private static String currentMenu; //현재 메뉴
 
     private static DatabaseHelper helper; //디비
+
+    TestFirebase testFirebase = new TestFirebase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
