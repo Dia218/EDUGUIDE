@@ -14,11 +14,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.post.FeedViewItem;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Frag3Posting extends Fragment {
 
     private View view;
     private ViewPager vp;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,16 +50,25 @@ public class Frag3Posting extends Fragment {
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
 
                 //게시글DB 등록
-                SQLiteDatabase db = com.capston.eduguide.MainActivity.getHelper().getWritableDatabase();
+                /*SQLiteDatabase db = com.capston.eduguide.MainActivity.getHelper().getWritableDatabase();
                 db.execSQL("INSERT INTO postTBL VALUES ("
                         + pWriterId + ", '"
                         + pTitle + "', '"
                         + pInfo + "', '"
                         + pTag + "', "
                         + 0 + ");");
-                db.close();
+                db.close();*/
 
-                //가이드툴DB 등록 메소드 호출 필요
+                FeedViewItem item = new FeedViewItem();
+                item.setTitle(pTitle);
+                item.setText(pTitle);
+                item.setTag(pTag);
+                item.setUserId("test_id1");
+                item.setGrade(0);
+                item.setBookmark_count("0");
+                item.setLike_count(0);
+
+                databaseReference.child("post").push().setValue(item);
 
             }
         });

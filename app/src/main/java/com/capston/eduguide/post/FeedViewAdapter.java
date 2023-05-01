@@ -214,26 +214,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         return feedViewItemList.size();
     }
 
-    // 아이템 데이터 추가를 위한 함수
-    public void addItem(Drawable userIcon, String username, String title, String desc, String tag, Integer like_count, String bookmark_count,Integer boxSize) {
-        FeedViewItem item = new FeedViewItem();
-
-        //item.setIcon(icon);
-        item.setUserIcon(userIcon);
-        item.setUserId(username);
-        item.setTitle(title);
-        item.setText(desc);
-        item.setTag(tag);
-        item.setLike_count(like_count);
-        item.setBookmark_count(bookmark_count);
-        FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(fm);
-        bpa.getGuide(boxSize);
-        item.setViewPagerAdapter(bpa);
-
-
-        feedViewItemList.add(item);
-    }
-
     public void setItems(ArrayList<FeedViewItem> items){
         feedViewItemList = items;
     }
