@@ -1,8 +1,15 @@
 package com.capston.eduguide.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.capston.eduguide.Frag1Feed;
+import com.capston.eduguide.post.FeedViewItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -63,4 +70,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS guideboxTBL");
         onCreate(db);
     }
+
 }
+
+
+

@@ -90,7 +90,6 @@
             android:backgroundTint="#BDD7EE"
             android:textColor="#000000"
             android:textSize="15sp"
-            style="?android:attr/buttonBarButtonStyle"
             tools:ignore="VisualLintButtonSize" />
 
         <!-- 두 번째 버튼 -->
@@ -103,53 +102,8 @@
             android:backgroundTint="#BDD7EE"
             android:textColor="#000000"
             android:textSize="15sp"
-            style="?android:attr/buttonBarButtonStyle"
             tools:ignore="VisualLintButtonSize" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <!-- 게시물 -->
-        <GridView
-            android:id="@+id/gridView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="230dp"
-            android:columnWidth="100dp"
-            android:gravity="center"
-            android:horizontalSpacing="5dp"
-            android:numColumns="3"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <!-- 하단바 아이템 1 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1" />
-
-        <!-- 하단바 아이템 2 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2" />
-
-        <!-- 하단바 아이템 3 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3" />
     </LinearLayout>
 
 </RelativeLayout>
