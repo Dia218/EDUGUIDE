@@ -1,15 +1,21 @@
 package com.capston.eduguide.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.capston.eduguide.post.FeedViewItem;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         //사용자DB 생성
@@ -62,5 +68,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS postTBL");
         db.execSQL("DROP TABLE IF EXISTS guideboxTBL");
         onCreate(db);
+    }
+
+    public boolean insertUser(String userID, String password, String email, String phone){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("userID",userID);
+        contentValues.put("password",password);
+        contentValues.put("email",email);
+        contentValues.put("phone",phone);
+        long result = db.insert("userTBL",null,contentValues);
+        if(result == -1)
+            return false;
+        else
+            return true;
+    }
+
+    public boolean insertPost(String userID, String postTitle, String postText, String postTag, Integer recommend, Integer save){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("userId",userID);
+        contentValues.put("postTitle",postTitle);
+        contentValues.put("postText",postText);
+        contentValues.put("postTag",postTag);
+        contentValues.put("recommend",recommend);
+        contentValues.put("save",save);
+        long result = db.insert("postTBL",null,contentValues);
+        if(result == -1)
+            return false;
+        else
+            return true;
+    }
+
+    public ArrayList<FeedViewItem> selectAllFeed(){
+        ArrayList<FeedViewItem> result = new ArrayList<FeedViewItem>();
+        try{
+            Cursor cursor = getReadableDatabase().rawQuery("select userId, postTitle, postText, postTag, recommend from postTBL",null);
+            for(int i = 0;i< cursor.getCount();i++){
+                cursor.moveToNext();
+                String userId = cursor.getString(0);
+                String titleStr = cursor.getString(1);
+                String textStr = cursor.getString(2);
+                String tagStr = cursor.getString(3);
+                Integer like_count = cursor.getInt(4);
+
+                FeedViewItem feed = new FeedViewItem();
+                feed.setUserId(userId);
+                feed.setTitle(titleStr);
+                feed.setText(textStr);
+                feed.setTag(tagStr);
+                feed.setLike_count(like_count);
+                result.add(feed);
+            }
+        } catch (Exception ex){
+            Log.e("database", "Exception in executing insert SQL.", ex);
+        }
+        return result;
     }
 }
