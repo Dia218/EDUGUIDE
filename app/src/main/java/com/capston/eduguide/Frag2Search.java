@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,15 +27,10 @@ import java.util.ArrayList;
 
 public class Frag2Search extends Fragment {
 
+    private SearchView searchView;
     private RecyclerView recyclerView;
+    private DatabaseReference databaseReference;
 
-    private RecyclerView.LayoutManager layoutManager;
-
-    private SearchAdapter adapter;
-
-    private ArrayList<SearchItem> searchlist;
-
-    private DatabaseHelper dbhelper;
 
     public Frag2Search() {
 
@@ -44,86 +40,55 @@ public class Frag2Search extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_search, container, false);
 
+        searchView = view.findViewById(R.id.search_view);
         recyclerView = view.findViewById(R.id.recycle_view);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
 
-        dbhelper = MainActivity.getHelper();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        SearchView searchView = view.findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //검색어 완료시 호출되는 메소드
-                return true;
-            }
+        private void searchDatabase (String searchText){
+            Query query = databaseReference.child("tags").orderByChild("tag").startAt(searchText).endAt(searchText + "\uf8ff");
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                search(newText);
-                return false;
-            }
-        });
+            FirebaseRecyclerOptions<Model> options =
+                    new FirebaseRecyclerOptions.Builder<Model>()
+                            .setQuery(query, Model.class)
+                            .build();
+            FirebaseRecyclerAdapter<Model, ViewHolder> firebaseRecyclerAdapter =
+                    new FirebaseRecyclerAdapter<Model, ViewHolder>(options) {
+                        @Override
+                        protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Model model) {
+                            holder.setDetails(getActivity().getApplicationContext(), model.getTitle(), model.getTag());
 
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("userId", model.getUserId());
+                                    bundle.putString("description", model.getDescription());
+                                    bundle.putString("tag", model.getTag());
 
-            GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+                                    Fragment fragment = new OtherFragment();
+                                    fragment.setArguments(bundle);
 
-                @Override
-                public boolean onSingleTapUp(MotionEvent motionEvent) {
-                    return true;
-                }
+                                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.fragment_container, fragment);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
 
-            });
+                                }
+                            });
+                        }
 
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
-                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-                if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
-                    int position = recyclerView.getChildAdapterPosition(child);
-                    SearchItem searchItem = searchlist.get(position);
-
-                    // CommentSimple 클래스 이동하는 intent를 생성하고 데이터 전달
-                    Intent intent = new Intent(getContext(), CommentSimple.class);
-                    intent.putExtra("title", searchItem.getTitle());
-                    intent.putExtra("tag", searchItem.getTag());
-                    startActivity(intent);
-
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean b) {
-
-            }
-        });
-
-        return view;
-    }
-
-    private void search(String searchText) {
-        //SQLite에서 검색어와 일치하는 데이터를 찾아서 Arraylist에 추가
-        searchlist = new ArrayList<SearchItem>();
-        SQLiteDatabase db = dbhelper.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM postTBL WHERE postTag='" + searchText + "'", null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String title = cursor.getString(2);
-                String tag = cursor.getString(4);
-                searchlist.add(new SearchItem(title, tag));
-            } while (cursor.moveToNext());
+                        @NonNull
+                        @Override
+                        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.model_layout, parent, false);
+                            ViewHolder viewHolder = new ViewHolder(view);
+                            return viewHolder;
+                        }
+                    };
+            firebaseRecyclerAdapter.startListening();
+            recyclerView.setAdapter(firebaseRecyclerAdapter);
         }
-        adapter = new SearchAdapter(searchlist);
-        recyclerView.setAdapter(adapter);
+
     }
 }
