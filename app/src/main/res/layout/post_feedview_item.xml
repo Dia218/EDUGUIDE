@@ -80,12 +80,12 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/bookmark_button"
                     android:text="0"/>
-                <Button
+                <!--<Button
                     android:id="@+id/delete_feed"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
-                    android:text="삭제"/>
+                    android:text="삭제"/>-->
             </RelativeLayout>
 
             <TextView
