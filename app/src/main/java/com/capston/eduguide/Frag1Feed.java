@@ -1,6 +1,7 @@
 package com.capston.eduguide;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,19 +30,19 @@ import java.util.ArrayList;
 public class Frag1Feed extends Fragment {
 
     private GuideTool fragmentGuide;
-    //DatabaseHelper helper;
     FeedViewAdapter adapter;
     ArrayList<FeedViewItem> items;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-    //Parcelable recyclerViewState;
+    private ValueEventListener mListener;
+    RecyclerView recyclerView;
+    Parcelable recyclerViewState = null;
     //RecyclerView recyclerView;
     // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
     /*public static Frag1Feed newInstance(){
         return new Frag1Feed();
     }*/
-
 
     @Nullable
     @Override
@@ -50,15 +51,14 @@ public class Frag1Feed extends Fragment {
         View rootView=inflater.inflate(R.layout.frag1_feed, container, false);
             //rootView = inflater.inflate(R.layout.frag1_feed, container, false);
             //rootView = inflater.inflate(R.layout.post_feedview_item,container,false);
-            // 리스트 뷰 참조 및 Adapter 달기
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
+        // 리스트 뷰 참조 및 Adapter 달기
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         items = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance();
-
         databaseReference = database.getReference("post");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 items.clear();
@@ -72,16 +72,13 @@ public class Frag1Feed extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Frag1Feed",String.valueOf(error.toException()));
+
             }
-        });
-
-
-        //SQLiteDatabase myDb;
-        //helper = MainActivity.getHelper();
+        };
+        databaseReference.addValueEventListener(mListener);
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
-        adapter = new FeedViewAdapter(getChildFragmentManager(), getContext());
+        adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
 
@@ -98,6 +95,43 @@ public class Frag1Feed extends Fragment {
         });
         return rootView;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("onStart","check Start!");
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.i("onStart","check Start!");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("onResume","check Resume!");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("onStop","check Stop!");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("onPause", "check Pause!");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i("onDestroyView", "check DestroyView!");
+        databaseReference.removeEventListener(mListener);
+    }
+
 
     public void addGuide() {
         //ArrayList<FeedViewItem> result = items;
@@ -127,6 +161,15 @@ public class Frag1Feed extends Fragment {
             item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
         }
     }
+
+    private void saveRecyclerViewState() {
+        // LayoutManager를 불러와 Parcelable 변수에 리사이클러뷰 상태를 Bundle 형태로 저장한다
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+    }
+
+    private void setSavedRecyclerViewState() {
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+    };
 }
 
 
