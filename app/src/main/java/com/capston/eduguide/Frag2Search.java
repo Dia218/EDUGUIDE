@@ -1,12 +1,8 @@
 package com.capston.eduguide;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.GestureDetector;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,24 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.capston.eduguide.db.DatabaseHelper;
-import com.capston.eduguide.post.CommentSimple;
 import com.capston.eduguide.search.SearchAdapter;
 import com.capston.eduguide.search.SearchItem;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Frag2Search extends Fragment {
 
-    private SearchView searchView;
-    private RecyclerView recyclerView;
     private DatabaseReference databaseReference;
-
-
+    private RecyclerView recyclerView;
+    private SearchView searchView;
+    private SearchAdapter adapter;
     public Frag2Search() {
 
     }
@@ -40,55 +37,57 @@ public class Frag2Search extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_search, container, false);
 
-        searchView = view.findViewById(R.id.search_view);
-        recyclerView = view.findViewById(R.id.recycle_view);
-
+        //firebase 초기화
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        private void searchDatabase (String searchText){
-            Query query = databaseReference.child("tags").orderByChild("tag").startAt(searchText).endAt(searchText + "\uf8ff");
+        //recyclerView 초기화
+        recyclerView=view.findViewById(R.id.recycle_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new SearchAdapter(getActivity());
+        recyclerView.setAdapter(adapter);
 
-            FirebaseRecyclerOptions<Model> options =
-                    new FirebaseRecyclerOptions.Builder<Model>()
-                            .setQuery(query, Model.class)
-                            .build();
-            FirebaseRecyclerAdapter<Model, ViewHolder> firebaseRecyclerAdapter =
-                    new FirebaseRecyclerAdapter<Model, ViewHolder>(options) {
-                        @Override
-                        protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Model model) {
-                            holder.setDetails(getActivity().getApplicationContext(), model.getTitle(), model.getTag());
+        //searchView 초기화
+        searchView = view.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query){
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText){
+                search(newText);
+                return true;
+            }
+        });
+        return view;
+    }
+    private void search(String query){
+        //firebase에서 검색어와 일치하는 태그값을 찾아 검색결과를 가져옴
 
-                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("userId", model.getUserId());
-                                    bundle.putString("description", model.getDescription());
-                                    bundle.putString("tag", model.getTag());
-
-                                    Fragment fragment = new OtherFragment();
-                                    fragment.setArguments(bundle);
-
-                                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.fragment_container, fragment);
-                                    transaction.addToBackStack(null);
-                                    transaction.commit();
-
-                                }
-                            });
+        databaseReference.child("posts")
+                .orderByChild("tag")
+                .startAt(query)
+                .endAt(query+"\uf8ff")
+                .addListenerForSingleValueEvent(new ValueEventListener(){
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot){
+                        List<SearchItem> searchItems=new ArrayList<>();
+                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                            //태그가 일치하는 경우
+                            String tag = snapshot.child("tag").getValue(String.class);
+                            if(tag!=null&& tag.contains(query)){
+                                String title=snapshot.child("title").getValue(String.class);
+                                String postId=snapshot.getKey();
+                                SearchItem searchItem=new SearchItem(postId,title,tag);
+                                searchItems.add(searchItem);
+                            }
                         }
-
-                        @NonNull
-                        @Override
-                        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.model_layout, parent, false);
-                            ViewHolder viewHolder = new ViewHolder(view);
-                            return viewHolder;
-                        }
-                    };
-            firebaseRecyclerAdapter.startListening();
-            recyclerView.setAdapter(firebaseRecyclerAdapter);
-        }
-
+                        adapter.setSearchItems(searchItems);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError){
+                        Log.e("Frag2Search","onCancelled",databaseError.toException());
+                    }
+                });
     }
 }
