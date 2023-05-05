@@ -1,5 +1,7 @@
 package com.capston.eduguide.post;
 
+import static com.capston.eduguide.Frag4Notice.frag4Notice;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -160,6 +162,9 @@ public class CommentSimple extends Fragment {
                 adapter.notifyItemInserted(comments.size());
                 recyclerView.setAdapter(adapter);
                 DatabaseReference.child(fId).setValue(comments);
+
+                //알림 호출 //게시글 제목 받아와야 함
+                frag4Notice.showNotification(0, "게시글 제목", userId);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

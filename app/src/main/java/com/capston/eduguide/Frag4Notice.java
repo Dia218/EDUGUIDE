@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 
 public class Frag4Notice extends Fragment {
 
+    public static Frag4Notice frag4Notice = new Frag4Notice();
+
     private View view;
 
     private TextView noticeText;
