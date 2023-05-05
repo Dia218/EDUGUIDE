@@ -1,5 +1,6 @@
 package com.capston.eduguide.search;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,39 +11,69 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
-    private ArrayList<SearchItem> searchlist;
+    private List<SearchItem> searchItems;
+    private Context context;
 
-    public static class SearchViewHolder extends RecyclerView.ViewHolder{
-        public TextView textView1;
-        public TextView textView2;
-
-        public SearchViewHolder(@NonNull View itemView){
-            super(itemView);
-            textView1 =itemView.findViewById(R.id.textView1);
-            textView2=itemView.findViewById(R.id.textView2);
-        }
+    public SearchAdapter(Context context){
+        this.context=context;
+        searchItems=new ArrayList<>();
     }
-    public SearchAdapter(ArrayList<SearchItem> searchlist){
-        this.searchlist=searchlist;
+    public void setSearchItems(List<SearchItem> searchItems){
+        searchItems.clear();
+        searchItems.addAll(searchItems);
+        notifyDataSetChanged();
     }
     @NonNull
     @Override
     public SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent,int viewType){
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item,parent,false);
-        SearchViewHolder evh = new SearchViewHolder(v);
-        return evh;
+        View view=LayoutInflater.from(context).inflate(R.layout.search_item,parent,false);
+        return new SearchViewHolder(view);
     }
     @Override
-    public void onBindViewHolder(@NonNull SearchViewHolder holder, int position){
-        SearchItem currentitem = searchlist.get(position);
-        holder.textView1.setText(currentitem.getTitle());
-        holder.textView2.setText(currentitem.getTag());
+    public void onBindViewHolder(@NonNull SearchViewHolder holder,int position){
+        SearchItem searchItem = searchItems.get(position);
+        holder.bind(searchItem);
     }
-    @Override
     public int getItemCount(){
-        return searchlist.size();
+        return searchItems.size();
     }
+    static class SearchViewHolder extends RecyclerView.ViewHolder{
+        private TextView titleTextView;
+        private TextView tagTextView;
+
+        public SearchViewHolder(@NonNull View itemView){
+            super(itemView);
+            titleTextView=itemView.findViewById(R.id.text_view_title);
+            tagTextView=itemView.findViewById(R.id.text_view_tag);
+        }
+        public void bind(SearchItem searchItem){
+            titleTextView.setText(searchItem.getTitle());
+            tagTextView.setText("#"+searchItem.getTag());
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+

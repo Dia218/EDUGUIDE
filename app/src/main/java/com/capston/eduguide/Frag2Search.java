@@ -1,81 +1,97 @@
 package com.capston.eduguide;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.capston.eduguide.db.DatabaseHelper;
 import com.capston.eduguide.search.SearchAdapter;
 import com.capston.eduguide.search.SearchItem;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Frag2Search extends Fragment {
 
+    private DatabaseReference databaseReference;
     private RecyclerView recyclerView;
-
-    private RecyclerView.LayoutManager layoutManager;
-
+    private SearchView searchView;
     private SearchAdapter adapter;
-
-    private ArrayList<SearchItem> searchlist;
-
-    private DatabaseHelper dbhelper;
-
-    public Frag2Search(){
+    public Frag2Search() {
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.frag2_search, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.frag2_search, container, false);
 
+        //firebase 초기화
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        //recyclerView 초기화
         recyclerView=view.findViewById(R.id.recycle_view);
-        recyclerView.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new SearchAdapter(getActivity());
+        recyclerView.setAdapter(adapter);
 
-        dbhelper = MainActivity.getHelper();
-
-        SearchView searchView = view.findViewById(R.id.search_view);
+        //searchView 초기화
+        searchView = view.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query){
-                //검색어 완료시 호출되는 메소드
-                return true;
+                return false;
             }
             @Override
             public boolean onQueryTextChange(String newText){
                 search(newText);
-                return false;
+                return true;
             }
         });
-
         return view;
     }
-    private void search(String searchText){
-        //SQLite에서 검색어와 일치하는 데이터를 찾아서 Arraylist에 추가
-        searchlist = new ArrayList<SearchItem>();
-        SQLiteDatabase db=dbhelper.getReadableDatabase();
+    private void search(String query){
+        //firebase에서 검색어와 일치하는 태그값을 찾아 검색결과를 가져옴
 
-        Cursor cursor = db.rawQuery("SELECT * FROM postTBL WHERE tag='" + searchText + "'", null);
+        databaseReference.child("posts")
+                .orderByChild("tag")
+                .startAt(query)
+                .endAt(query+"\uf8ff")
+                .addListenerForSingleValueEvent(new ValueEventListener(){
 
-        if(cursor.moveToFirst()){
-            do{
-                String title=cursor.getString(2);
-                String tag=cursor.getString(4);
-                searchlist.add(new SearchItem(title,tag));
-            }while (cursor.moveToNext());
-        }
-        adapter = new SearchAdapter(searchlist);
-        recyclerView.setAdapter(adapter);
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot){
+                        List<SearchItem> searchItems=new ArrayList<>();
+                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                            //태그가 일치하는 경우
+                            String tag = snapshot.child("tag").getValue(String.class);
+                            if(tag!=null&& tag.contains(query)){
+                                String title=snapshot.child("title").getValue(String.class);
+                                String postId=snapshot.getKey();
+                                SearchItem searchItem=new SearchItem(postId,title,tag);
+                                searchItems.add(searchItem);
+                            }
+                        }
+                        adapter.setSearchItems(searchItems);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError){
+                        Log.e("Frag2Search","onCancelled",databaseError.toException());
+                    }
+                });
     }
 }
