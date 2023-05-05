@@ -46,7 +46,6 @@ public class CommentSimple extends Fragment {
     /*public static Comment newInstance(){
         return new Comment();
     }*/
-    //private View view;
     private TextView main;
     private TextView tag;
     private TextView username;
@@ -56,7 +55,6 @@ public class CommentSimple extends Fragment {
     private ImageView userImage;
     private ImageView feedUserImage;
     private String fId;
-    private String title;
     FeedViewItem item;
     CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
@@ -140,25 +138,20 @@ public class CommentSimple extends Fragment {
         adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
         recyclerView.setAdapter(adapter);
 
-        //댓글아이템 추가
-        /*adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
-                "댓글단 유저 아이디1","임시 댓글 내용1");*/
-
         input.setOnClickListener(new View.OnClickListener() {                      //댓글 입력시 이벤트
             @Override
             public void onClick(View v) {
-
-
-
                 String comment = comm.getText().toString();
                 //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
                 String userId = bundle.getString("user_name");
-                Integer userGrade = bundle.getInt("user_grade");
+                //여기서 유저의 등급 받아서 코멘트 속성으로 부여할지 고민중
+                //현재는 어댑터에서 출력하기 전에 유저 이름으로 등급 검색함
                 comm.setText("");
                 adapter.addComment(comments,userId,comment);
-                //comments.add(new CommentItem(ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null), comment,userId));
                 adapter.notifyItemInserted(comments.size());
                 recyclerView.setAdapter(adapter);
+
+                //파이어베이스에 데이터 입력
                 DatabaseReference.child(fId).setValue(comments);
 
                 new Handler().postDelayed(new Runnable() {
@@ -171,7 +164,6 @@ public class CommentSimple extends Fragment {
                 //recyclerView.scrollToPosition(comments.size()-1);
             }
         });
-
         return view;
     }
 
@@ -181,14 +173,14 @@ public class CommentSimple extends Fragment {
     }
 
     private int grade(Integer gradeInt) {
-        if(gradeInt < 10)
-            return R.drawable.grade1;
-        else if(gradeInt < 20)
-            return R.drawable.grade1;
-        else if(gradeInt < 30)
-            return R.drawable.grade1;
-        else if(gradeInt < 40)
-            return R.drawable.grade1;
+        if(gradeInt == 0)
+            return R.drawable.seed;
+        else if(gradeInt == 1)
+            return R.drawable.sprout;
+        else if(gradeInt == 2)
+            return R.drawable.seedling;
+        else if(gradeInt == 3)
+            return R.drawable.tree;
         else
             return R.drawable.grade1;
     }

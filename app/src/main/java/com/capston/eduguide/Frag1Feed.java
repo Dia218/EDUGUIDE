@@ -141,24 +141,24 @@ public class Frag1Feed extends Fragment {
             FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(adapter.getFm());
             bpa.getGuide(12);
             item.setViewPagerAdapter(bpa);
-            item.setGrade(10);
+            //item.setGrade(0);
             setUserIconForGrade(item);
             items.set(i,item);
         }
     }
 
     public void setUserIconForGrade(FeedViewItem item){
-        if(item.getGrade()<10){
-            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
+        if(item.getGrade()==0){
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seed, null));
         }
-        else if (item.getGrade()<20) {
-            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
+        else if (item.getGrade()==1) {
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.sprout, null));
         }
-        else if (item.getGrade()<30) {
-            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
+        else if (item.getGrade()==2) {
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seedling, null));
         }
-        else if (item.getGrade()<40) {
-            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
+        else if (item.getGrade()==3) {
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.tree, null));
         }
     }
 

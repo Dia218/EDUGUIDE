@@ -80,7 +80,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
             //iconImage = itemView.findViewById(R.id.guideImage);
             userImage = itemView.findViewById(R.id.feedUserImage);
             vp = (ViewPager) itemView.findViewById(R.id.vp);
-            userGrade = 10;
+            //userGrade = 10;
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -90,18 +90,18 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         int count = Integer.parseInt(like_count.getText().toString());
                         count += 1;
                         like_count.setText(Integer.toString(count));
-                        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databaseReference = database.getReference("post");
-                        databaseReference.child(pos).child("like_count").setValue(count);*/
+                        databaseReference.child(pos).child("like_count").setValue(count);
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
                         if(count != 0){
                             count -= 1;
                             like_count.setText(Integer.toString(count));
-                            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference databaseReference = database.getReference("post");
-                            databaseReference.child(pos).child("like_count").setValue(count);*/
+                            databaseReference.child(pos).child("like_count").setValue(count);
                         }
                     }
                 }
@@ -111,26 +111,27 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     v.setSelected(!v.isSelected());
+                    String pos = Integer.toString(getAdapterPosition());
                     if(v.isSelected()){
                         int count = Integer.parseInt(bookmark_count.getText().toString());
-                        bookmark_count.setText(Integer.toString(++count));
+                        count += 1;
+                        bookmark_count.setText(Integer.toString(count));
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference databaseReference = database.getReference("post");
+                        databaseReference.child(pos).child("bookmark_count").setValue(count);
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());
                         if(count != 0){
-                            bookmark_count.setText(Integer.toString(--count));
+                            count -= 1;
+                            bookmark_count.setText(Integer.toString(count));
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference databaseReference = database.getReference("post");
+                            databaseReference.child(pos).child("bookmark_count").setValue(count);
                         }
                     }
                 }
             });
-
-            /*delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setPosition(position);
-                    removeItem(position);
-                }
-            });*/
 
             titleText.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -142,7 +143,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         String textStr = item.getText() ;
                         String tagStr = item.getTag();
                         String usernameStr = item.getUserId();
-                        Integer grade = userGrade;
+                        Integer grade = item.getGrade();
 
                         // TODO : use item data.
                         Bundle bundle = new Bundle();

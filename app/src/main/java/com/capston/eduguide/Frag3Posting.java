@@ -29,7 +29,7 @@ public class Frag3Posting extends Fragment {
     private Integer prepId;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
-    DatabaseReference postDatabaseReference = firebaseDatabase.getReference("post");
+    DatabaseReference postDatabaseReference = firebaseDatabase.getReference();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,7 +93,6 @@ public class Frag3Posting extends Fragment {
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = prepId.toString();
-                //item.setFeedId(prepId+1);
 
                 databaseReference.child("post").child(fId).setValue(item);
 

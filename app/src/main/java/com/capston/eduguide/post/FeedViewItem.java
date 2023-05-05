@@ -25,8 +25,6 @@ public class FeedViewItem {
     private Integer like_count;
     private Integer bookmark_count;
     private Integer grade;
-    //private ArrayList<CommentItem> comments;
-    //private ArrayList<String> comment;
     private BannerPagerAdapter viewPagerAdapter;
 
 
