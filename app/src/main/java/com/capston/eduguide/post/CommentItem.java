@@ -6,20 +6,22 @@ import java.util.ArrayList;
 
 public class CommentItem {
 
-    private Drawable userIcon;
+    //private Drawable userIcon;
     private String commentStr ;
     private String username;
     //private ArrayList<ReplyItem_unfinished> replyList;
 
-    public CommentItem(Drawable userIcon, String commentStr, String username){
-        this.userIcon = userIcon;
+    public CommentItem(){
+
+    }
+
+    public CommentItem(String commentStr, String username){
+        //this.userIcon = userIcon;
         this.commentStr = commentStr;
         this.username = username;
     }
 
-    public void setUserIcon(Drawable icon) {
-        userIcon = icon;
-    }
+    //public void setUserIcon(Drawable icon) { userIcon = icon;}
     public void setComment(String comment) {
         commentStr = comment ;
     }
@@ -28,9 +30,7 @@ public class CommentItem {
         this.replyList = replyList;
     }*/
 
-    public Drawable getUserIcon() {
-        return this.userIcon ;
-    }
+    //public Drawable getUserIcon() { return this.userIcon ;}
     public String getComment() {
         return this.commentStr ;
     }

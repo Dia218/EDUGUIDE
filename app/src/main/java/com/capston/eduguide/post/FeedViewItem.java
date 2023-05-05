@@ -16,18 +16,22 @@ import java.util.ArrayList;
 
 public class FeedViewItem {
     //private Drawable iconDrawable ;
+    private Integer feedId;
     private Drawable userIcon;
     private String titleStr ;
     private String textStr ;
     private String tagStr;
     private String userId;
     private Integer like_count;
-    private String bookmark_count;
+    private Integer bookmark_count;
     private Integer grade;
+    //private ArrayList<CommentItem> comments;
+    //private ArrayList<String> comment;
     private BannerPagerAdapter viewPagerAdapter;
 
 
     //public void setIcon(Drawable icon) { iconDrawable = icon;}
+    public void setFeedId(Integer id) { feedId = id; }
     public void setUserIcon(Drawable icon) {
         userIcon = icon;
     }
@@ -42,12 +46,15 @@ public class FeedViewItem {
         userId = name;
     }
     public void setLike_count(Integer count) { like_count = count; }
-    public void setBookmark_count(String count) { bookmark_count = count; }
+    public void setBookmark_count(Integer count) { bookmark_count = count; }
     public void setGrade(Integer grade) { this.grade = grade; }
+    //public void setComment(ArrayList<CommentItem> comment) { this.comments = comment; }
+    //public void setComment(ArrayList<String> comment) { this.comment = comment; }
     public void setViewPagerAdapter(BannerPagerAdapter bpa) { this.viewPagerAdapter = bpa; }
 
 
     //public Drawable getIcon() { return this.iconDrawable ;}
+    public Integer getFeedId() { return this.feedId; }
     public Drawable getUserIcon() {
         return this.userIcon ;
     }
@@ -62,13 +69,16 @@ public class FeedViewItem {
     public Integer getLike_count() {
         return this.like_count ;
     }
-    public String getBookmark_count(){
+    public Integer getBookmark_count(){
         return this.bookmark_count ;
     }
     public Integer getGrade() { return this.grade; }
+    //public ArrayList<CommentItem> getComment() { return this.comments; }
+    //public ArrayList<String> getComment() { return this.comment; }
     public BannerPagerAdapter getViewPagerAdapter() { return this.viewPagerAdapter; }
 
-
+    //public void addComments(CommentItem comm) { comments.add(comm); }
+    //public void addComment(String comm) { comment.add(comm); }
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 

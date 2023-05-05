@@ -139,5 +139,4 @@ public class MainActivity extends AppCompatActivity {
 
     //디비 반환 메소드
     public static DatabaseHelper getHelper() { return helper; }
-
 }

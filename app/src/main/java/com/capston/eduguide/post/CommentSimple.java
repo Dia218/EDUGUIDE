@@ -2,6 +2,7 @@ package com.capston.eduguide.post;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -26,15 +28,25 @@ import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.capston.eduguide.guideTool.GuideTool;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CommentSimple extends Fragment {
 
     /*public static Comment newInstance(){
         return new Comment();
     }*/
-    private View view;
+    //private View view;
     private TextView main;
     private TextView tag;
     private TextView username;
@@ -43,7 +55,14 @@ public class CommentSimple extends Fragment {
     private Integer gradeInt;
     private ImageView userImage;
     private ImageView feedUserImage;
+    private String fId;
+    private String title;
+    FeedViewItem item;
+    CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference DatabaseReference = firebaseDatabase.getReference("comment");
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +72,7 @@ public class CommentSimple extends Fragment {
             public void handleOnBackPressed() {
                 // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
                 ((MainActivity)getActivity()).replaceFragment(new Frag1Feed());
+
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -69,42 +89,55 @@ public class CommentSimple extends Fragment {
         comm = view.findViewById(R.id.commentDetail);
         feedUserImage = view.findViewById(R.id.feedUserImage);
         userImage = view.findViewById(R.id.userImage);
-        Button back = (Button)view.findViewById(R.id.back);
+        //Button back = (Button)view.findViewById(R.id.back);
         Button input = (Button) view.findViewById(R.id.commentInput);
-        Bundle bundle = getArguments();
-        if (getArguments() != null)
-        {
-            String mainStr = bundle.getString("main_text"); // 피드에서 받아온 값 넣기
-            main.setText(mainStr);
-            String tagStr = bundle.getString("tag_text");
-            tag.setText(tagStr);
-            String usernameStr = bundle.getString("user_name");
-            username.setText(usernameStr);
-            gradeInt =  bundle.getInt("user_grade");
-            feedUserImage.setImageResource(grade(gradeInt));
-            //사용자의 뱃지 이미지. 일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
-            userImage.setImageResource(grade(gradeInt));
-        }
+        item = new FeedViewItem();
+
         vp = (ViewPager) view.findViewById(R.id.vp);
         vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
         vp.setCurrentItem(0);
 
-        back.setOnClickListener(new View.OnClickListener() {              //피드 메인으로 돌아가는 버튼 이벤트
+        Bundle bundle = getArguments();
+        if (getArguments() != null)
+        {
+            String mainStr = bundle.getString("main_text");
+            String tagStr = bundle.getString("tag_text");
+            String userName = bundle.getString("user_name");
+            main.setText(mainStr);
+            tag.setText(tagStr);
+            username.setText(userName);
+            gradeInt =  bundle.getInt("user_grade");
+            feedUserImage.setImageResource(grade(gradeInt));
+            Integer pos = bundle.getInt("position");
+            fId = pos.toString();
+            //사용자의 뱃지 이미지. 일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
+            userImage.setImageResource(grade(gradeInt));
+        }
+
+        ValueEventListener mListener = new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                //((MainActivity)getActivity()).replaceFragment(Frag1Feed.newInstance());
-                Frag1Feed feed = new Frag1Feed();
-                AppCompatActivity activity = (AppCompatActivity)v.getContext();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,feed).commit();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                comments.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    CommentItem comm = snapshot.getValue(CommentItem.class);
+                    comments.add(comm);
+                }
+                adapter.notifyDataSetChanged();
             }
-        });
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        DatabaseReference.child(fId).addValueEventListener(mListener);
 
         // 댓글 리사이클러뷰 참조
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.commentList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // 댓글 리사이클러뷰에 Adapter 객체 지정
-        CommentSimpleAdapter adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
+        adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
         recyclerView.setAdapter(adapter);
 
         //댓글아이템 추가
@@ -114,15 +147,19 @@ public class CommentSimple extends Fragment {
         input.setOnClickListener(new View.OnClickListener() {                      //댓글 입력시 이벤트
             @Override
             public void onClick(View v) {
+
+
+
                 String comment = comm.getText().toString();
                 //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
                 String userId = bundle.getString("user_name");
                 Integer userGrade = bundle.getInt("user_grade");
                 comm.setText("");
-                adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(userGrade),null),userId,comment);
+                adapter.addComment(comments,userId,comment);
                 //comments.add(new CommentItem(ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null), comment,userId));
                 adapter.notifyItemInserted(comments.size());
                 recyclerView.setAdapter(adapter);
+                DatabaseReference.child(fId).setValue(comments);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

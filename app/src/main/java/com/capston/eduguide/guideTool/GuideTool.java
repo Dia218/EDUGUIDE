@@ -233,6 +233,7 @@ public class GuideTool extends Fragment {
         addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
     }
 
+    //일단은 박스 사이즈만 받아서 키워드만 임의 지정함.키워드랑 설명 저장 기능,db   생기면 시도해봄
     public void addGuide(int guideNum,String key){
         //Log.v("size",""+addbuttonVector.capacity());
         /*while(forGuideNum<guideNum-guideMinNum+1){
