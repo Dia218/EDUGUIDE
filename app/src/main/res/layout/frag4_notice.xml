@@ -18,8 +18,11 @@
         android:layout_height="3dp"
         android:background="?android:attr/listDivider"/>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <TextView
+        android:id="@+id/notice_text"
         android:layout_width="match_parent"
-        android:layout_height="628dp"/>
+        android:layout_height="wrap_content"
+        android:padding="16dp"/>
+
 
 </LinearLayout>
