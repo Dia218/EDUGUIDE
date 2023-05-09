@@ -2,6 +2,7 @@ package com.capston.eduguide.post;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +16,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.capston.eduguide.Frag1Feed;
+import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.capston.eduguide.guideTool.GuideTool;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -33,6 +40,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     private ArrayList<FeedViewItem> feedViewItemList = new ArrayList<FeedViewItem>() ;
     private FragmentManager fm;
     private int position;
+
+    private ValueEventListener mListener;
 
     // ListViewAdapter의 생성자
     public FeedViewAdapter(FragmentManager fm, Context context){
@@ -53,6 +62,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         public ViewPager vp;
         public FeedViewItem.BannerPagerAdapter bpa;
         public Integer userGrade;
+        private FirebaseDatabase database = FirebaseDatabase.getInstance();
+        private DatabaseReference databaseReference = database.getReference("post");
 
 
         ViewHolder(View itemView){
@@ -74,14 +85,23 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     v.setSelected(!v.isSelected());
+                    String pos = Integer.toString(getAdapterPosition());
                     if(v.isSelected()){
                         int count = Integer.parseInt(like_count.getText().toString());
-                        like_count.setText(Integer.toString(++count));
+                        count += 1;
+                        like_count.setText(Integer.toString(count));
+                        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference databaseReference = database.getReference("post");
+                        databaseReference.child(pos).child("like_count").setValue(count);*/
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
                         if(count != 0){
-                            like_count.setText(Integer.toString(--count));
+                            count -= 1;
+                            like_count.setText(Integer.toString(count));
+                            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference databaseReference = database.getReference("post");
+                            databaseReference.child(pos).child("like_count").setValue(count);*/
                         }
                     }
                 }
@@ -137,7 +157,16 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         comment.setArguments(bundle);
 
                         AppCompatActivity activity = (AppCompatActivity)v.getContext();
-                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,comment).commit();
+                        /*FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                        Fragment frag = activity.getSupportFragmentManager().findFragmentById(R.id.main_frame);
+                        transaction.add(R.id.main_frame,comment);
+                        transaction.show(comment);
+                        transaction.hide(frag);
+                        transaction.commit();*/
+                        activity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_frame,comment)
+                                //.addToBackStack(null)
+                                .commit();
 
                     }
                 }
@@ -148,7 +177,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
             titleText.setText(item.getTitle());
             tagText.setText(item.getTag());
             like_count.setText(String.valueOf(item.getLike_count()));
-            bookmark_count.setText(String.valueOf(item.getLike_count()));
+            bookmark_count.setText(String.valueOf(item.getBookmark_count()));
             Glide
                     .with(context)
                     .load(item.getUserIcon())
@@ -174,34 +203,16 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FeedViewItem item = feedViewItemList.get(position);
         holder.setItem(item);
-        /*holder.username.setText(item.getUserId());
-        holder.titleText.setText(item.getTitle());
-        holder.tagText.setText(item.getTag());
-        holder.like_count.setText(String.valueOf(item.getLike_count()));
-        holder.bookmark_count.setText(String.valueOf(item.getLike_count()));
-        Glide
-                .with(context)
-                .load(item.getUserIcon())
-                .apply(new RequestOptions().override(50,50))
-                .into(holder.userImage);*/
-        //holder.bpa = new FeedViewItem.BannerPagerAdapter(fm);
-        //holder.bpa.getGuide(12);
         holder.bpa = item.getViewPagerAdapter();
 
         holder.vp.setAdapter(holder.bpa);
         holder.vp.setId(position+1);
         holder.vp.setOffscreenPageLimit(0);
+    }
 
-        /*holder.delete.setTag(holder.getAdapterPosition());
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int pos = (int) v.getTag();
-                feedViewItemList.remove(pos);
-                notifyItemRemoved(pos);
-                notifyDataSetChanged();
-            }
-        });*/
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     //지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴
@@ -212,26 +223,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     @Override
     public int getItemCount() {
         return feedViewItemList.size();
-    }
-
-    // 아이템 데이터 추가를 위한 함수
-    public void addItem(Drawable userIcon, String username, String title, String desc, String tag, Integer like_count, String bookmark_count,Integer boxSize) {
-        FeedViewItem item = new FeedViewItem();
-
-        //item.setIcon(icon);
-        item.setUserIcon(userIcon);
-        item.setUserId(username);
-        item.setTitle(title);
-        item.setText(desc);
-        item.setTag(tag);
-        item.setLike_count(like_count);
-        item.setBookmark_count(bookmark_count);
-        FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(fm);
-        bpa.getGuide(boxSize);
-        item.setViewPagerAdapter(bpa);
-
-
-        feedViewItemList.add(item);
     }
 
     public void setItems(ArrayList<FeedViewItem> items){

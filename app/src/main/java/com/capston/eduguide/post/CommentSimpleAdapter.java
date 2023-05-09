@@ -100,7 +100,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
 
         holder.username.setText(item.getUsername());
         holder.commentText.setText(item.getComment());
-        holder.userImage.setImageResource(R.drawable.grade1);   //db에서 gradeInt를 받아와서 각 사용자의 뱃지 이미지 받아와야함
+        holder.userImage.setImageResource(grade(10));   //db에서 gradeInt를 받아와서 각 사용자의 뱃지 이미지 받아와야함
 
     }
 
@@ -114,10 +114,10 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
     public int getItemCount() { return commentItemList.size(); }
 
     // 아이템 데이터 추가를 위한 함수
-    public void addComment(ArrayList<CommentItem> commentItemList, Drawable userImage, String userName, String comment){
-        CommentItem item = new CommentItem(userImage,comment,userName);
+    public void addComment(ArrayList<CommentItem> commentItemList, String userName, String comment){
+        CommentItem item = new CommentItem(comment,userName);
 
-        item.setUserIcon(userImage);
+        //item.setUserIcon(userImage);
         item.setUsername(userName);
         item.setComment(comment);
 

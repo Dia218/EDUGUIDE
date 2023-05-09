@@ -17,13 +17,13 @@ public class TestFirebase {
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        DatabaseReference myRef = database.getReference();
 
-        myRef.setValue("Hello, World!");
+        //myRef.setValue("Hello, World!");
 
 
         // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
+        /*myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -37,7 +37,7 @@ public class TestFirebase {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
-        });
+        });*/
 
     }
 }
