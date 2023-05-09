@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
+import com.capston.eduguide.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -130,7 +131,7 @@ public class GuideTool extends Fragment {
                 }
             });
         }
-
+/*
         Bundle bundle = getArguments();
         if(getArguments() != null){
             Integer index = bundle.getInt("guideboxsize");
@@ -144,7 +145,7 @@ public class GuideTool extends Fragment {
                     lineVector.get(num-1).setVisibility(View.VISIBLE);
                 }
             }
-        }
+        }*/
 
         //게시글 작성 메뉴가 아닐 경우
         if(!MainActivity.getCurrentMenu().equals("posting")) {

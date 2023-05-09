@@ -335,7 +335,8 @@
             android:contentDescription="추가 버튼"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/guideColor"
+            android:visibility="visible" />
 
         <!-- 8번째 줄 (4 공백라인) -->
         <Button
