@@ -1,6 +1,5 @@
 package com.capston.eduguide;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.capston.eduguide.guideTool.GuideTool;
-import com.capston.eduguide.post.FeedViewItem;
+import com.capston.eduguide.post.PostItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -74,20 +73,11 @@ public class Frag3Posting extends Fragment {
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
 
                 //게시글DB 등록
-                /*SQLiteDatabase db = com.capston.eduguide.MainActivity.getHelper().getWritableDatabase();
-                db.execSQL("INSERT INTO postTBL VALUES ("
-                        + pWriterId + ", '"
-                        + pTitle + "', '"
-                        + pInfo + "', '"
-                        + pTag + "', "
-                        + 0 + ");");
-                db.close();*/
+                PostItem item = new PostItem();
 
-                FeedViewItem item = new FeedViewItem();
-
-                item.setTitle(pTitle);
-                item.setText(pTitle);
-                item.setTag(pTag);
+                item.setPostTitle(pTitle);
+                item.setPostInfo(pInfo);
+                item.setPostTag(pTag);
                 item.setUserId("test_id1");
                 item.setGrade(0);
                 item.setBookmark_count(0);
