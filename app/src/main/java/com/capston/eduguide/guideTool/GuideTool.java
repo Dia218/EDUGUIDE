@@ -2,6 +2,7 @@ package com.capston.eduguide.guideTool;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -235,6 +236,8 @@ public class GuideTool extends Fragment {
 
     //가이드 DB 저장
     public void regGuideContent(String postId) {
+        Log.d("GuideTool", "regGuideContent called. postId: " + postId);
+
         Vector<GuideBox> guideBoxVector = new Vector<>(); //가이드 박스 벡터
         Iterator<Button> guideboxIt = guideVector.iterator();
         while (guideboxIt.hasNext()) {
@@ -252,6 +255,8 @@ public class GuideTool extends Fragment {
         String guideId = guideDatabaseReference.push().getKey(); // 새로운 가이드 ID 생성
         GuideContent guide = new GuideContent(postId, guideBoxVector); // 가이드 객체 생성
         guideDatabaseReference.child(guideId).setValue(guide); //가이드 객체 DB에 넣기
+
+        Log.d("GuideTool", "Guide content registered successfully.");
     }
 
 

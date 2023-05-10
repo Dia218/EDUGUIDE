@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.capston.eduguide.guideTool.GuideTool;
-import com.capston.eduguide.post.PostItem;
+import com.capston.eduguide.post.FeedViewItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +35,8 @@ public class Frag3Posting extends Fragment {
         view=inflater.inflate(R.layout.frag3_posting, container, false);
 
         vp = (ViewPager) view.findViewById(R.id.vp);
-        vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
+        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(getChildFragmentManager());
+        vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
         AppCompatEditText postTitle = view.findViewById(R.id.postTitle); //제목
@@ -65,29 +66,31 @@ public class Frag3Posting extends Fragment {
         view.findViewById(R.id.postingSubmit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //유저 아이디 로직 추가 필요
-                Integer pWriterId = 0;
-                
+                Integer pWriterId = 0; //유저 아이디 로직 추가 필요
                 String pTitle = String.valueOf(postTitle.getText()); //제목 받아오기
                 String pInfo = String.valueOf(postInfo.getText()); //내용 받아오기
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
 
                 //게시글DB 등록
-                PostItem item = new PostItem();
-
-                item.setPostTitle(pTitle);
-                item.setPostInfo(pInfo);
-                item.setPostTag(pTag);
+                FeedViewItem item = new FeedViewItem();
+                item.setTitle(pTitle);
+                item.setText(pTitle);
+                item.setTag(pTag);
                 item.setUserId("test_id1");
                 item.setGrade(0);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = prepId.toString();
+                //String fId = "adminPost0";
+                //String fId = prepId.toString();
                 //item.setPostId(prepId+1);
-
                 databaseReference.child("post").child(fId).setValue(item);
 
-                //GuideTool.regGuideContent()
+                GuideTool guideTool = (GuideTool) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                guideTool.regGuideContent(fId);
+
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
             }
         });
 

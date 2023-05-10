@@ -50,7 +50,7 @@ public class CommentSimple extends Fragment {
     private ImageView feedUserImage;
     private String fId;
     private String title;
-    PostItem item;
+    FeedViewItem item;
     CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -84,7 +84,7 @@ public class CommentSimple extends Fragment {
         userImage = view.findViewById(R.id.userImage);
         //Button back = (Button)view.findViewById(R.id.back);
         Button input = (Button) view.findViewById(R.id.commentInput);
-        item = new PostItem();
+        item = new FeedViewItem();
 
         vp = (ViewPager) view.findViewById(R.id.vp);
         vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));

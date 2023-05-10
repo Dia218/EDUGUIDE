@@ -2,41 +2,49 @@ package com.capston.eduguide.post;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.graphics.drawable.Drawable;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.capston.eduguide.Frag1Feed;
+import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.capston.eduguide.guideTool.GuideTool;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHolder> {
 
     private Context context;
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<PostItem> postItems = new ArrayList<PostItem>() ;
+    private ArrayList<FeedViewItem> feedViewItemList = new ArrayList<FeedViewItem>() ;
     private FragmentManager fm;
     private int position;
 
     private ValueEventListener mListener;
 
     // ListViewAdapter의 생성자
-    public PostAdapter(FragmentManager fm, Context context){
+    public FeedViewAdapter(FragmentManager fm, Context context){
         this.context = context;
         this.fm = fm;
     }
@@ -52,7 +60,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public Button bookmark;
         public TextView bookmark_count;
         public ViewPager vp;
-        public PostItem.BannerPagerAdapter bpa;
+        public FeedViewItem.BannerPagerAdapter bpa;
         public Integer userGrade;
         private FirebaseDatabase database = FirebaseDatabase.getInstance();
         private DatabaseReference databaseReference = database.getReference("post");
@@ -72,7 +80,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             //iconImage = itemView.findViewById(R.id.guideImage);
             userImage = itemView.findViewById(R.id.feedUserImage);
             vp = (ViewPager) itemView.findViewById(R.id.vp);
-            userGrade = 10;
+            //userGrade = 10;
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -82,18 +90,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         int count = Integer.parseInt(like_count.getText().toString());
                         count += 1;
                         like_count.setText(Integer.toString(count));
-                        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databaseReference = database.getReference("post");
-                        databaseReference.child(pos).child("like_count").setValue(count);*/
+                        databaseReference.child(pos).child("like_count").setValue(count);
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
                         if(count != 0){
                             count -= 1;
                             like_count.setText(Integer.toString(count));
-                            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference databaseReference = database.getReference("post");
-                            databaseReference.child(pos).child("like_count").setValue(count);*/
+                            databaseReference.child(pos).child("like_count").setValue(count);
                         }
                     }
                 }
@@ -103,38 +111,39 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     v.setSelected(!v.isSelected());
+                    String pos = Integer.toString(getAdapterPosition());
                     if(v.isSelected()){
                         int count = Integer.parseInt(bookmark_count.getText().toString());
-                        bookmark_count.setText(Integer.toString(++count));
+                        count += 1;
+                        bookmark_count.setText(Integer.toString(count));
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference databaseReference = database.getReference("post");
+                        databaseReference.child(pos).child("bookmark_count").setValue(count);
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());
                         if(count != 0){
-                            bookmark_count.setText(Integer.toString(--count));
+                            count -= 1;
+                            bookmark_count.setText(Integer.toString(count));
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference databaseReference = database.getReference("post");
+                            databaseReference.child(pos).child("bookmark_count").setValue(count);
                         }
                     }
                 }
             });
-
-            /*delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setPosition(position);
-                    removeItem(position);
-                }
-            });*/
 
             titleText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
-                        PostItem item = postItems.get(pos);
-                        String titleStr = item.getPostTitle() ;
-                        String textStr = item.getPostInfo() ;
-                        String tagStr = item.getPostTag();
+                        FeedViewItem item = feedViewItemList.get(pos);
+                        String titleStr = item.getTitle() ;
+                        String textStr = item.getText() ;
+                        String tagStr = item.getTag();
                         String usernameStr = item.getUserId();
-                        Integer grade = userGrade;
+                        Integer grade = item.getGrade();
 
                         // TODO : use item data.
                         Bundle bundle = new Bundle();
@@ -164,10 +173,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 }
             });
         }
-        public void setItem(PostItem item){
+        public void setItem(FeedViewItem item){
             username.setText(item.getUserId());
-            titleText.setText(item.getPostTitle());
-            tagText.setText(item.getPostTag());
+            titleText.setText(item.getTitle());
+            tagText.setText(item.getTag());
             like_count.setText(String.valueOf(item.getLike_count()));
             bookmark_count.setText(String.valueOf(item.getBookmark_count()));
             Glide
@@ -182,18 +191,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
-            PostAdapter.ViewHolder vh = new PostAdapter.ViewHolder(view);
-            return vh;
+        View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
+        FeedViewAdapter.ViewHolder vh = new FeedViewAdapter.ViewHolder(view);
+        return vh;
     }
 
     //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PostItem item = postItems.get(position);
+        FeedViewItem item = feedViewItemList.get(position);
         holder.setItem(item);
         holder.bpa = item.getViewPagerAdapter();
 
@@ -214,19 +223,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
     @Override
     public int getItemCount() {
-        return postItems.size();
+        return feedViewItemList.size();
     }
 
-    public void setItems(ArrayList<PostItem> items){
-        postItems = items;
+    public void setItems(ArrayList<FeedViewItem> items){
+        feedViewItemList = items;
     }
 
-    public PostItem getItem(int position){
-        return postItems.get(position);
+    public FeedViewItem getItem(int position){
+        return feedViewItemList.get(position);
     }
 
-    public void setItem(int position, PostItem item){
-        postItems.set(position, item);
+    public void setItem(int position, FeedViewItem item){
+        feedViewItemList.set(position, item);
     }
 
     public FragmentManager getFm(){

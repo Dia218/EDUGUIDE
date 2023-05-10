@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.capston.eduguide.post.PostItem;
+import com.capston.eduguide.post.FeedViewItem;
 
 import java.util.ArrayList;
 
@@ -100,8 +100,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public ArrayList<PostItem> selectAllFeed(){
-        ArrayList<PostItem> result = new ArrayList<PostItem>();
+    public ArrayList<FeedViewItem> selectAllFeed(){
+        ArrayList<FeedViewItem> result = new ArrayList<FeedViewItem>();
         try{
             Cursor cursor = getReadableDatabase().rawQuery("select userId, postTitle, postText, postTag, recommend from postTBL",null);
             for(int i = 0;i< cursor.getCount();i++){
@@ -112,11 +112,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String tagStr = cursor.getString(3);
                 Integer like_count = cursor.getInt(4);
 
-                PostItem feed = new PostItem();
+                FeedViewItem feed = new FeedViewItem();
                 feed.setUserId(userId);
-                feed.setPostTitle(titleStr);
-                feed.setPostInfo(textStr);
-                feed.setPostTag(tagStr);
+                feed.setTitle(titleStr);
+                feed.setText(textStr);
+                feed.setTag(tagStr);
                 feed.setLike_count(like_count);
                 result.add(feed);
             }
