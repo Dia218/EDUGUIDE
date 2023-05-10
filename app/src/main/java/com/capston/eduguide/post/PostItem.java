@@ -3,47 +3,44 @@ package com.capston.eduguide.post;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.capston.eduguide.guideTool.GuideTool;
 
 import java.util.ArrayList;
 
-public class FeedViewItem {
+public class PostItem {
     //private Drawable iconDrawable ;
-    private Integer feedId;
-    private Drawable userIcon;
-    private String titleStr ;
-    private String textStr ;
-    private String tagStr;
-    private String userId;
-    private Integer like_count;
-    private Integer bookmark_count;
-    private Integer grade;
+    private Integer postId; //게시글 번호
+    private Drawable userIcon; //사용자 아이콘 or 뱃지
+    private String postTitle; //게시글 제목
+    private String postInfo; //게시글 설명
+    private String postTag; //게시글 태그
+    private String userId; //작성자
+    private Integer like_count; //추천 수
+    private Integer bookmark_count; //북마크 수
+    private Integer grade; //??
     //private ArrayList<CommentItem> comments;
     //private ArrayList<String> comment;
     private BannerPagerAdapter viewPagerAdapter;
 
 
     //public void setIcon(Drawable icon) { iconDrawable = icon;}
-    public void setFeedId(Integer id) { feedId = id; }
+    public void setPostId(Integer id) { postId = id; }
     public void setUserIcon(Drawable icon) {
         userIcon = icon;
     }
-    public void setTitle(String title) {
-        titleStr = title;
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
     }
-    public void setText(String text) {
-        textStr = text;
+    public void setPostInfo(String postInfo) {
+        this.postInfo = postInfo;
     }
-    public void setTag(String tag){ tagStr = tag; }
-    public void setUserId(String name) {
-        userId = name;
+    public void setPostTag(String postTag){ this.postTag = postTag; }
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
     public void setLike_count(Integer count) { like_count = count; }
     public void setBookmark_count(Integer count) { bookmark_count = count; }
@@ -54,17 +51,17 @@ public class FeedViewItem {
 
 
     //public Drawable getIcon() { return this.iconDrawable ;}
-    public Integer getFeedId() { return this.feedId; }
+    public Integer getPostId() { return this.postId; }
     public Drawable getUserIcon() {
         return this.userIcon ;
     }
-    public String getTitle() {
-        return this.titleStr ;
+    public String getPostTitle() {
+        return this.postTitle;
     }
-    public String getText() {
-        return this.textStr ;
+    public String getPostInfo() {
+        return this.postInfo;
     }
-    public String getTag(){ return this.tagStr; }
+    public String getPostTag(){ return this.postTag; }
     public String getUserId() { return this.userId ;}
     public Integer getLike_count() {
         return this.like_count ;

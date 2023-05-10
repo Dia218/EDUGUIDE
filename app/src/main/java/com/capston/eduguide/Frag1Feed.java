@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capston.eduguide.guideTool.GuideTool;
-import com.capston.eduguide.post.FeedViewAdapter;
-import com.capston.eduguide.post.FeedViewItem;
+import com.capston.eduguide.post.PostAdapter;
+import com.capston.eduguide.post.PostItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,8 +30,8 @@ import java.util.ArrayList;
 public class Frag1Feed extends Fragment {
 
     private GuideTool fragmentGuide;
-    FeedViewAdapter adapter;
-    ArrayList<FeedViewItem> items;
+    PostAdapter adapter;
+    ArrayList<PostItem> items;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -63,7 +63,7 @@ public class Frag1Feed extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 items.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    FeedViewItem item = snapshot.getValue(FeedViewItem.class);
+                    PostItem item = snapshot.getValue(PostItem.class);
                     items.add(item);
                 }
                 addGuide();
@@ -78,7 +78,7 @@ public class Frag1Feed extends Fragment {
         databaseReference.addValueEventListener(mListener);
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
-        adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
+        adapter = new PostAdapter(getChildFragmentManager(), getActivity());
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
 
@@ -137,8 +137,8 @@ public class Frag1Feed extends Fragment {
         //ArrayList<FeedViewItem> result = items;
         //가이드 툴 추가는 여기서(가이드 툴 db 받으면 게시글 db와 비교로 가져와서 넣기), 뱃지는 등급-팀원들과 상의 필요
         for(int i=0;i<items.size();i++){
-            FeedViewItem item = items.get(i);
-            FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(adapter.getFm());
+            PostItem item = items.get(i);
+            PostItem.BannerPagerAdapter bpa = new PostItem.BannerPagerAdapter(adapter.getFm());
             bpa.getGuide(12);
             item.setViewPagerAdapter(bpa);
             item.setGrade(10);
@@ -147,7 +147,7 @@ public class Frag1Feed extends Fragment {
         }
     }
 
-    public void setUserIconForGrade(FeedViewItem item){
+    public void setUserIconForGrade(PostItem item){
         if(item.getGrade()<10){
             item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
         }

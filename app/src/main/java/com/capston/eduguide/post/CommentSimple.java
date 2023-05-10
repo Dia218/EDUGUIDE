@@ -4,7 +4,6 @@ import static com.capston.eduguide.Frag4Notice.frag4Notice;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,9 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -30,10 +26,6 @@ import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.capston.eduguide.guideTool.GuideTool;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,7 +33,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CommentSimple extends Fragment {
 
@@ -59,7 +50,7 @@ public class CommentSimple extends Fragment {
     private ImageView feedUserImage;
     private String fId;
     private String title;
-    FeedViewItem item;
+    PostItem item;
     CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -93,7 +84,7 @@ public class CommentSimple extends Fragment {
         userImage = view.findViewById(R.id.userImage);
         //Button back = (Button)view.findViewById(R.id.back);
         Button input = (Button) view.findViewById(R.id.commentInput);
-        item = new FeedViewItem();
+        item = new PostItem();
 
         vp = (ViewPager) view.findViewById(R.id.vp);
         vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
