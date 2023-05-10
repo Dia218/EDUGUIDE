@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     String userId;
 
     boolean userExit;
-
+    boolean testing;
     SQLiteDatabase userDB;
     DatabaseHelper helper;
 
@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 userExit = false;
+                testing = true;         //테스트용 값. 반드시 지울것.
 
                 String isID = id.getText().toString().trim();
                 String isPass = password.getText().toString().trim();
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (userExit) {
+                    if(testing){ userId = isID; }
                     Intent intent = new Intent();
                     intent.putExtra("userId", userId);
                     setResult(Activity.RESULT_OK, intent);
@@ -89,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             userId = cursor.getString(0);
             userExit = true;
         }
+
         userExit = true; //로그인 강제 성공 코드
         cursor.close(); // cursor를 닫아주는 코드
     }

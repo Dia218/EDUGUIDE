@@ -51,6 +51,8 @@ public class Frag1Feed extends Fragment {
         View rootView=inflater.inflate(R.layout.frag1_feed, container, false);
             //rootView = inflater.inflate(R.layout.frag1_feed, container, false);
             //rootView = inflater.inflate(R.layout.post_feedview_item,container,false);
+
+        Bundle bundle = getArguments();
         // 리스트 뷰 참조 및 Adapter 달기
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -80,6 +82,7 @@ public class Frag1Feed extends Fragment {
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
         adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
         adapter.setItems(items);
+        adapter.setUserId(bundle.getString("userId"));
         recyclerView.setAdapter(adapter);
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe);
@@ -141,7 +144,6 @@ public class Frag1Feed extends Fragment {
             FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(adapter.getFm());
             bpa.getGuide(12);
             item.setViewPagerAdapter(bpa);
-            //item.setGrade(0);
             setUserIconForGrade(item);
             items.set(i,item);
         }

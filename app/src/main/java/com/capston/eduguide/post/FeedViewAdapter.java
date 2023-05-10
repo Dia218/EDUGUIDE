@@ -3,6 +3,7 @@ package com.capston.eduguide.post;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import com.capston.eduguide.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.capston.eduguide.guideTool.GuideTool;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -42,6 +45,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     private int position;
 
     private ValueEventListener mListener;
+    private String userId;
+    private Integer check = 0;
 
     // ListViewAdapter의 생성자
     public FeedViewAdapter(FragmentManager fm, Context context){
@@ -62,8 +67,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         public ViewPager vp;
         public FeedViewItem.BannerPagerAdapter bpa;
         public Integer userGrade;
-        private FirebaseDatabase database = FirebaseDatabase.getInstance();
-        private DatabaseReference databaseReference = database.getReference("post");
 
 
         ViewHolder(View itemView){
@@ -91,8 +94,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         count += 1;
                         like_count.setText(Integer.toString(count));
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference databaseReference = database.getReference("post");
-                        databaseReference.child(pos).child("like_count").setValue(count);
+                        DatabaseReference databaseReference = database.getReference();
+                        databaseReference.child("post").child(pos).child("like_count").setValue(count);
+                        databaseReference.child("like").child(userId).child(pos).child("postId").setValue(pos);
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
@@ -100,8 +104,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                             count -= 1;
                             like_count.setText(Integer.toString(count));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference databaseReference = database.getReference("post");
-                            databaseReference.child(pos).child("like_count").setValue(count);
+                            DatabaseReference databaseReference = database.getReference();
+                            databaseReference.child("post").child(pos).child("like_count").setValue(count);
+                            databaseReference.child("like").child(userId).child(pos).removeValue();
                         }
                     }
                 }
@@ -117,8 +122,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         count += 1;
                         bookmark_count.setText(Integer.toString(count));
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference databaseReference = database.getReference("post");
-                        databaseReference.child(pos).child("bookmark_count").setValue(count);
+                        DatabaseReference databaseReference = database.getReference();
+                        databaseReference.child("post").child(pos).child("bookmark_count").setValue(count);
+                        databaseReference.child("bookmark").child(userId).child(pos).child("postId").setValue(pos);
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());
@@ -126,8 +132,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                             count -= 1;
                             bookmark_count.setText(Integer.toString(count));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference databaseReference = database.getReference("post");
-                            databaseReference.child(pos).child("bookmark_count").setValue(count);
+                            DatabaseReference databaseReference = database.getReference();
+                            databaseReference.child("post").child(pos).child("bookmark_count").setValue(count);
+                            databaseReference.child("bookmark").child(userId).child(pos).removeValue();
                         }
                     }
                 }
@@ -151,8 +158,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         bundle.putString("title_text",titleStr);
                         bundle.putString("main_text",textStr);
                         bundle.putString("tag_text",tagStr);
-                        bundle.putString("user_name",usernameStr);
+                        bundle.putString("feedUser_name",usernameStr);
                         bundle.putInt("user_grade",grade);
+                        bundle.putString("userId",userId);
 
                         CommentSimple comment = new CommentSimple();
                         comment.setArguments(bundle);
@@ -184,6 +192,50 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     .load(item.getUserIcon())
                     .apply(new RequestOptions().override(50,50))
                     .into(userImage);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference likeDatabaseReference = database.getReference("like");
+            likeDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        if(userId.equals(dataSnapshot.getKey())){
+                            for(DataSnapshot keySnapshot : dataSnapshot.getChildren()){
+                                if(item.getFeedId().equals(keySnapshot.getKey())){
+                                    if(!like.isSelected())
+                                        like.setSelected(!like.isSelected());
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            DatabaseReference bookmarkDatabaseReference = database.getReference("bookmark");
+            bookmarkDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        if(userId.equals(dataSnapshot.getKey())){
+                            for(DataSnapshot keySnapshot : dataSnapshot.getChildren()){
+                                if(item.getFeedId().equals(keySnapshot.getKey())){
+                                    if(!bookmark.isSelected())
+                                        bookmark.setSelected(!bookmark.isSelected());
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
     }
 
@@ -206,9 +258,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         holder.setItem(item);
         holder.bpa = item.getViewPagerAdapter();
 
-        holder.vp.setAdapter(holder.bpa);
         holder.vp.setId(position+1);
-        holder.vp.setOffscreenPageLimit(0);
+        holder.vp.setOffscreenPageLimit(1);
+        holder.vp.setAdapter(holder.bpa);
     }
 
     @Override
@@ -230,22 +282,14 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         feedViewItemList = items;
     }
 
-    public FeedViewItem getItem(int position){
-        return feedViewItemList.get(position);
-    }
+    public void setUserId(String userId) { this.userId = userId; }
 
-    public void setItem(int position, FeedViewItem item){
-        feedViewItemList.set(position, item);
-    }
+    //public FeedViewItem getItem(int position){ return feedViewItemList.get(position); }
+    //public void setItem(int position, FeedViewItem item){ feedViewItemList.set(position, item);}
+    //public int getPosition(){return position;}
+    //public void setPosition(int position) {this.position = position;}
 
-    public FragmentManager getFm(){
+    public FragmentManager getFm() {
         return fm;
-    }
-
-    public int getPosition(){
-        return position;
-    }
-    public void setPosition(int position) {
-        this.position = position;
     }
 }

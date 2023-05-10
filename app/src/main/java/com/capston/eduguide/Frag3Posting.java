@@ -29,7 +29,7 @@ public class Frag3Posting extends Fragment {
     private Integer prepId;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
-    DatabaseReference postDatabaseReference = firebaseDatabase.getReference();
+    DatabaseReference postDatabaseReference = firebaseDatabase.getReference("post");
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,6 +38,8 @@ public class Frag3Posting extends Fragment {
         vp = (ViewPager) view.findViewById(R.id.vp);
         vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
         vp.setCurrentItem(0);
+
+        Bundle bundle = getArguments();
 
         AppCompatEditText postTitle = view.findViewById(R.id.postTitle); //제목
         AppCompatEditText postInfo = view.findViewById(R.id.postInfo); //내용
@@ -48,11 +50,12 @@ public class Frag3Posting extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer count = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    if(snapshot.child("post").getKey() != null)
+                    if(snapshot.getKey() != null) {
                         count += 1;
+                    }
                 }
                 prepId = count;
-                Log.d("pId_test","preId:"+prepId);
+                Log.d("pId_test2","preId:"+prepId);
             }
 
             @Override
@@ -73,26 +76,17 @@ public class Frag3Posting extends Fragment {
                 String pInfo = String.valueOf(postInfo.getText()); //내용 받아오기
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
 
-                //게시글DB 등록
-                /*SQLiteDatabase db = com.capston.eduguide.MainActivity.getHelper().getWritableDatabase();
-                db.execSQL("INSERT INTO postTBL VALUES ("
-                        + pWriterId + ", '"
-                        + pTitle + "', '"
-                        + pInfo + "', '"
-                        + pTag + "', "
-                        + 0 + ");");
-                db.close();*/
-
                 FeedViewItem item = new FeedViewItem();
 
                 item.setTitle(pTitle);
                 item.setText(pTitle);
                 item.setTag(pTag);
-                item.setUserId("test_id1");
+                item.setUserId(bundle.getString("userId"));
                 item.setGrade(0);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = prepId.toString();
+                item.setFeedId(fId);
 
                 databaseReference.child("post").child(fId).setValue(item);
 

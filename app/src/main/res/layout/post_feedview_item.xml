@@ -16,14 +16,16 @@
         <ImageView
             android:id="@+id/feedUserImage"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_margin="5dp"/>
 
         <TextView
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="TextView" />
+            android:text="유저 아이디"
+            android:textSize="18dp"/>
 
     </LinearLayout>
 

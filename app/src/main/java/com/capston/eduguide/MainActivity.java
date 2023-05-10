@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.capston.eduguide.db.TestFirebase;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag3Posting frag3;
     private Frag4Notice frag4;
     private Frag5User frag5;
-    private GuideTool guideTool;
+    private String userId;
 
     private static String currentMenu; //현재 메뉴
 
@@ -42,17 +43,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //데이터베이스 생성
-        SQLiteDatabase db;
-        helper = new DatabaseHelper(com.capston.eduguide.MainActivity.this, "new-db.db", null, 1);
-        db = helper.getWritableDatabase();
-        helper.onCreate(db);
-
         //로그인 화면 실행
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,0);
 
+        //Bundle bundle = new Bundle();
+        //bundle.putString("userId",userId);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==0){
+            if (resultCode==RESULT_OK) {
+                if(data != null){
+                    userId = data.getExtras().getString("userId");
+                }
+            }
+        }
         //하단바 뷰
         navigationBarView = findViewById(R.id.bottomNavi);
         navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -82,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         frag3 = new Frag3Posting();
         frag4 = new Frag4Notice();
         frag5 = new Frag5User();
-        guideTool = new GuideTool();
         setFrag(0);// 첫 프래그먼트 화면 지정
     }
 
@@ -91,28 +99,36 @@ public class MainActivity extends AppCompatActivity {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("userId",userId);
+
         switch (n) {
             case 0:
+                frag1.setArguments(bundle);
                 ft.replace(R.id.main_frame, frag1);
                 this.setCurrentMenu("feed");
                 ft.commit();
                 break;
             case 1:
+                frag2.setArguments(bundle);
                 ft.replace(R.id.main_frame, frag2);
                 this.setCurrentMenu("search");
                 ft.commit();
                 break;
             case 2:
+                frag3.setArguments(bundle);
                 ft.replace(R.id.main_frame, frag3);
                 this.setCurrentMenu("posting");
                 ft.commit();
                 break;
             case 3:
+                frag4.setArguments(bundle);
                 ft.replace(R.id.main_frame, frag4);
                 this.setCurrentMenu("notice");
                 ft.commit();
                 break;
             case 4:
+                frag5.setArguments(bundle);
                 ft.replace(R.id.main_frame, frag5);
                 this.setCurrentMenu("user");
                 ft.commit();

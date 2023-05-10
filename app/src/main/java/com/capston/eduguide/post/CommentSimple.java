@@ -102,7 +102,7 @@ public class CommentSimple extends Fragment {
         {
             String mainStr = bundle.getString("main_text");
             String tagStr = bundle.getString("tag_text");
-            String userName = bundle.getString("user_name");
+            String userName = bundle.getString("feedUser_name");
             main.setText(mainStr);
             tag.setText(tagStr);
             username.setText(userName);
@@ -145,7 +145,7 @@ public class CommentSimple extends Fragment {
             public void onClick(View v) {
                 String comment = comm.getText().toString();
                 //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
-                String userId = bundle.getString("user_name");
+                String userId = bundle.getString("userId");
                 //여기서 유저의 등급 받아서 코멘트 속성으로 부여할지 고민중
                 //현재는 어댑터에서 출력하기 전에 유저 이름으로 등급 검색함
                 comm.setText("");
@@ -157,7 +157,7 @@ public class CommentSimple extends Fragment {
                 DatabaseReference.child(fId).setValue(comments);
 
                 //알림 호출 //게시글 제목 받아와야 함
-                frag4Notice.showNotification(0, "게시글 제목", userId);
+                //frag4Notice.showNotification(0, "게시글 제목", userId);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
