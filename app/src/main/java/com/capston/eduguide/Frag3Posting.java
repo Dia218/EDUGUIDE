@@ -83,10 +83,11 @@ public class Frag3Posting extends Fragment {
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = prepId.toString();
-                //item.setFeedId(prepId+1);
+                //item.setPostId(prepId+1);
 
                 databaseReference.child("post").child(fId).setValue(item);
 
+                //GuideTool.regGuideContent()
             }
         });
 
