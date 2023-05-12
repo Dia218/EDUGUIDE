@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 public class GuideTool extends Fragment {
@@ -238,7 +239,7 @@ public class GuideTool extends Fragment {
     public void regGuideContent(String postId) {
         Log.d("GuideTool", "regGuideContent called. postId: " + postId);
 
-        Vector<GuideBox> guideBoxVector = new Vector<>(); //가이드 박스 벡터
+        List<GuideBox> guideBoxes = new ArrayList<>(); //가이드박스 리스트
         Iterator<Button> guideboxIt = guideVector.iterator();
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
@@ -249,11 +250,11 @@ public class GuideTool extends Fragment {
             int indexKey = guideVector.indexOf(guideBox);
             String boxInfo = boxInfos.get(indexKey); //가이드박스 설명글
 
-            guideBoxVector.add(new GuideBox(keyword, boxInfo)); //리스트에 가이드박스 넣기
+            guideBoxes.add(new GuideBox(keyword, boxInfo)); //리스트에 가이드박스 넣기
         }
 
         String guideId = guideDatabaseReference.push().getKey(); // 새로운 가이드 ID 생성
-        GuideContent guide = new GuideContent(postId, guideBoxVector); // 가이드 객체 생성
+        GuideContent guide = new GuideContent(postId, guideBoxes); // 가이드 객체 생성
         guideDatabaseReference.child(guideId).setValue(guide); //가이드 객체 DB에 넣기
 
         Log.d("GuideTool", "Guide content registered successfully.");

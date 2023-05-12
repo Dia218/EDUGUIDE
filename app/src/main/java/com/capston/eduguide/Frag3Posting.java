@@ -39,6 +39,8 @@ public class Frag3Posting extends Fragment {
         vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
+        Bundle bundle = getArguments();
+
         AppCompatEditText postTitle = view.findViewById(R.id.postTitle); //제목
         AppCompatEditText postInfo = view.findViewById(R.id.postInfo); //내용
         AppCompatEditText postTag = view.findViewById(R.id.postTag); //태그
@@ -48,11 +50,12 @@ public class Frag3Posting extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer count = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    if(snapshot.child("post").getKey() != null)
+                    if(snapshot.getKey() != null) {
                         count += 1;
+                    }
                 }
                 prepId = count;
-                Log.d("pId_test","preId:"+prepId);
+                Log.d("pId_test2","preId:"+prepId);
             }
 
             @Override
@@ -71,19 +74,27 @@ public class Frag3Posting extends Fragment {
                 String pInfo = String.valueOf(postInfo.getText()); //내용 받아오기
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
 
+<<<<<<< HEAD
                 //게시글DB 등록
+=======
+>>>>>>> feed
                 FeedViewItem item = new FeedViewItem();
                 item.setTitle(pTitle);
                 item.setText(pTitle);
                 item.setTag(pTag);
-                item.setUserId("test_id1");
+                item.setUserId(bundle.getString("userId"));
                 item.setGrade(0);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = prepId.toString();
+<<<<<<< HEAD
                 //String fId = "adminPost0";
                 //String fId = prepId.toString();
                 //item.setPostId(prepId+1);
+=======
+                item.setFeedId(fId);
+
+>>>>>>> feed
                 databaseReference.child("post").child(fId).setValue(item);
 
                 GuideTool guideTool = (GuideTool) bannerPagerAdapter.getItem(vp.getCurrentItem());
