@@ -2,6 +2,7 @@ package com.capston.eduguide.guideTool;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -11,8 +12,12 @@ import androidx.fragment.app.Fragment;
 
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
+import com.capston.eduguide.login.LoginActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -23,12 +28,13 @@ public class GuideTool extends Fragment {
     int guideMaxNum = 18;
     int guideMinNum = 9;
 
-    //가이드 박스
-    Vector<Button> guideVector = new Vector<>(guideMaxNum);
-    //라인
-    Vector<Button> lineVector = new Vector<>(guideMaxNum-1);
-    //추가 버튼
-    Vector<ImageButton> addbuttonVector = new Vector<>(guideMaxNum-guideMinNum);
+    Vector<Button> guideVector = new Vector<>(guideMaxNum); // 가이드 박스
+    Vector<Button> lineVector = new Vector<>(guideMaxNum-1); // 라인
+    Vector<ImageButton> addbuttonVector = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
+    HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
+
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); // 파이어베이스 DB
+    DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
 
     private View view;
     public static GuideTool newInstance(int param1){
@@ -124,13 +130,10 @@ public class GuideTool extends Fragment {
 
             guideBox.setOnLongClickListener(new View.OnLongClickListener() { //길게 누르기 이벤트
                 @Override
-                public boolean onLongClick(View v) {
-                    onLongClickGuide(v);
-                    return true;
-                }
+                public boolean onLongClick(View v) { onLongClickGuide(v); return true; }
             });
         }
-
+/*
         Bundle bundle = getArguments();
         if(getArguments() != null){
             Integer index = bundle.getInt("guideboxsize");
@@ -144,7 +147,7 @@ public class GuideTool extends Fragment {
                     lineVector.get(num-1).setVisibility(View.VISIBLE);
                 }
             }
-        }
+        }*/
 
         //게시글 작성 메뉴가 아닐 경우
         if(!MainActivity.getCurrentMenu().equals("posting")) {
@@ -185,12 +188,7 @@ public class GuideTool extends Fragment {
             @Override
             public void onClick(View v) {
                 String keyword = String.valueOf(((EditText)guideDialogView.findViewById(R.id.guideKeyword)).getText());
-                if( keyword.trim().isEmpty() || keyword.equals("키워드")) {
-                    ;
-                }
-                else {
-                    ((Button) view).setText(keyword);
-                }
+                if( !(keyword.trim().isEmpty() || keyword.equals("키워드")) ) ((Button) view).setText(keyword);
                 keywordDialog.dismiss();
             }
         });
@@ -209,6 +207,9 @@ public class GuideTool extends Fragment {
         guideDialogView.findViewById(R.id.editInform).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String boxInfo = String.valueOf(((MultiAutoCompleteTextView)guideDialogView.findViewById(R.id.guideInform)).getText()); // 설명글
+                int indexKey = guideVector.indexOf((Button) view); // 가이드박스의 인덱스 번호
+                boxInfos.put(indexKey, boxInfo); //설명글 해시맵에 저장
                 informDialog.dismiss();
             }
         });
@@ -232,6 +233,32 @@ public class GuideTool extends Fragment {
         //다음 addButton 보이게 하기
         addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
     }
+
+    //가이드 DB 저장
+    public void regGuideContent(String postId) {
+        Log.d("GuideTool", "regGuideContent called. postId: " + postId);
+
+        Vector<GuideBox> guideBoxVector = new Vector<>(); //가이드 박스 벡터
+        Iterator<Button> guideboxIt = guideVector.iterator();
+        while (guideboxIt.hasNext()) {
+            Button guideBox = guideboxIt.next();
+
+            String keyword = String.valueOf(guideBox.getText()); // 가이드박스 키워드
+            if(keyword.replace("단계", "").matches("^[0-9]*$")) { continue; } //[숫자]단계 형식일 경우 저장하지 않고 스킵
+
+            int indexKey = guideVector.indexOf(guideBox);
+            String boxInfo = boxInfos.get(indexKey); //가이드박스 설명글
+
+            guideBoxVector.add(new GuideBox(keyword, boxInfo)); //리스트에 가이드박스 넣기
+        }
+
+        String guideId = guideDatabaseReference.push().getKey(); // 새로운 가이드 ID 생성
+        GuideContent guide = new GuideContent(postId, guideBoxVector); // 가이드 객체 생성
+        guideDatabaseReference.child(guideId).setValue(guide); //가이드 객체 DB에 넣기
+
+        Log.d("GuideTool", "Guide content registered successfully.");
+    }
+
 
     //일단은 박스 사이즈만 받아서 키워드만 임의 지정함.키워드랑 설명 저장 기능,db   생기면 시도해봄
     public void addGuide(int guideNum,String key){

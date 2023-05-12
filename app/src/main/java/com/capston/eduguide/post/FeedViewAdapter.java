@@ -243,12 +243,12 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
-            FeedViewAdapter.ViewHolder vh = new FeedViewAdapter.ViewHolder(view);
-            return vh;
+        View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
+        FeedViewAdapter.ViewHolder vh = new FeedViewAdapter.ViewHolder(view);
+        return vh;
     }
 
     //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시

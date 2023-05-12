@@ -1,6 +1,5 @@
 package com.capston.eduguide;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +35,8 @@ public class Frag3Posting extends Fragment {
         view=inflater.inflate(R.layout.frag3_posting, container, false);
 
         vp = (ViewPager) view.findViewById(R.id.vp);
-        vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
+        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(getChildFragmentManager());
+        vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
         Bundle bundle = getArguments();
@@ -71,7 +71,7 @@ public class Frag3Posting extends Fragment {
             public void onClick(View v) {
                 //유저 아이디 로직 추가 필요
                 Integer pWriterId = 0;
-                
+
                 String pTitle = String.valueOf(postTitle.getText()); //제목 받아오기
                 String pInfo = String.valueOf(postInfo.getText()); //내용 받아오기
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
@@ -90,6 +90,11 @@ public class Frag3Posting extends Fragment {
 
                 databaseReference.child("post").child(fId).setValue(item);
 
+                GuideTool guideTool = (GuideTool) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                guideTool.regGuideContent(fId);
+
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
             }
         });
 
