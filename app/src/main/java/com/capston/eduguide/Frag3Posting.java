@@ -69,16 +69,15 @@ public class Frag3Posting extends Fragment {
         view.findViewById(R.id.postingSubmit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer pWriterId = 0; //유저 아이디 로직 추가 필요
+                //유저 아이디 로직 추가 필요
+                Integer pWriterId = 0;
+
                 String pTitle = String.valueOf(postTitle.getText()); //제목 받아오기
                 String pInfo = String.valueOf(postInfo.getText()); //내용 받아오기
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
 
-<<<<<<< HEAD
-                //게시글DB 등록
-=======
->>>>>>> feed
                 FeedViewItem item = new FeedViewItem();
+
                 item.setTitle(pTitle);
                 item.setText(pTitle);
                 item.setTag(pTag);
@@ -87,14 +86,8 @@ public class Frag3Posting extends Fragment {
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = prepId.toString();
-<<<<<<< HEAD
-                //String fId = "adminPost0";
-                //String fId = prepId.toString();
-                //item.setPostId(prepId+1);
-=======
                 item.setFeedId(fId);
 
->>>>>>> feed
                 databaseReference.child("post").child(fId).setValue(item);
 
                 GuideTool guideTool = (GuideTool) bannerPagerAdapter.getItem(vp.getCurrentItem());

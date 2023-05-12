@@ -94,14 +94,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         count += 1;
                         like_count.setText(Integer.toString(count));
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-<<<<<<< HEAD
-                        DatabaseReference databaseReference = database.getReference("post");
-                        databaseReference.child(pos).child("like_count").setValue(count);
-=======
                         DatabaseReference databaseReference = database.getReference();
                         databaseReference.child("post").child(pos).child("like_count").setValue(count);
                         databaseReference.child("like").child(userId).child(pos).child("postId").setValue(pos);
->>>>>>> feed
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
@@ -109,14 +104,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                             count -= 1;
                             like_count.setText(Integer.toString(count));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-<<<<<<< HEAD
-                            DatabaseReference databaseReference = database.getReference("post");
-                            databaseReference.child(pos).child("like_count").setValue(count);
-=======
                             DatabaseReference databaseReference = database.getReference();
                             databaseReference.child("post").child(pos).child("like_count").setValue(count);
                             databaseReference.child("like").child(userId).child(pos).removeValue();
->>>>>>> feed
                         }
                     }
                 }
@@ -132,14 +122,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         count += 1;
                         bookmark_count.setText(Integer.toString(count));
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-<<<<<<< HEAD
-                        DatabaseReference databaseReference = database.getReference("post");
-                        databaseReference.child(pos).child("bookmark_count").setValue(count);
-=======
                         DatabaseReference databaseReference = database.getReference();
                         databaseReference.child("post").child(pos).child("bookmark_count").setValue(count);
                         databaseReference.child("bookmark").child(userId).child(pos).child("postId").setValue(pos);
->>>>>>> feed
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());
@@ -147,14 +132,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                             count -= 1;
                             bookmark_count.setText(Integer.toString(count));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-<<<<<<< HEAD
-                            DatabaseReference databaseReference = database.getReference("post");
-                            databaseReference.child(pos).child("bookmark_count").setValue(count);
-=======
                             DatabaseReference databaseReference = database.getReference();
                             databaseReference.child("post").child(pos).child("bookmark_count").setValue(count);
                             databaseReference.child("bookmark").child(userId).child(pos).removeValue();
->>>>>>> feed
                         }
                     }
                 }
@@ -312,15 +292,4 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     public FragmentManager getFm() {
         return fm;
     }
-<<<<<<< HEAD
-
-    public int getPosition(){
-        return position;
-    }
-    public void setPosition(int position) {
-        this.position = position;
-    }
 }
-=======
-}
->>>>>>> feed
