@@ -22,13 +22,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class Frag3Posting extends Fragment {
 
     private View view;
     private ViewPager vp;
     private Integer prepId;
+    private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
+    DatabaseReference userDatabaseReference = firebaseDatabase.getReference("users");
     DatabaseReference postDatabaseReference = firebaseDatabase.getReference("post");
     @Nullable
     @Override
@@ -56,6 +60,23 @@ public class Frag3Posting extends Fragment {
                 }
                 prepId = count;
                 Log.d("pId_test2","preId:"+prepId);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()){
+                    HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
+                    if(bundle.getString("userId").equals((String)user.get("id"))) {
+                        Log.d("testing", (String) user.get("id"));
+                    }
+                }
             }
 
             @Override
