@@ -8,14 +8,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.capston.eduguide.guideTool.GuideTool;
 import com.capston.eduguide.login.LoginActivity;
 import com.google.android.material.navigation.NavigationBarView;
-import android.database.sqlite.SQLiteDatabase;
 import com.capston.eduguide.db.DatabaseHelper;
 
 

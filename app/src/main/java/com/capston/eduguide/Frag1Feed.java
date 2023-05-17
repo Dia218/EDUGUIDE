@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.guideTool.GuideAdapter;
 import com.capston.eduguide.post.FeedViewAdapter;
 import com.capston.eduguide.post.FeedViewItem;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class Frag1Feed extends Fragment {
 
-    private GuideTool fragmentGuide;
+    private GuideAdapter fragmentGuide;
     FeedViewAdapter adapter;
     ArrayList<FeedViewItem> items;
     private SwipeRefreshLayout swipeRefreshLayout;
