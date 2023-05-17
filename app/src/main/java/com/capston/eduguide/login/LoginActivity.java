@@ -27,13 +27,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = null;
-    private EditText etId, etPassword;
+    private EditText etEmail, etPassword;
     private Button btnLogin, btnSignUp;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
@@ -48,25 +46,27 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         SignInButton signInButton = findViewById(R.id.btn_google_sign_in); //구글 로그인 버튼
-
+ 
         //로그인
         btnLogin = findViewById(R.id.btn_login);
-        etId = findViewById(R.id.login_id);
+        etEmail = findViewById(R.id.login_email);
         etPassword = findViewById(R.id.login_password);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String id = etId.getText().toString();
+                String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                if (!id.isEmpty() && !password.isEmpty()) {
-                    mAuth.signInWithEmailAndPassword(id, password)
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
+                                        Intent intent = new Intent();
+                                        intent.putExtra("userEmail", email);
+                                        //startActivity(intent);
+                                        setResult(RESULT_OK, intent);
                                         finish();
                                     } else {
                                         Toast.makeText(LoginActivity.this, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(getApplication(), MainActivity.class);
-            startActivity(intent);
+            //startActivity(intent);
             finish();
         }
         // Configure Google Sign In
@@ -160,8 +160,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent();
+            intent.putExtra("userEmail", getString(R.string.default_web_client_id));
+            //startActivity(intent);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }

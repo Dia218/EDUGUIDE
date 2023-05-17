@@ -166,12 +166,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         comment.setArguments(bundle);
 
                         AppCompatActivity activity = (AppCompatActivity)v.getContext();
-                        /*FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                        Fragment frag = activity.getSupportFragmentManager().findFragmentById(R.id.main_frame);
-                        transaction.add(R.id.main_frame,comment);
-                        transaction.show(comment);
-                        transaction.hide(frag);
-                        transaction.commit();*/
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.main_frame,comment)
                                 //.addToBackStack(null)
@@ -192,50 +186,52 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     .load(item.getUserIcon())
                     .apply(new RequestOptions().override(50,50))
                     .into(userImage);
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference likeDatabaseReference = database.getReference("like");
-            likeDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                        if(userId.equals(dataSnapshot.getKey())){
-                            for(DataSnapshot keySnapshot : dataSnapshot.getChildren()){
-                                if(item.getFeedId().equals(keySnapshot.getKey())){
-                                    if(!like.isSelected())
-                                        like.setSelected(!like.isSelected());
+            if(userId != null) {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference likeDatabaseReference = database.getReference("like");
+                likeDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            if (userId.equals(dataSnapshot.getKey())) {
+                                for (DataSnapshot keySnapshot : dataSnapshot.getChildren()) {
+                                    if (item.getFeedId().equals(keySnapshot.getKey())) {
+                                        if (!like.isSelected())
+                                            like.setSelected(!like.isSelected());
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+                    }
+                });
 
-            DatabaseReference bookmarkDatabaseReference = database.getReference("bookmark");
-            bookmarkDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                        if(userId.equals(dataSnapshot.getKey())){
-                            for(DataSnapshot keySnapshot : dataSnapshot.getChildren()){
-                                if(item.getFeedId().equals(keySnapshot.getKey())){
-                                    if(!bookmark.isSelected())
-                                        bookmark.setSelected(!bookmark.isSelected());
+                DatabaseReference bookmarkDatabaseReference = database.getReference("bookmark");
+                bookmarkDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            if (userId.equals(dataSnapshot.getKey())) {
+                                for (DataSnapshot keySnapshot : dataSnapshot.getChildren()) {
+                                    if (item.getFeedId().equals(keySnapshot.getKey())) {
+                                        if (!bookmark.isSelected())
+                                            bookmark.setSelected(!bookmark.isSelected());
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 

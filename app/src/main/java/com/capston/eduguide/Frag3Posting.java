@@ -73,8 +73,8 @@ public class Frag3Posting extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()){
                     HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
-                    if(bundle.getString("userId").equals((String)user.get("id"))) {
-                        Log.d("testing", (String) user.get("id"));
+                    if(bundle.getString("userEmail").equals((String)user.get("email"))) {
+                        Log.d("testing", String.valueOf(user.get("id")));
                     }
                 }
             }
@@ -100,7 +100,7 @@ public class Frag3Posting extends Fragment {
                 FeedViewItem item = new FeedViewItem();
 
                 item.setTitle(pTitle);
-                item.setText(pTitle);
+                item.setText(pInfo);
                 item.setTag(pTag);
                 item.setUserId(bundle.getString("userId"));
                 item.setGrade(0);
