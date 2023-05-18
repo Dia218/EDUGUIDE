@@ -12,33 +12,36 @@ import androidx.fragment.app.Fragment;
 
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
-import com.capston.eduguide.login.LoginActivity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
-public class GuideTool extends Fragment {
+public class GuideAdapter extends Fragment {
 
 
     //가이드 박스 개수
-    int guideMaxNum = 18;
-    int guideMinNum = 9;
+    static int guideMaxNum = 18;
+    static int guideMinNum = 9;
 
-    Vector<Button> guideVector = new Vector<>(guideMaxNum); // 가이드 박스
-    Vector<Button> lineVector = new Vector<>(guideMaxNum-1); // 라인
-    Vector<ImageButton> addbuttonVector = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
+    Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
+    Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
+    Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
     HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); // 파이어베이스 DB
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
 
     private View view;
-    public static GuideTool newInstance(int param1){
-        GuideTool fg = new GuideTool();
+    public static GuideAdapter newInstance(int param1){
+        GuideAdapter fg = new GuideAdapter();
         Bundle args = new Bundle();
         args.putInt("param1", param1);
         fg.setArguments(args);
@@ -56,57 +59,57 @@ public class GuideTool extends Fragment {
         view=inflater.inflate(R.layout.guide_guidetool, container, false);
 
         //가이드박스 벡터에 저장
-        guideVector.add((Button) view.findViewById(R.id.guideBox1));
-        guideVector.add((Button) view.findViewById(R.id.guideBox2));
-        guideVector.add((Button) view.findViewById(R.id.guideBox3));
-        guideVector.add((Button) view.findViewById(R.id.guideBox4));
-        guideVector.add((Button) view.findViewById(R.id.guideBox5));
-        guideVector.add((Button) view.findViewById(R.id.guideBox6));
-        guideVector.add((Button) view.findViewById(R.id.guideBox7));
-        guideVector.add((Button) view.findViewById(R.id.guideBox8));
-        guideVector.add((Button) view.findViewById(R.id.guideBox9));
-        guideVector.add((Button) view.findViewById(R.id.guideBox10));
-        guideVector.add((Button) view.findViewById(R.id.guideBox11));
-        guideVector.add((Button) view.findViewById(R.id.guideBox12));
-        guideVector.add((Button) view.findViewById(R.id.guideBox13));
-        guideVector.add((Button) view.findViewById(R.id.guideBox14));
-        guideVector.add((Button) view.findViewById(R.id.guideBox15));
-        guideVector.add((Button) view.findViewById(R.id.guideBox16));
-        guideVector.add((Button) view.findViewById(R.id.guideBox17));
-        guideVector.add((Button) view.findViewById(R.id.guideBox18));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox1));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox2));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox3));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox4));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox5));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox6));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox7));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox8));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox9));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox10));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox11));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox12));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox13));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox14));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox15));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox16));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox17));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox18));
 
         //라인 벡터에 저장
-        lineVector.add((Button) view.findViewById(R.id.line1));
-        lineVector.add((Button) view.findViewById(R.id.line2));
-        lineVector.add((Button) view.findViewById(R.id.line3));
-        lineVector.add((Button) view.findViewById(R.id.line4));
-        lineVector.add((Button) view.findViewById(R.id.line5));
-        lineVector.add((Button) view.findViewById(R.id.line6));
-        lineVector.add((Button) view.findViewById(R.id.line7));
-        lineVector.add((Button) view.findViewById(R.id.line8));
-        lineVector.add((Button) view.findViewById(R.id.line9));
-        lineVector.add((Button) view.findViewById(R.id.line10));
-        lineVector.add((Button) view.findViewById(R.id.line11));
-        lineVector.add((Button) view.findViewById(R.id.line12));
-        lineVector.add((Button) view.findViewById(R.id.line13));
-        lineVector.add((Button) view.findViewById(R.id.line14));
-        lineVector.add((Button) view.findViewById(R.id.line15));
-        lineVector.add((Button) view.findViewById(R.id.line16));
-        lineVector.add((Button) view.findViewById(R.id.line17));
+        guideLineViews.add((Button) view.findViewById(R.id.line1));
+        guideLineViews.add((Button) view.findViewById(R.id.line2));
+        guideLineViews.add((Button) view.findViewById(R.id.line3));
+        guideLineViews.add((Button) view.findViewById(R.id.line4));
+        guideLineViews.add((Button) view.findViewById(R.id.line5));
+        guideLineViews.add((Button) view.findViewById(R.id.line6));
+        guideLineViews.add((Button) view.findViewById(R.id.line7));
+        guideLineViews.add((Button) view.findViewById(R.id.line8));
+        guideLineViews.add((Button) view.findViewById(R.id.line9));
+        guideLineViews.add((Button) view.findViewById(R.id.line10));
+        guideLineViews.add((Button) view.findViewById(R.id.line11));
+        guideLineViews.add((Button) view.findViewById(R.id.line12));
+        guideLineViews.add((Button) view.findViewById(R.id.line13));
+        guideLineViews.add((Button) view.findViewById(R.id.line14));
+        guideLineViews.add((Button) view.findViewById(R.id.line15));
+        guideLineViews.add((Button) view.findViewById(R.id.line16));
+        guideLineViews.add((Button) view.findViewById(R.id.line17));
 
         //추가버튼 벡터에 저장
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton0));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton1));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton2));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton3));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton4));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton5));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton6));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton7));
-        addbuttonVector.add((ImageButton) view.findViewById(R.id.addButton8));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton0));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton1));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton2));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton3));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton4));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton5));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton6));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton7));
+        guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton8));
 
         //addButton에 이벤트리스너 달기
-        Iterator<ImageButton> addbuttonIt = addbuttonVector.iterator();
+        Iterator<ImageButton> addbuttonIt = guideAddButtons.iterator();
         while (addbuttonIt.hasNext()) {
             ImageButton addButton = addbuttonIt.next();
             addButton.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +121,7 @@ public class GuideTool extends Fragment {
         }
 
         //guideBox에 이벤트리스너 달기
-        Iterator<Button> guideboxIt = guideVector.iterator();
+        Iterator<Button> guideboxIt = guideBoxViews.iterator();
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
             guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
@@ -159,10 +162,10 @@ public class GuideTool extends Fragment {
 
     public void setFixmode() {
         //추가 버튼 나타나지 않게 함
-        addbuttonVector.get(0).setVisibility(View.GONE);
+        guideAddButtons.get(0).setVisibility(View.GONE);
 
         //짧게 터치 이벤트 비활성화
-        Iterator<Button> guideboxIt = guideVector.iterator();
+        Iterator<Button> guideboxIt = guideBoxViews.iterator();
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
             guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
@@ -208,7 +211,7 @@ public class GuideTool extends Fragment {
             @Override
             public void onClick(View v) {
                 String boxInfo = String.valueOf(((MultiAutoCompleteTextView)guideDialogView.findViewById(R.id.guideInform)).getText()); // 설명글
-                int indexKey = guideVector.indexOf((Button) view); // 가이드박스의 인덱스 번호
+                int indexKey = guideBoxViews.indexOf((Button) view); // 가이드박스의 인덱스 번호
                 boxInfos.put(indexKey, boxInfo); //설명글 해시맵에 저장
                 informDialog.dismiss();
             }
@@ -218,45 +221,60 @@ public class GuideTool extends Fragment {
     //addButtion의 터치 이벤트
     public void onClickAdd(View view) {
         //클릭한 addButtion의 인덱스
-        int indexAdd = addbuttonVector.indexOf((ImageButton) view);
+        int indexAdd = guideAddButtons.indexOf((ImageButton) view);
         //클릭한 addButtion 없애기
         view.setVisibility(View.GONE);
         //guideBox 보이게 하기
-        guideVector.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
+        guideBoxViews.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
 
         //다음 line 보이게 하기
-        lineVector.get(guideMinNum + indexAdd - 1).setVisibility(View.VISIBLE);
+        guideLineViews.get(guideMinNum + indexAdd - 1).setVisibility(View.VISIBLE);
 
         if(indexAdd == guideMaxNum-guideMinNum-1) //마지막 addbutton일 경우 뒷부분 생략
             return;
 
         //다음 addButton 보이게 하기
-        addbuttonVector.get(++indexAdd).setVisibility(View.VISIBLE);
+        guideAddButtons.get(++indexAdd).setVisibility(View.VISIBLE);
     }
 
     //가이드 DB 저장
     public void regGuideContent(String postId) {
         Log.d("GuideTool", "regGuideContent called. postId: " + postId);
 
-        Vector<GuideBox> guideBoxVector = new Vector<>(); //가이드 박스 벡터
-        Iterator<Button> guideboxIt = guideVector.iterator();
+        List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
+        Iterator<Button> guideboxIt = guideBoxViews.iterator();
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
 
             String keyword = String.valueOf(guideBox.getText()); // 가이드박스 키워드
             if(keyword.replace("단계", "").matches("^[0-9]*$")) { continue; } //[숫자]단계 형식일 경우 저장하지 않고 스킵
 
-            int indexKey = guideVector.indexOf(guideBox);
+            int indexKey = guideBoxViews.indexOf(guideBox);
             String boxInfo = boxInfos.get(indexKey); //가이드박스 설명글
 
-            guideBoxVector.add(new GuideBox(keyword, boxInfo)); //리스트에 가이드박스 넣기
+            guideBoxItems.add(new GuideBoxItem(keyword, boxInfo)); //리스트에 가이드박스 넣기
         }
 
         String guideId = guideDatabaseReference.push().getKey(); // 새로운 가이드 ID 생성
-        GuideContent guide = new GuideContent(postId, guideBoxVector); // 가이드 객체 생성
+        GuideItem guide = new GuideItem(postId, guideBoxItems); // 가이드 객체 생성
         guideDatabaseReference.child(guideId).setValue(guide); //가이드 객체 DB에 넣기
 
-        Log.d("GuideTool", "Guide content registered successfully.");
+        Log.d("Guide", "GuideItem registered successfully.");
+
+        guideDatabaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.d("Guide", "GuideBoxes registered successfully.");
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) { }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
     }
 
 
@@ -275,7 +293,7 @@ public class GuideTool extends Fragment {
             }
         }*/
 
-        guideVector.get(guideNum).setText(key);
+        guideBoxViews.get(guideNum).setText(key);
     }
 }
 
