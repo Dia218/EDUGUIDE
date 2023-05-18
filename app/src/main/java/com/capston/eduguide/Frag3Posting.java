@@ -21,13 +21,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class Frag3Posting extends Fragment {
 
     private View view;
     private ViewPager vp;
-    private Integer prepId;
+    private String prepId;
+    private String userId;
+    private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
+    DatabaseReference userDatabaseReference = firebaseDatabase.getReference("users");
     DatabaseReference postDatabaseReference = firebaseDatabase.getReference("post");
     @Nullable
     @Override
@@ -48,14 +53,31 @@ public class Frag3Posting extends Fragment {
         postDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Integer count = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     if(snapshot.getKey() != null) {
-                        count += 1;
+                        prepId = snapshot.getKey();
                     }
                 }
-                prepId = count;
                 Log.d("pId_test2","preId:"+prepId);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()){
+                    HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
+                    if(bundle.getString("userEmail")!=null) {
+                        if (bundle.getString("userEmail").equals((String) user.get("email"))) {
+                            userId = (String)user.get("id");
+                        }
+                    }
+                }
             }
 
             @Override
@@ -79,13 +101,14 @@ public class Frag3Posting extends Fragment {
                 FeedViewItem item = new FeedViewItem();
 
                 item.setTitle(pTitle);
-                item.setText(pTitle);
+                item.setText(pInfo);
                 item.setTag(pTag);
-                item.setUserId(bundle.getString("userId"));
+                if(userId!=null)
+                    item.setUserId(userId);
                 item.setGrade(0);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
-                String fId = prepId.toString();
+                String fId = fId(prepId);
                 item.setFeedId(fId);
 
                 databaseReference.child("post").child(fId).setValue(item);
@@ -117,4 +140,9 @@ public class Frag3Posting extends Fragment {
             return 1;
         }
     }
+    private String fId(String prepId){
+        Integer fIdNum = Integer.parseInt(prepId)+1;
+        return String.valueOf(fIdNum);
+    }
 }
+

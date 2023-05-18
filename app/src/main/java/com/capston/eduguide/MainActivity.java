@@ -14,9 +14,17 @@ import android.view.MenuItem;
 
 import com.capston.eduguide.guideTool.GuideTool;
 import com.capston.eduguide.login.LoginActivity;
+import com.capston.eduguide.post.FeedViewItem;
 import com.google.android.material.navigation.NavigationBarView;
 import android.database.sqlite.SQLiteDatabase;
 import com.capston.eduguide.db.DatabaseHelper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private Frag3Posting frag3;
     private Frag4Notice frag4;
     private Frag5User frag5;
-    private String userId;
+    private String userEmail;
+    public String userId;
+    public Bundle bundle = new Bundle();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = database.getReference("users");
 
     private static String currentMenu; //현재 메뉴
 
@@ -56,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==0){
             if (resultCode==RESULT_OK) {
                 if(data != null){
-                    userId = data.getExtras().getString("userId");
+                    userEmail = data.getExtras().getString("userEmail");
+                    Log.d("테스팅중입니다",userEmail);
                 }
             }
         }
@@ -96,9 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private void setFrag(int n) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
-
-        Bundle bundle = new Bundle();
-        bundle.putString("userId",userId);
+        bundle.putString("userEmail",userEmail);
 
         switch (n) {
             case 0:

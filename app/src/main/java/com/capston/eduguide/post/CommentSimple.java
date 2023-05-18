@@ -48,6 +48,7 @@ public class CommentSimple extends Fragment {
     private ImageView userImage;
     private ImageView feedUserImage;
     private String fId;
+    private String userId;
     FeedViewItem item;
     CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
@@ -62,8 +63,11 @@ public class CommentSimple extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
-                ((MainActivity)getActivity()).replaceFragment(new Frag1Feed());
-
+                Bundle bundle = new Bundle();
+                bundle.putString("userId",userId);
+                Frag1Feed feed = new Frag1Feed();
+                feed.setArguments(bundle);
+                ((MainActivity) requireActivity()).replaceFragment(feed);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -91,6 +95,7 @@ public class CommentSimple extends Fragment {
         Bundle bundle = getArguments();
         if (getArguments() != null)
         {
+            userId = bundle.getString("userId");
             String mainStr = bundle.getString("main_text");
             String tagStr = bundle.getString("tag_text");
             String userName = bundle.getString("feedUser_name");
@@ -135,7 +140,6 @@ public class CommentSimple extends Fragment {
             @Override
             public void onClick(View v) {
                 String comment = comm.getText().toString();
-                //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
                 String userId = bundle.getString("userId");
                 //여기서 유저의 등급 받아서 코멘트 속성으로 부여할지 고민중
                 //현재는 어댑터에서 출력하기 전에 유저 이름으로 등급 검색함
@@ -146,10 +150,6 @@ public class CommentSimple extends Fragment {
 
                 //파이어베이스에 데이터 입력
                 DatabaseReference.child(fId).setValue(comments);
-
-                //알림 호출 //게시글 제목 받아와야 함
-                //frag4Notice.showNotification(0, "게시글 제목", userId);
-
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
