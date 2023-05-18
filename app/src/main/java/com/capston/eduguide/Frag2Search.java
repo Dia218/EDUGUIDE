@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
 
+<<<<<<< HEAD
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,11 +31,33 @@ import java.util.List;
 
 public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClickListenr {
 
+=======
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.capston.eduguide.search.SearchAdapter;
+import com.capston.eduguide.search.SearchItem;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Frag2Search extends Fragment {
+
+>>>>>>> login
     private DatabaseReference databaseReference;
     private RecyclerView recyclerView;
     private SearchView searchView;
     private SearchAdapter adapter;
+<<<<<<< HEAD
 
+=======
+>>>>>>> login
     public Frag2Search() {
 
     }
@@ -42,6 +65,7 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_search, container, false);
+<<<<<<< HEAD
         //firebase 초기화
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -68,9 +92,34 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                 return true;
             }
         });
+=======
+>>>>>>> login
 
+        //firebase 초기화
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        //recyclerView 초기화
+        recyclerView=view.findViewById(R.id.recycle_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new SearchAdapter(getActivity());
+        recyclerView.setAdapter(adapter);
+
+        //searchView 초기화
+        searchView = view.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query){
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText){
+                search(newText);
+                return true;
+            }
+        });
         return view;
     }
+<<<<<<< HEAD
     public void onItemClick(SearchItem searchItem){
 
         Fragment fragment = new CommentSimple();
@@ -98,6 +147,15 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
 
         databaseReference.child("post")
                 .orderByChild("tag")
+=======
+    private void search(String query){
+        //firebase에서 검색어와 일치하는 태그값을 찾아 검색결과를 가져옴
+
+        databaseReference.child("posts")
+                .orderByChild("tag")
+                .startAt(query)
+                .endAt(query+"\uf8ff")
+>>>>>>> login
                 .addListenerForSingleValueEvent(new ValueEventListener(){
 
                     @Override
@@ -106,6 +164,7 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                         for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                             //태그가 일치하는 경우
                             String tag = snapshot.child("tag").getValue(String.class);
+<<<<<<< HEAD
                             if(tag!=null&& tag.contains(query.toLowerCase())){
                                 String title=snapshot.child("title").getValue(String.class);
                                 String postId=snapshot.getKey();
@@ -122,6 +181,16 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                         adapter.setSearchItems(searchItems);
                         Log.d("testingp", "검색 결과 개수: " + searchItems.size());
 
+=======
+                            if(tag!=null&& tag.contains(query)){
+                                String title=snapshot.child("title").getValue(String.class);
+                                String postId=snapshot.getKey();
+                                SearchItem searchItem=new SearchItem(postId,title,tag);
+                                searchItems.add(searchItem);
+                            }
+                        }
+                        adapter.setSearchItems(searchItems);
+>>>>>>> login
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError){

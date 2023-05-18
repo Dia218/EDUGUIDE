@@ -8,6 +8,7 @@
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         <option name="gradleJvm" value="jbr-11" />
         <option name="modules">
@@ -17,6 +18,9 @@
           </set>
         </option>
 >>>>>>> 1632cc5580dce8ddae9e372504125e024a83c1bf
+=======
+        <option name="gradleJvm" value="11" />
+>>>>>>> login
       </GradleProjectSettings>
     </option>
   </component>

@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.guideTool.GuideAdapter;
 import com.capston.eduguide.post.FeedViewItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +28,7 @@ public class Frag3Posting extends Fragment {
     private ViewPager vp;
     private String prepId;
     private String userId;
+
     private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -40,7 +40,7 @@ public class Frag3Posting extends Fragment {
         view=inflater.inflate(R.layout.frag3_posting, container, false);
 
         vp = (ViewPager) view.findViewById(R.id.vp);
-        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(getChildFragmentManager());
+        FeedViewItem.BannerPagerAdapter bannerPagerAdapter = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager());
         vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 

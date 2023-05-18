@@ -3,11 +3,24 @@ package com.capston.eduguide.post;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+<<<<<<< HEAD
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.capston.eduguide.guideTool.GuideAdapter;
+
+import java.util.ArrayList;
+=======
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+>>>>>>> login
+
+import com.capston.eduguide.guideTool.GuideTool;
 
 import java.util.ArrayList;
 
@@ -77,7 +90,11 @@ public class FeedViewItem {
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
+<<<<<<< HEAD
         GuideAdapter guide = new GuideAdapter();
+=======
+        GuideTool guide = new GuideTool();
+>>>>>>> login
         public BannerPagerAdapter(FragmentManager fm){
             super(fm);
         }
@@ -106,4 +123,8 @@ public class FeedViewItem {
             return 1;
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> login

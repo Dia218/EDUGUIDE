@@ -30,17 +30,28 @@ import java.util.HashMap;
 
 public class Frag1Feed extends Fragment {
 
+<<<<<<< HEAD
     private GuideAdapter fragmentGuide;
+=======
+    private GuideTool fragmentGuide;
+>>>>>>> login
     FeedViewAdapter adapter;
     ArrayList<FeedViewItem> items;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+<<<<<<< HEAD
     private DatabaseReference userDatabaseReference;
     private ValueEventListener mListener;
     RecyclerView recyclerView;
     String userId;
     String userEmail;
+=======
+    private ValueEventListener mListener;
+    RecyclerView recyclerView;
+    Parcelable recyclerViewState = null;
+    //RecyclerView recyclerView;
+>>>>>>> login
     // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
     /*public static Frag1Feed newInstance(){
         return new Frag1Feed();
@@ -51,8 +62,11 @@ public class Frag1Feed extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.frag1_feed, container, false);
+            //rootView = inflater.inflate(R.layout.frag1_feed, container, false);
+            //rootView = inflater.inflate(R.layout.post_feedview_item,container,false);
 
         Bundle bundle = getArguments();
+<<<<<<< HEAD
         if (userEmail == null){
             if (bundle.getString("userId")!=null) {
                 userId = bundle.getString("userId");
@@ -61,17 +75,46 @@ public class Frag1Feed extends Fragment {
                 userEmail = bundle.getString("userEmail");
         }
 
+=======
+>>>>>>> login
         // 리스트 뷰 참조 및 Adapter 달기
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         items = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance();
+<<<<<<< HEAD
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
         adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
         callFeedList();
         callUserId();
+=======
+        databaseReference = database.getReference("post");
+        mListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                items.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    FeedViewItem item = snapshot.getValue(FeedViewItem.class);
+                    items.add(item);
+                }
+                addGuide();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        databaseReference.addValueEventListener(mListener);
+
+        // 리사이클러뷰에 SimpleTextAdapter 객체 지정
+        adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
+        adapter.setItems(items);
+        adapter.setUserId(bundle.getString("userId"));
+>>>>>>> login
         recyclerView.setAdapter(adapter);
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe);
@@ -152,6 +195,7 @@ public class Frag1Feed extends Fragment {
             item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.tree, null));
         }
     }
+<<<<<<< HEAD
     public void callFeedList(){
         databaseReference = database.getReference("post");
         mListener = new ValueEventListener() {
@@ -211,6 +255,17 @@ public class Frag1Feed extends Fragment {
             recyclerView.setAdapter(adapter);
         }
     }
+=======
+
+    private void saveRecyclerViewState() {
+        // LayoutManager를 불러와 Parcelable 변수에 리사이클러뷰 상태를 Bundle 형태로 저장한다
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+    }
+
+    private void setSavedRecyclerViewState() {
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+    };
+>>>>>>> login
 }
 
 

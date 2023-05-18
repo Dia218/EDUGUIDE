@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth = null;
@@ -46,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         SignInButton signInButton = findViewById(R.id.btn_google_sign_in); //구글 로그인 버튼
- 
+
         //로그인
         btnLogin = findViewById(R.id.btn_login);
         etEmail = findViewById(R.id.login_email);
