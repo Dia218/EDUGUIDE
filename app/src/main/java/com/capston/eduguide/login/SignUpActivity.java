@@ -1,5 +1,6 @@
 package com.capston.eduguide.login;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -12,54 +13,86 @@ import android.widget.Toast;
 
 import com.capston.eduguide.R;
 import com.capston.eduguide.db.DatabaseHelper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText userId;
-    EditText userPassword;
-    EditText userEmail;
-    EditText userPhone;
+    private EditText signUpIdEditText;
+    private EditText signUpPasswordEditText;
+    private EditText signUpEmailEditText;
+    private EditText signUpPhoneEditText;
+    private EditText signUpNameEditText;
+    private EditText signUpAgeEditText;
+    private Button signUpButton;
 
-    SQLiteDatabase userDB;
-    DatabaseHelper helper;
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_sign_up_form);
 
-        helper = new DatabaseHelper(this, "userDB", null, 1);
+        signUpIdEditText = findViewById(R.id.signUp_id);
+        signUpPasswordEditText = findViewById(R.id.signUp_password);
+        signUpEmailEditText = findViewById(R.id.signUp_email);
+        signUpPhoneEditText = findViewById(R.id.signUp_phone);
+        signUpNameEditText = findViewById(R.id.signUp_name);
+        signUpAgeEditText = findViewById(R.id.signUp_age);
+        signUpButton = findViewById(R.id.btn_signUp);
 
-        userId = (EditText) findViewById(R.id.signUp_id);
-        userPassword = (EditText) findViewById(R.id.signUp_password);
-        userEmail = (EditText) findViewById(R.id.signUp_email);
-        userPhone = (EditText) findViewById(R.id.signUp_phone);
+        // Firebase 인증 객체 초기화
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        Button signUpButton = (Button) findViewById(R.id.btn_signUp);
-        signUpButton.setOnClickListener(new View.OnClickListener(){
+        // Firebase 실시간 데이터베이스 객체 초기화
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = userId.getText().toString().trim();
-                String password = userPassword.getText().toString().trim();
-                String email = userEmail.getText().toString().trim();
-                String phone = userPhone.getText().toString().trim();
+                String id = signUpIdEditText.getText().toString().trim();
+                String password = signUpPasswordEditText.getText().toString().trim();
+                String email = signUpEmailEditText.getText().toString().trim();
+                String phone = signUpPhoneEditText.getText().toString().trim();
+                String name = signUpNameEditText.getText().toString().trim();
+                String age = signUpAgeEditText.getText().toString().trim();
 
-                if(id.length() < 5 || password.length() < 5) {
-                    Toast.makeText(SignUpActivity.this,"아이디 5글자 이상\n" + "비밀번호 5글자 이상\n" + "\n입력해주세요", Toast.LENGTH_LONG).show();
-                } else {
-                    insertData(id, password, email, phone);
-                    setResult(Activity.RESULT_OK);
-                    finish();
-                }
+                // Firebase Authentication을 사용하여 회원 가입 정보 저장
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // 회원 가입이 성공하면 Firebase Realtime Database에 회원 정보 저장
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    String userId = user.getUid();
+
+                                    User newUser = new User(id, password, email, phone, name, age);
+
+                                    databaseReference.child(userId).setValue(newUser)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(SignUpActivity.this, "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(SignUpActivity.this, "회원 가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                } else {
+                                    Toast.makeText(SignUpActivity.this, "회원 가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
         });
-    }
-    public void insertData(String id, String password, String email, String phone) {
-        userDB = helper.getWritableDatabase();
-
-        String sql = "INSERT INTO userDB (userId, password, email, phone) VALUES " +
-                "('" + id + "', '" + password + "', '" + email + "', '" + phone + "')";
-
-        userDB.execSQL(sql);
     }
 }

@@ -14,8 +14,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdapter.ViewHolder> {
 
@@ -46,20 +52,17 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         public TextView username;
         public TextView commentText;
         public ImageView userImage;
-        //public ArrayList<ReplyItem_unfinished> replyItems;
-        //private RecyclerView rvReplyItem;
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference DatabaseReference = database.getReference("comment");
 
         //클릭리스너는 뷰홀더에서 작성
         public ViewHolder(@NonNull View itemView, final OnItemClickEventListener a_itemClickListener) {
             super(itemView);
-            // 뷰 객체에 대한 참조(부모).
             username = itemView.findViewById(R.id.commentUserName);
             commentText = itemView.findViewById(R.id.comment);
             userImage = itemView.findViewById(R.id.commentUserImage);
-            // 뷰 객체에 대한 참조(자식아이템).
-            //rvReplyItem = itemView.findViewById(R.id.replyList);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View a_view) {
                     final int position = getAdapterPosition();
@@ -67,7 +70,35 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
                         a_itemClickListener.onItemClick(position);
                     }
                 }
-            });
+            });*/
+        }
+        public void setItem(CommentItem item){
+            username.setText(item.getUsername());
+            commentText.setText(item.getComment());
+            String userName = item.getUsername();
+            final Integer[] userGrade = new Integer[1];
+            //유저 이름으로 파이어베이스에서 유저 등급 받아오기
+            /*ValueEventListener mListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        HashMap<String, Object> value = (HashMap<String, Object>)snapshot.getValue();
+                        if(userName == (String)value.get("name")){
+                            userGrade[0] = (Integer) value.get("grade");
+                            userImage.setImageResource(grade(userGrade[0]));
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            };
+            DatabaseReference.addValueEventListener(mListener);*/
+
+            //현재는 임의로 등급 입력
+            userImage.setImageResource(grade(0));
         }
     }
 
@@ -78,8 +109,8 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.comment_item, parent, false);
-        ViewHolder cvh = new ViewHolder(view,mItemClickListener);
+        View view = inflater.inflate(R.layout.post_comment_item, parent, false);
+        CommentSimpleAdapter.ViewHolder cvh = new CommentSimpleAdapter.ViewHolder(view,mItemClickListener);
 
         return cvh;
     }
@@ -98,10 +129,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         }
         holder.itemView.setBackgroundColor(color);
 
-        holder.username.setText(item.getUsername());
-        holder.commentText.setText(item.getComment());
-        holder.userImage.setImageResource(R.drawable.grade1);   //db에서 gradeInt를 받아와서 각 사용자의 뱃지 이미지 받아와야함
-
+        holder.setItem(item);
     }
 
 
@@ -114,10 +142,10 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
     public int getItemCount() { return commentItemList.size(); }
 
     // 아이템 데이터 추가를 위한 함수
-    public void addComment(ArrayList<CommentItem> commentItemList, Drawable userImage, String userName, String comment){
-        CommentItem item = new CommentItem(userImage,comment,userName);
+    public void addComment(ArrayList<CommentItem> commentItemList, String userName, String comment){
+        CommentItem item = new CommentItem(comment,userName);
 
-        item.setUserIcon(userImage);
+        //item.setUserIcon(userImage);
         item.setUsername(userName);
         item.setComment(comment);
 
@@ -140,14 +168,14 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
     }
 
     private int grade(Integer gradeInt) {
-        if(gradeInt < 10)
-            return R.drawable.grade1;
-        else if(gradeInt < 20)
-            return R.drawable.grade1;
-        else if(gradeInt < 30)
-            return R.drawable.grade1;
-        else if(gradeInt < 40)
-            return R.drawable.grade1;
+        if(gradeInt == 0)
+            return R.drawable.seed;
+        else if(gradeInt == 1)
+            return R.drawable.sprout;
+        else if(gradeInt == 2)
+            return R.drawable.seedling;
+        else if(gradeInt == 3)
+            return R.drawable.tree;
         else
             return R.drawable.grade1;
     }
