@@ -8,31 +8,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.capston.eduguide.login.LoginActivity;
-import com.capston.eduguide.post.FeedViewItem;
-=======
-import android.os.Debug;
-import android.util.Log;
-import android.view.MenuItem;
-
 import com.capston.eduguide.db.TestFirebase;
-import com.capston.eduguide.guideTool.GuideTool;
-import com.capston.eduguide.login.LoginActivity;
->>>>>>> login
 import com.google.android.material.navigation.NavigationBarView;
 import com.capston.eduguide.db.DatabaseHelper;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,25 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private Frag3Posting frag3;
     private Frag4Notice frag4;
     private Frag5User frag5;
-<<<<<<< HEAD
     private String userEmail;
     public String userId;
     public Bundle bundle = new Bundle();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("users");
-=======
-    private String userId;
->>>>>>> login
 
     private static String currentMenu; //현재 메뉴
-
     private static DatabaseHelper helper; //디비
 
-<<<<<<< HEAD
-=======
     TestFirebase testFirebase = new TestFirebase();
->>>>>>> login
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         //bundle.putString("userId",userId);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -83,13 +60,8 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==0){
             if (resultCode==RESULT_OK) {
                 if(data != null){
-<<<<<<< HEAD
-                    userEmail = data.getExtras().getString("userEmail");
-                    Log.d("테스팅중입니다",userEmail);
-=======
                     userId = data.getExtras().getString("userId");
                     Log.d("테스팅",userId);
->>>>>>> login
                 }
             }
         }

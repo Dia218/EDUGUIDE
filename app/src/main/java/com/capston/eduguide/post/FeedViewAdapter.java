@@ -2,36 +2,22 @@ package com.capston.eduguide.post;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-<<<<<<< HEAD
-=======
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
->>>>>>> login
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.Frag1Feed;
-import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-<<<<<<< HEAD
-=======
-import com.capston.eduguide.guideTool.GuideTool;
->>>>>>> login
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -170,15 +156,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         comment.setArguments(bundle);
 
                         AppCompatActivity activity = (AppCompatActivity)v.getContext();
-<<<<<<< HEAD
-=======
-                        /*FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                        Fragment frag = activity.getSupportFragmentManager().findFragmentById(R.id.main_frame);
-                        transaction.add(R.id.main_frame,comment);
-                        transaction.show(comment);
-                        transaction.hide(frag);
-                        transaction.commit();*/
->>>>>>> login
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.main_frame,comment)
                                 //.addToBackStack(null)
@@ -199,7 +176,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     .load(item.getUserIcon())
                     .apply(new RequestOptions().override(50,50))
                     .into(userImage);
-<<<<<<< HEAD
             if(userId != null) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference likeDatabaseReference = database.getReference("like");
@@ -213,24 +189,10 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                                         if (!like.isSelected())
                                             like.setSelected(!like.isSelected());
                                     }
-=======
-            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference likeDatabaseReference = database.getReference("like");
-            likeDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                        if(userId.equals(dataSnapshot.getKey())){
-                            for(DataSnapshot keySnapshot : dataSnapshot.getChildren()){
-                                if(item.getFeedId().equals(keySnapshot.getKey())){
-                                    if(!like.isSelected())
-                                        like.setSelected(!like.isSelected());
->>>>>>> login
                                 }
                             }
                         }
                     }
-<<<<<<< HEAD
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -249,31 +211,10 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                                         if (!bookmark.isSelected())
                                             bookmark.setSelected(!bookmark.isSelected());
                                     }
-=======
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-            DatabaseReference bookmarkDatabaseReference = database.getReference("bookmark");
-            bookmarkDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                        if(userId.equals(dataSnapshot.getKey())){
-                            for(DataSnapshot keySnapshot : dataSnapshot.getChildren()){
-                                if(item.getFeedId().equals(keySnapshot.getKey())){
-                                    if(!bookmark.isSelected())
-                                        bookmark.setSelected(!bookmark.isSelected());
->>>>>>> login
                                 }
                             }
                         }
                     }
-<<<<<<< HEAD
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -281,15 +222,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     }
                 });
             }
-=======
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });*/
->>>>>>> login
         }
     }
 
@@ -297,18 +229,12 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-<<<<<<< HEAD
         View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
         FeedViewAdapter.ViewHolder vh = new FeedViewAdapter.ViewHolder(view);
         return vh;
-=======
-            View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
-            FeedViewAdapter.ViewHolder vh = new FeedViewAdapter.ViewHolder(view);
-            return vh;
->>>>>>> login
     }
 
     //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
@@ -352,8 +278,4 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     public FragmentManager getFm() {
         return fm;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> login

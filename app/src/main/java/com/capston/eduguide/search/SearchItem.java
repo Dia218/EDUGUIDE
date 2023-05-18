@@ -4,7 +4,6 @@ public class SearchItem{
     private String postId;
     private String title;
     private String tag;
-<<<<<<< HEAD
     private String description;
     private String userId;
 
@@ -14,13 +13,6 @@ public class SearchItem{
         this.tag=tag;
         this.description=description;
         this.userId=userId;
-=======
-
-    public SearchItem(String postId,String title,String tag){
-        this.postId=postId;
-        this.title=title;
-        this.tag=tag;
->>>>>>> login
     }
     public String getPostId(){return postId;}
     public String getTitle(){
@@ -29,17 +21,6 @@ public class SearchItem{
     public String getTag(){
         return tag;
     }
-<<<<<<< HEAD
     public String getDescription(){return description;}
     public String getUserId(){return userId;}
 }
-=======
-}
-
-
-
-
-
-
-
->>>>>>> login

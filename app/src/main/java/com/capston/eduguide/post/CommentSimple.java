@@ -1,10 +1,7 @@
 package com.capston.eduguide.post;
 
-import static com.capston.eduguide.Frag4Notice.frag4Notice;
-
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -27,15 +23,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
-<<<<<<< HEAD
 import com.capston.eduguide.guideTool.GuideAdapter;
-=======
-import com.capston.eduguide.guideTool.GuideTool;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
->>>>>>> login
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,8 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 public class CommentSimple extends Fragment {
 
     /*public static Comment newInstance(){
@@ -59,10 +46,7 @@ public class CommentSimple extends Fragment {
     private ImageView userImage;
     private ImageView feedUserImage;
     private String fId;
-<<<<<<< HEAD
     private String userId;
-=======
->>>>>>> login
     FeedViewItem item;
     CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
@@ -77,16 +61,11 @@ public class CommentSimple extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
-<<<<<<< HEAD
                 Bundle bundle = new Bundle();
                 bundle.putString("userId",userId);
                 Frag1Feed feed = new Frag1Feed();
                 feed.setArguments(bundle);
                 ((MainActivity) requireActivity()).replaceFragment(feed);
-=======
-                ((MainActivity)getActivity()).replaceFragment(new Frag1Feed());
-
->>>>>>> login
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -114,10 +93,7 @@ public class CommentSimple extends Fragment {
         Bundle bundle = getArguments();
         if (getArguments() != null)
         {
-<<<<<<< HEAD
             userId = bundle.getString("userId");
-=======
->>>>>>> login
             String mainStr = bundle.getString("main_text");
             String tagStr = bundle.getString("tag_text");
             String userName = bundle.getString("feedUser_name");
@@ -162,10 +138,6 @@ public class CommentSimple extends Fragment {
             @Override
             public void onClick(View v) {
                 String comment = comm.getText().toString();
-<<<<<<< HEAD
-=======
-                //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
->>>>>>> login
                 String userId = bundle.getString("userId");
                 //여기서 유저의 등급 받아서 코멘트 속성으로 부여할지 고민중
                 //현재는 어댑터에서 출력하기 전에 유저 이름으로 등급 검색함
