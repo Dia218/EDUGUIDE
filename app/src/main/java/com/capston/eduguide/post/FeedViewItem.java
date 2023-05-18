@@ -3,14 +3,11 @@ package com.capston.eduguide.post;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
-import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.guideTool.GuideAdapter;
 
 import java.util.ArrayList;
 
@@ -25,8 +22,6 @@ public class FeedViewItem {
     private Integer like_count;
     private Integer bookmark_count;
     private Integer grade;
-    //private ArrayList<CommentItem> comments;
-    //private ArrayList<String> comment;
     private BannerPagerAdapter viewPagerAdapter;
 
 
@@ -82,7 +77,7 @@ public class FeedViewItem {
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        GuideTool guide = new GuideTool();
+        GuideAdapter guide = new GuideAdapter();
         public BannerPagerAdapter(FragmentManager fm){
             super(fm);
         }
@@ -104,7 +99,6 @@ public class FeedViewItem {
             bundle.putInt("guidelinesize",9);
             bundle.putStringArrayList("key",key);
             guide.setArguments(bundle);
-
         }
 
         @Override

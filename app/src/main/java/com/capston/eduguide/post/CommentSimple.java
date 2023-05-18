@@ -1,8 +1,9 @@
 package com.capston.eduguide.post;
 
+import static com.capston.eduguide.Frag4Notice.frag4Notice;
+
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,9 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -27,11 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
-import com.capston.eduguide.guideTool.GuideTool;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.capston.eduguide.guideTool.GuideAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,14 +33,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CommentSimple extends Fragment {
 
     /*public static Comment newInstance(){
         return new Comment();
     }*/
-    //private View view;
     private TextView main;
     private TextView tag;
     private TextView username;
@@ -56,7 +48,7 @@ public class CommentSimple extends Fragment {
     private ImageView userImage;
     private ImageView feedUserImage;
     private String fId;
-    private String title;
+    private String userId;
     FeedViewItem item;
     CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
@@ -71,8 +63,11 @@ public class CommentSimple extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
-                ((MainActivity)getActivity()).replaceFragment(new Frag1Feed());
-
+                Bundle bundle = new Bundle();
+                bundle.putString("userId",userId);
+                Frag1Feed feed = new Frag1Feed();
+                feed.setArguments(bundle);
+                ((MainActivity) requireActivity()).replaceFragment(feed);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -100,9 +95,10 @@ public class CommentSimple extends Fragment {
         Bundle bundle = getArguments();
         if (getArguments() != null)
         {
+            userId = bundle.getString("userId");
             String mainStr = bundle.getString("main_text");
             String tagStr = bundle.getString("tag_text");
-            String userName = bundle.getString("user_name");
+            String userName = bundle.getString("feedUser_name");
             main.setText(mainStr);
             tag.setText(tagStr);
             username.setText(userName);
@@ -140,27 +136,20 @@ public class CommentSimple extends Fragment {
         adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
         recyclerView.setAdapter(adapter);
 
-        //댓글아이템 추가
-        /*adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
-                "댓글단 유저 아이디1","임시 댓글 내용1");*/
-
         input.setOnClickListener(new View.OnClickListener() {                      //댓글 입력시 이벤트
             @Override
             public void onClick(View v) {
-
-
-
                 String comment = comm.getText().toString();
-                //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
-                String userId = bundle.getString("user_name");
-                Integer userGrade = bundle.getInt("user_grade");
+                String userId = bundle.getString("userId");
+                //여기서 유저의 등급 받아서 코멘트 속성으로 부여할지 고민중
+                //현재는 어댑터에서 출력하기 전에 유저 이름으로 등급 검색함
                 comm.setText("");
                 adapter.addComment(comments,userId,comment);
-                //comments.add(new CommentItem(ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null), comment,userId));
                 adapter.notifyItemInserted(comments.size());
                 recyclerView.setAdapter(adapter);
-                DatabaseReference.child(fId).setValue(comments);
 
+                //파이어베이스에 데이터 입력
+                DatabaseReference.child(fId).setValue(comments);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -171,7 +160,6 @@ public class CommentSimple extends Fragment {
                 //recyclerView.scrollToPosition(comments.size()-1);
             }
         });
-
         return view;
     }
 
@@ -181,14 +169,14 @@ public class CommentSimple extends Fragment {
     }
 
     private int grade(Integer gradeInt) {
-        if(gradeInt < 10)
-            return R.drawable.grade1;
-        else if(gradeInt < 20)
-            return R.drawable.grade1;
-        else if(gradeInt < 30)
-            return R.drawable.grade1;
-        else if(gradeInt < 40)
-            return R.drawable.grade1;
+        if(gradeInt == 0)
+            return R.drawable.seed;
+        else if(gradeInt == 1)
+            return R.drawable.sprout;
+        else if(gradeInt == 2)
+            return R.drawable.seedling;
+        else if(gradeInt == 3)
+            return R.drawable.tree;
         else
             return R.drawable.grade1;
     }
@@ -201,7 +189,7 @@ public class CommentSimple extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return GuideTool.newInstance(position);
+            return GuideAdapter.newInstance(position);
         }
 
         @Override

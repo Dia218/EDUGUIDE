@@ -15,7 +15,8 @@
             <ImageView
                 android:id="@+id/commentUserImage"
                 android:layout_width="50dp"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp"
+                android:layout_margin="5dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -27,31 +28,17 @@
                 android:id="@+id/commentUserName"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:text="댓글을 작성한 유저 아이디"
+                android:text="유저 아이디"
                 android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="댓글 내용\n\n"/>
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="댓글 내용"/>
         </LinearLayout>
 
     </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/replyLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!--<androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/replyList"
-            android:overScrollMode="never"
-            android:nestedScrollingEnabled="false"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true" />-->
-    </RelativeLayout>
 
 </LinearLayout>
