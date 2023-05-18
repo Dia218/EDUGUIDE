@@ -13,15 +13,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.capston.eduguide.post.FeedViewItem;
 import com.capston.eduguide.user.SettingsActivity;
+import com.capston.eduguide.user.UserFeedViewAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class Frag5User extends Fragment {
 
-    private View view;
-
     private TextView profileNameTextView;
     private TextView selfIntroTextView;
+    ArrayList<FeedViewItem> items;
+    UserFeedViewAdapter adapter;
 
     @Nullable
     @Override
@@ -42,6 +53,35 @@ public class Frag5User extends Fragment {
         selfIntroTextView = view.findViewById(R.id.self_intro);
 
         updateProfileInfo();
+
+        RecyclerView rcView = (RecyclerView) view.findViewById(R.id.my_posts);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        rcView.setLayoutManager(gridLayoutManager);
+
+        items = new ArrayList<>();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference("post");
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                items.clear();
+                for (DataSnapshot Snapshot : snapshot.getChildren()){
+                    FeedViewItem item = Snapshot.getValue(FeedViewItem.class);
+                    items.add(item);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        adapter = new UserFeedViewAdapter(getContext(),items);
+        rcView.setAdapter(adapter);
 
         return view;
     }

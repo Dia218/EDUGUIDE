@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class FeedViewItem {
     //private Drawable iconDrawable ;
-    private Integer feedId;
+    private String feedId;
     private Drawable userIcon;
     private String titleStr ;
     private String textStr ;
@@ -31,7 +31,7 @@ public class FeedViewItem {
 
 
     //public void setIcon(Drawable icon) { iconDrawable = icon;}
-    public void setFeedId(Integer id) { feedId = id; }
+    public void setFeedId(String id) { feedId = id; }
     public void setUserIcon(Drawable icon) {
         userIcon = icon;
     }
@@ -54,7 +54,7 @@ public class FeedViewItem {
 
 
     //public Drawable getIcon() { return this.iconDrawable ;}
-    public Integer getFeedId() { return this.feedId; }
+    public String getFeedId() { return this.feedId; }
     public Drawable getUserIcon() {
         return this.userIcon ;
     }

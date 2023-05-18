@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,7 +29,6 @@
             android:id="@+id/profile_image"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:contentDescription="@string/profile_description"
             android:src="@drawable/user_profile_image"
             tools:ignore="ImageContrastCheck" />
 
@@ -102,8 +102,22 @@
             android:textColor="#000000"
             android:textSize="15sp"
             tools:ignore="VisualLintButtonSize" />
-
     </LinearLayout>
+
+    <!-- 게시물 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_posts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/profile_buttons"
+        android:layout_marginTop="6dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_buttons"
+        app:spanCount="3"
+        tools:listitem="@layout/user_item_grid" />
 
 </RelativeLayout>
 

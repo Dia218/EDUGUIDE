@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 로그아웃 처리 코드 작성
-                // 예시: SharedPreferences에서 로그인 정보 삭제 후 로그인 화면으로 이동
+                // SharedPreferences에서 로그인 정보 삭제 후 로그인 화면으로 이동
                 SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
