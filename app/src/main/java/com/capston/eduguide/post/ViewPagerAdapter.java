@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.capston.eduguide.guideTool.GuideAdapter;
+import com.capston.eduguide.guideTool.GuideFragment;
 
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -15,7 +15,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return GuideAdapter.newInstance(position);
+        return GuideFragment.newInstance(position);
     }
 
     @Override

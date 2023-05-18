@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +25,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
-public class GuideAdapter extends Fragment {
+/*
+* 가이드 띄우기, 가이드 관리, 가이드 - 파이어베이스 연동 등을 처리함
+*
+* 필드 : 가이드 박스 개수, 가이드 구성 인터페이스 저장 구조, 파이어베이스 인스턴스
+* 생성 시 : 인터페이스 저장 구조 초기화, 이벤트 리스너 부착, 고정 모드 활성화 여부 결정
+*
+* 메소드 :
+* 터치 이벤트 - 키워드 작성,
+* 길게 누르기 이벤트 - 설명글 작성,
+* 고정 모드 - addButton 비활성화,
+* 가이드 데이터베이스 저장
+* 가이드 데이터베이스 조회
+* */
+
+public class GuideFragment extends Fragment {
 
 
     //가이드 박스 개수
@@ -40,8 +55,8 @@ public class GuideAdapter extends Fragment {
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
 
     private View view;
-    public static GuideAdapter newInstance(int param1){
-        GuideAdapter fg = new GuideAdapter();
+    public static GuideFragment newInstance(int param1){
+        GuideFragment fg = new GuideFragment();
         Bundle args = new Bundle();
         args.putInt("param1", param1);
         fg.setArguments(args);
@@ -136,45 +151,14 @@ public class GuideAdapter extends Fragment {
                 public boolean onLongClick(View v) { onLongClickGuide(v); return true; }
             });
         }
-/*
-        Bundle bundle = getArguments();
-        if(getArguments() != null){
-            Integer index = bundle.getInt("guideboxsize");
-            ArrayList<String> key = bundle.getStringArrayList("key");
-            addbuttonVector.get(0).setVisibility(View.GONE);
-            for(int num=0;num<(index);num++){
-                addGuide(num, key.get(num));
-                if(num > guideMinNum-1){
-                    //addbuttonVector.get(0).setVisibility(View.GONE);
-                    guideVector.get(num).setVisibility(View.VISIBLE);
-                    lineVector.get(num-1).setVisibility(View.VISIBLE);
-                }
-            }
-        }*/
 
         //게시글 작성 메뉴가 아닐 경우
         if(!MainActivity.getCurrentMenu().equals("posting")) {
             setFixmode(); //fix모드 메소드 호출
+            //setGuide(postId); //가이드 데이터 가져오기 호출? 호출은 바깥에서 해야하나? 게시글 ID를 어떻게 받아올까?
         }
 
         return view;
-    }
-
-    public void setFixmode() {
-        //추가 버튼 나타나지 않게 함
-        guideAddButtons.get(0).setVisibility(View.GONE);
-
-        //짧게 터치 이벤트 비활성화
-        Iterator<Button> guideboxIt = guideBoxViews.iterator();
-        while (guideboxIt.hasNext()) {
-            Button guideBox = guideboxIt.next();
-            guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
-                @Override
-                public void onClick(View v) {
-                    ;
-                }
-            });
-        }
     }
 
     //guideBox의 터치 이벤트
@@ -227,7 +211,7 @@ public class GuideAdapter extends Fragment {
         //guideBox 보이게 하기
         guideBoxViews.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
 
-        //다음 line 보이게 하기
+        //line 보이게 하기
         guideLineViews.get(guideMinNum + indexAdd - 1).setVisibility(View.VISIBLE);
 
         if(indexAdd == guideMaxNum-guideMinNum-1) //마지막 addbutton일 경우 뒷부분 생략
@@ -237,27 +221,67 @@ public class GuideAdapter extends Fragment {
         guideAddButtons.get(++indexAdd).setVisibility(View.VISIBLE);
     }
 
-    //가이드 DB 저장
+    //가이드 고정(보여주기) 모드
+    public void setFixmode() {
+        //추가 버튼 나타나지 않게 함
+        guideAddButtons.get(0).setVisibility(View.GONE);
+
+        //짧게 터치 이벤트 리스너 달기
+        Iterator<Button> guideboxIt = guideBoxViews.iterator();
+        while (guideboxIt.hasNext()) {
+            Button guideBox = guideboxIt.next();
+            guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
+                @Override
+                public void onClick(View v) {
+                    //설명글 창 띄우기
+                    View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_inform, null);
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    dialogBuilder.setView(guideDialogView);
+                    final AlertDialog informDialog = dialogBuilder.create();
+
+                    //팝업창 제목 수정하기
+                    ((TextView) guideDialogView.findViewById(R.id.titleKeyword)).setText(">ㅁ<// 이 단계에서는 : ");
+
+                    //팝업창 설명 부분 수정하기
+                    MultiAutoCompleteTextView guideInformTextView = (MultiAutoCompleteTextView) guideDialogView.findViewById(R.id.guideInform);
+                    guideInformTextView.setText(boxInfos.get(guideBoxViews.indexOf(v)));
+                    guideInformTextView.setEnabled(false);
+
+                    informDialog.show();
+                }
+            });
+        }
+    }
+
+    //파이어베이스에 가이드 데이터 저장
     public void regGuideContent(String postId) {
-        Log.d("GuideTool", "regGuideContent called. postId: " + postId);
+        Log.d("GuideItem", "regGuideContent called. postId: " + postId);
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
 
-            String keyword = String.valueOf(guideBox.getText()); // 가이드박스 키워드
-            if(keyword.replace("단계", "").matches("^[0-9]*$")) { continue; } //[숫자]단계 형식일 경우 저장하지 않고 스킵
+            // 가이드박스 키워드 가져오기
+            String keyword = String.valueOf(guideBox.getText());
+            if(keyword.replace("단계", "").matches("^[0-9]*$")) { continue; } //미입력 상태인 경우([숫자]단계 형식일 경우), 스킵
 
+            //가이드박스 설명글 가져오기
             int indexKey = guideBoxViews.indexOf(guideBox);
-            String boxInfo = boxInfos.get(indexKey); //가이드박스 설명글
+            String boxInfo;
+            if(boxInfos.get(indexKey).equals("설명")) //미입력 상태인 경우
+                boxInfo = "내용없음";
+            else
+                boxInfo = boxInfos.get(indexKey);
 
             guideBoxItems.add(new GuideBoxItem(keyword, boxInfo)); //리스트에 가이드박스 넣기
         }
 
-        String guideId = guideDatabaseReference.push().getKey(); // 새로운 가이드 ID 생성
-        GuideItem guide = new GuideItem(postId, guideBoxItems); // 가이드 객체 생성
-        guideDatabaseReference.child(guideId).setValue(guide); //가이드 객체 DB에 넣기
+        GuideItem guideItem = new GuideItem(postId, guideBoxItems); // 가이드 객체 생성
+        guideDatabaseReference.child(postId).setValue(guideItem); //가이드 객체 DB에 넣기
+
+        //위 코드에서 에러가 발생할 경우 해당 코드로 수정 :
+        //guideDatabaseReference.child(postId).child("guideBox").setValue(guideBoxItems); //가이드박스 리스트 DB에 넣기
 
         Log.d("Guide", "GuideItem registered successfully.");
 
@@ -277,24 +301,52 @@ public class GuideAdapter extends Fragment {
         });
     }
 
+    //파이어베이스에서 가이드 데이터 가져오기
+    public void setGuide(String postId) {
+        guideDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // 데이터가 존재할 경우 처리
+                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBox");
+                    int numGuideBoxes = (int) guideSnapshot.getChildrenCount();
 
-    //일단은 박스 사이즈만 받아서 키워드만 임의 지정함.키워드랑 설명 저장 기능,db   생기면 시도해봄
-    public void addGuide(int guideNum,String key){
-        //Log.v("size",""+addbuttonVector.capacity());
-        /*while(forGuideNum<guideNum-guideMinNum+1){
-            addbuttonVector.get(forGuideNum).setVisibility(View.GONE);
-            guideVector.get(guideMinNum+forGuideNum).setVisibility(View.VISIBLE);
-            if(guideNum>10){
-                lineVector.get(guideMinNum + forGuideNum).setVisibility(View.VISIBLE);
-            }
-            forGuideNum++;
-            if(forGuideNum<guideNum-guideMinNum){
-                lineVector.get(guideMinNum + forGuideNum).setVisibility(View.GONE);
-            }
-        }*/
+                    //가이드 박스 개수 맞추기
+                    int addNum = numGuideBoxes - guideMinNum;
+                    if(addNum > 0) {
+                        for(int i = 0; i < addNum; i++) {
+                            //guideBox 보이게 하기
+                            guideBoxViews.get(guideMinNum+i).setVisibility(View.VISIBLE);
+                            //line 보이게 하기
+                            guideLineViews.get(guideMinNum + i - 1).setVisibility(View.VISIBLE);
+                        }
+                    }
 
-        guideBoxViews.get(guideNum).setText(key);
+                    //데이터 가져와서 처리
+                    Iterator<Button> guideboxIt = guideBoxViews.iterator();
+                    int index = 0;
+                    while (guideboxIt.hasNext()) {
+                        Button guideBox = guideboxIt.next();
+                        guideBox.setText(guideSnapshot.child(String.valueOf(index)).child("boxWord").getValue(String.class)); //박스에 키워드 표시
+                        boxInfos.put(index, guideSnapshot.child(String.valueOf(index)).child("boxInfo").getValue(String.class)); //해시맵에 설명글 저장
+                        index++;
+                    }
+
+                } else {
+                    // 데이터가 없을 경우 처리
+                    System.out.println("데이터가 존재하지 않습니다.");
+                    Toast.makeText(getActivity(), "데이터가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 에러 처리
+                Toast.makeText(getActivity(), "데이터 읽기 실패: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 }
 
 

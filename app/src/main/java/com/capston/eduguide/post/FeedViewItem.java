@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.capston.eduguide.guideTool.GuideAdapter;
+import com.capston.eduguide.guideTool.GuideFragment;
 
 import java.util.ArrayList;
 
@@ -116,7 +116,7 @@ public class FeedViewItem {
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        GuideAdapter guide = new GuideAdapter();
+        GuideFragment guide = new GuideFragment();
 
         public BannerPagerAdapter(FragmentManager fm) {
             super(fm);

@@ -23,7 +23,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
-import com.capston.eduguide.guideTool.GuideAdapter;
+import com.capston.eduguide.guideTool.GuideFragment;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -187,7 +187,7 @@ public class CommentSimple extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return GuideAdapter.newInstance(position);
+            return GuideFragment.newInstance(position);
         }
 
         @Override
