@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.guideTool.GuideAdapter;
 import com.capston.eduguide.post.FeedViewItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -113,8 +113,8 @@ public class Frag3Posting extends Fragment {
 
                 databaseReference.child("post").child(fId).setValue(item);
 
-                GuideTool guideTool = (GuideTool) bannerPagerAdapter.getItem(vp.getCurrentItem());
-                guideTool.regGuideContent(fId);
+                GuideAdapter guideAdapter = (GuideAdapter) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                guideAdapter.regGuideContent(fId);
 
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
@@ -132,7 +132,7 @@ public class Frag3Posting extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return GuideTool.newInstance(position);
+            return GuideAdapter.newInstance(position);
         }
 
         @Override
