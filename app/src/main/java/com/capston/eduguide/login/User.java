@@ -1,5 +1,8 @@
 package com.capston.eduguide.login;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class User {
     private String id;
     private String password;
@@ -63,6 +66,15 @@ public class User {
 
     public void setAge(String age) {
         this.age = age;
+    }
+
+
+    public void saveToFirebase() {
+        // Get the Firebase database reference
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        // Save the user object to the "users" collection in Firebase
+        databaseRef.child("users").child(id).setValue(this);
     }
 }
 
