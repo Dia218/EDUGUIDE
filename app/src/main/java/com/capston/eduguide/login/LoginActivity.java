@@ -27,6 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     //private Button signInButton;
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -160,11 +163,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
-            Intent intent = new Intent();
-            intent.putExtra("userId", getString(R.string.default_web_client_id));
-            //startActivity(intent);
+
+
+            String id = user.getUid();
+            String email = user.getEmail();
+            String name = user.getDisplayName();
+
+            // Create a User object
+            User newUser = new User(id, "", email, "", name, "");
+
+            // Save the User object to Firebase
+            newUser.saveToFirebase();
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("userId", email);
             setResult(RESULT_OK, intent);
             finish();
         }
+
     }
 }
