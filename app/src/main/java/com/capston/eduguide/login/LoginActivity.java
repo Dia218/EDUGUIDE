@@ -27,7 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -64,8 +65,8 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        Intent intent = new Intent();
-                                        intent.putExtra("userEmail", email);
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        intent.putExtra("userId", email);
                                         //startActivity(intent);
                                         setResult(RESULT_OK, intent);
                                         finish();
@@ -161,11 +162,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
-            Intent intent = new Intent();
-            intent.putExtra("userEmail", getString(R.string.default_web_client_id));
-            //startActivity(intent);
+
+
+            String id = user.getUid();
+            String email = user.getEmail();
+            String name = user.getDisplayName();
+
+            // Create a User object
+            User newUser = new User(id, "", email, "", name, "");
+
+            // Save the User object to Firebase
+            newUser.saveToFirebase();
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("userId", email);
             setResult(RESULT_OK, intent);
             finish();
         }
+
     }
 }

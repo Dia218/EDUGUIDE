@@ -70,6 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     String userId = user.getUid();
 
                                     User newUser = new User(id, password, email, phone, name, age);
+                                    newUser.saveToFirebase();
 
                                     databaseReference.child(userId).setValue(newUser)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
