@@ -12,10 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.capston.eduguide.R;
-import com.capston.eduguide.db.DatabaseHelper;
 
 public class EditPasswordActivity extends AppCompatActivity {
-
+/*
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,5 +55,5 @@ public class EditPasswordActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-    }
+    }*/
 }

@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.guideTool.GuideFragment;
 import com.capston.eduguide.post.FeedViewItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,7 +42,8 @@ public class Frag3Posting extends Fragment {
         view=inflater.inflate(R.layout.frag3_posting, container, false);
 
         vp = (ViewPager) view.findViewById(R.id.vp);
-        vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
+        FeedViewItem.BannerPagerAdapter bannerPagerAdapter = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager());
+        vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
         Bundle bundle = getArguments();
@@ -97,7 +98,7 @@ public class Frag3Posting extends Fragment {
             public void onClick(View v) {
                 //유저 아이디 로직 추가 필요
                 Integer pWriterId = 0;
-                
+
                 String pTitle = String.valueOf(postTitle.getText()); //제목 받아오기
                 String pInfo = String.valueOf(postInfo.getText()); //내용 받아오기
                 String pTag = String.valueOf(postTag.getText()); //태그 받아오기
@@ -116,7 +117,12 @@ public class Frag3Posting extends Fragment {
                 item.setFeedId(fId);
 
                 databaseReference.child("post").child(fId).setValue(item);
-                Log.d("id_test",fId);
+
+                GuideFragment guideAdapter = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                guideAdapter.regGuideContent(fId);
+
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
             }
         });
 
@@ -131,7 +137,7 @@ public class Frag3Posting extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return GuideTool.newInstance(position);
+            return GuideFragment.newInstance(position);
         }
 
         @Override
@@ -146,3 +152,4 @@ public class Frag3Posting extends Fragment {
         return String.valueOf(fIdNum);
     }
 }
+

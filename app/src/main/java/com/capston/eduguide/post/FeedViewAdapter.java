@@ -2,32 +2,23 @@ package com.capston.eduguide.post;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.graphics.drawable.Drawable;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.capston.eduguide.Frag1Feed;
-import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.capston.eduguide.guideTool.GuideTool;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,14 +78,16 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                 public void onClick(View v) {
                     v.setSelected(!v.isSelected());
                     String pos = Integer.toString(getAdapterPosition());
+                    FeedViewItem item = feedViewItemList.get(Integer.parseInt(pos));
                     if(v.isSelected()){
                         int count = Integer.parseInt(like_count.getText().toString());
                         count += 1;
                         like_count.setText(Integer.toString(count));
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databaseReference = database.getReference();
-                        databaseReference.child("post").child(pos).child("like_count").setValue(count);
-                        databaseReference.child("like").child(userName).child(pos).child("postId").setValue(pos);
+                        databaseReference.child("post").child(item.getFeedId()).child("like_count").setValue(count);
+                        databaseReference.child("like").child(userName).child(item.getFeedId()).child("postId").setValue(pos);
+                        Log.d("포지션 테스트",item.getFeedId());
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
@@ -103,8 +96,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                             like_count.setText(Integer.toString(count));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference databaseReference = database.getReference();
-                            databaseReference.child("post").child(pos).child("like_count").setValue(count);
-                            databaseReference.child("like").child(userName).child(pos).removeValue();
+                            databaseReference.child("post").child(item.getFeedId()).child("like_count").setValue(count);
+                            databaseReference.child("like").child(userName).child(item.getFeedId()).removeValue();
                         }
                     }
                 }
@@ -115,14 +108,15 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                 public void onClick(View v) {
                     v.setSelected(!v.isSelected());
                     String pos = Integer.toString(getAdapterPosition());
+                    FeedViewItem item = feedViewItemList.get(Integer.parseInt(pos));
                     if(v.isSelected()){
                         int count = Integer.parseInt(bookmark_count.getText().toString());
                         count += 1;
                         bookmark_count.setText(Integer.toString(count));
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databaseReference = database.getReference();
-                        databaseReference.child("post").child(pos).child("bookmark_count").setValue(count);
-                        databaseReference.child("bookmark").child(userName).child(pos).child("postId").setValue(pos);
+                        databaseReference.child("post").child(item.getFeedId()).child("bookmark_count").setValue(count);
+                        databaseReference.child("bookmark").child(userName).child(item.getFeedId()).child("postId").setValue(pos);
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());
@@ -131,8 +125,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                             bookmark_count.setText(Integer.toString(count));
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference databaseReference = database.getReference();
-                            databaseReference.child("post").child(pos).child("bookmark_count").setValue(count);
-                            databaseReference.child("bookmark").child(userName).child(pos).removeValue();
+                            databaseReference.child("post").child(item.getFeedId()).child("bookmark_count").setValue(count);
+                            databaseReference.child("bookmark").child(userName).child(item.getFeedId()).removeValue();
                         }
                     }
                 }
@@ -239,12 +233,12 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
-            FeedViewAdapter.ViewHolder vh = new FeedViewAdapter.ViewHolder(view);
-            return vh;
+        View view = inflater.inflate(R.layout.post_feedview_item, parent, false);
+        FeedViewAdapter.ViewHolder vh = new FeedViewAdapter.ViewHolder(view);
+        return vh;
     }
 
     //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시

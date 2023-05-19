@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.guideTool.GuideFragment;
 import com.capston.eduguide.post.FeedViewAdapter;
 import com.capston.eduguide.post.FeedViewItem;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 
 public class Frag1Feed extends Fragment {
 
-    private GuideTool fragmentGuide;
+    private GuideFragment fragmentGuide;
     FeedViewAdapter adapter;
     ArrayList<FeedViewItem> items;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -126,12 +126,11 @@ public class Frag1Feed extends Fragment {
 
 
     public void addGuide() {
-        //ArrayList<FeedViewItem> result = items;
         //가이드 툴 추가는 여기서(가이드 툴 db 받으면 게시글 db와 비교로 가져와서 넣기), 뱃지는 등급-팀원들과 상의 필요
         for(int i=0;i<items.size();i++){
             FeedViewItem item = items.get(i);
             FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(adapter.getFm());
-            bpa.getGuide(12);
+            bpa.getGuide(item.getFeedId());
             item.setViewPagerAdapter(bpa);
             setUserIconForGrade(item);
             items.set(i,item);
@@ -212,5 +211,3 @@ public class Frag1Feed extends Fragment {
         }
     }
 }
-
-

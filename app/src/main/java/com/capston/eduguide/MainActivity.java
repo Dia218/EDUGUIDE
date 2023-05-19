@@ -8,25 +8,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.capston.eduguide.db.TestFirebase;
-import com.capston.eduguide.guideTool.GuideTool;
 import com.capston.eduguide.login.LoginActivity;
-import com.capston.eduguide.post.FeedViewItem;
 import com.google.android.material.navigation.NavigationBarView;
-import android.database.sqlite.SQLiteDatabase;
-import com.capston.eduguide.db.DatabaseHelper;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,10 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static String currentMenu; //현재 메뉴
 
-    private static DatabaseHelper helper; //디비
-
-    TestFirebase testFirebase = new TestFirebase();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         //Bundle bundle = new Bundle();
         //bundle.putString("userId",userId);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -111,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
     private void setFrag(int n) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
+        bundle.putString("userEmail",userEmail);
+
+        Bundle bundle = new Bundle();
         bundle.putString("userEmail",userEmail);
 
         switch (n) {
@@ -164,6 +153,4 @@ public class MainActivity extends AppCompatActivity {
         return currentMenu;
     }
 
-    //디비 반환 메소드
-    public static DatabaseHelper getHelper() { return helper; }
 }
