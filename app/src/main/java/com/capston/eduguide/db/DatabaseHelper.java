@@ -113,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Integer like_count = cursor.getInt(4);
 
                 FeedViewItem feed = new FeedViewItem();
-                feed.setUserId(userId);
+                feed.setUserName(userId);
                 feed.setTitle(titleStr);
                 feed.setText(textStr);
                 feed.setTag(tagStr);

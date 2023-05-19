@@ -39,7 +39,7 @@ public class Frag1Feed extends Fragment {
     private DatabaseReference userDatabaseReference;
     private ValueEventListener mListener;
     RecyclerView recyclerView;
-    String userId;
+    String userName;
     String userEmail;
     // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
     /*public static Frag1Feed newInstance(){
@@ -54,8 +54,8 @@ public class Frag1Feed extends Fragment {
 
         Bundle bundle = getArguments();
         if (userEmail == null){
-            if (bundle.getString("userId")!=null) {
-                userId = bundle.getString("userId");
+            if (bundle.getString("userName")!=null) {
+                userName = bundle.getString("userName");
             }
             else if(bundle.getString("userEmail")!= null)
                 userEmail = bundle.getString("userEmail");
@@ -71,7 +71,7 @@ public class Frag1Feed extends Fragment {
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
         adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
         callFeedList();
-        callUserId();
+        callUserName();
         recyclerView.setAdapter(adapter);
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe);
@@ -176,7 +176,7 @@ public class Frag1Feed extends Fragment {
         databaseReference.addValueEventListener(mListener);
     }
 
-    public void callUserId(){
+    public void callUserName(){
         if(userEmail != null){
             userDatabaseReference = database.getReference("users");
             userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -185,12 +185,12 @@ public class Frag1Feed extends Fragment {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                         HashMap<String, Object> value = (HashMap<String, Object>)dataSnapshot.getValue();
                         if(userEmail.equals((String)value.get("email"))){
-                            userId = (String)value.get("id");
-                            adapter.setUserId(userId);
+                            userName = (String)value.get("name");
+                            adapter.setUserName(userName);
                             recyclerView.setAdapter(adapter);
                         }
                     }
-                    if(userId == null){
+                    if(userName == null){
                         recyclerView.setAdapter(adapter);
                     }
                 }
@@ -201,8 +201,8 @@ public class Frag1Feed extends Fragment {
                 }
             });
         }
-        else if(userId != null){
-            adapter.setUserId(userId);
+        else if(userName != null){
+            adapter.setUserName(userName);
             adapter.setItems(items);
             recyclerView.setAdapter(adapter);
         }

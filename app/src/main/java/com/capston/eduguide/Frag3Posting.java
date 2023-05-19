@@ -28,9 +28,9 @@ public class Frag3Posting extends Fragment {
 
     private View view;
     private ViewPager vp;
-    private String prepId;
+    private String prepId="null";
     private String feedId;
-    private String userId;
+    private String userName;
     private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -59,7 +59,10 @@ public class Frag3Posting extends Fragment {
                         prepId = snapshot.getKey();
                     }
                 }
-                feedId = String.valueOf((Integer.parseInt(prepId)+1));
+                if(!(prepId.equals("null")))
+                    feedId = String.valueOf((Integer.parseInt(prepId)+1));
+                else
+                    feedId = "0";
             }
 
             @Override
@@ -75,7 +78,7 @@ public class Frag3Posting extends Fragment {
                     HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
                     if(bundle.getString("userEmail")!=null) {
                         if (bundle.getString("userEmail").equals((String) user.get("email"))) {
-                            userId = (String)user.get("id");
+                            userName = (String)user.get("name");
                         }
                     }
                 }
@@ -104,8 +107,8 @@ public class Frag3Posting extends Fragment {
                 item.setTitle(pTitle);
                 item.setText(pInfo);
                 item.setTag(pTag);
-                if(userId!=null)
-                    item.setUserId(userId);
+                if(userName!=null)
+                    item.setUserName(userName);
                 item.setGrade(0);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
@@ -137,7 +140,9 @@ public class Frag3Posting extends Fragment {
         }
     }
     private String fId(String prepId){
-        Integer fIdNum = Integer.parseInt(prepId)+1;
+        Integer fIdNum=0;
+        if(!(prepId.equals("null")))
+            fIdNum = Integer.parseInt(prepId)+1;
         return String.valueOf(fIdNum);
     }
 }

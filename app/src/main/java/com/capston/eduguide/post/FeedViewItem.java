@@ -21,7 +21,7 @@ public class FeedViewItem {
     private String titleStr ;
     private String textStr ;
     private String tagStr;
-    private String userId;
+    private String userName;
     private Integer like_count;
     private Integer bookmark_count;
     private Integer grade;
@@ -40,8 +40,8 @@ public class FeedViewItem {
         textStr = text;
     }
     public void setTag(String tag){ tagStr = tag; }
-    public void setUserId(String name) {
-        userId = name;
+    public void setUserName(String name) {
+        userName = name;
     }
     public void setLike_count(Integer count) { like_count = count; }
     public void setBookmark_count(Integer count) { bookmark_count = count; }
@@ -63,7 +63,7 @@ public class FeedViewItem {
         return this.textStr ;
     }
     public String getTag(){ return this.tagStr; }
-    public String getUserId() { return this.userId ;}
+    public String getUserName() { return this.userName ;}
     public Integer getLike_count() {
         return this.like_count ;
     }

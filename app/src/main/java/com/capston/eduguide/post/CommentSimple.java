@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -58,7 +59,8 @@ public class CommentSimple extends Fragment {
     private ImageView userImage;
     private ImageView feedUserImage;
     private String fId;
-    private String userId;
+    private String userName;
+    private String feedUserName;
     FeedViewItem item;
     CommentSimpleAdapter adapter;
     ArrayList<CommentItem> comments = new ArrayList<>();
@@ -74,7 +76,7 @@ public class CommentSimple extends Fragment {
             public void handleOnBackPressed() {
                 // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
                 Bundle bundle = new Bundle();
-                bundle.putString("userId",userId);
+                bundle.putString("userName",userName);
                 Frag1Feed feed = new Frag1Feed();
                 feed.setArguments(bundle);
                 ((MainActivity) requireActivity()).replaceFragment(feed);
@@ -94,7 +96,7 @@ public class CommentSimple extends Fragment {
         comm = view.findViewById(R.id.commentDetail);
         feedUserImage = view.findViewById(R.id.feedUserImage);
         userImage = view.findViewById(R.id.userImage);
-        //Button back = (Button)view.findViewById(R.id.back);
+        Button delete = (Button)view.findViewById(R.id.deleteButton);
         Button input = (Button) view.findViewById(R.id.commentInput);
         item = new FeedViewItem();
 
@@ -105,17 +107,18 @@ public class CommentSimple extends Fragment {
         Bundle bundle = getArguments();
         if (getArguments() != null)
         {
-            userId = bundle.getString("userId");
+            userName = bundle.getString("userName");
             String mainStr = bundle.getString("main_text");
             String tagStr = bundle.getString("tag_text");
             String userName = bundle.getString("feedUser_name");
+            feedUserName = bundle.getString("feedUser_name");
             main.setText(mainStr);
             tag.setText(tagStr);
             username.setText(userName);
             gradeInt =  bundle.getInt("user_grade");
             feedUserImage.setImageResource(grade(gradeInt));
             Integer pos = bundle.getInt("position");
-            fId = pos.toString();
+            fId = bundle.getString("feedId");
             //사용자의 뱃지 이미지. 일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
             userImage.setImageResource(grade(gradeInt));
         }
@@ -144,17 +147,51 @@ public class CommentSimple extends Fragment {
 
         // 댓글 리사이클러뷰에 Adapter 객체 지정
         adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
+        adapter.setUserName(userName);
+        adapter.setFeedId(fId);
         recyclerView.setAdapter(adapter);
+
+        if(userName!=null){
+            if(userName.equals(feedUserName)){
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        database.getReference().child("post").child(fId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("userName",userName);
+                                Frag1Feed feed = new Frag1Feed();
+                                feed.setArguments(bundle);
+                                ((MainActivity) requireActivity()).replaceFragment(feed);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+            }
+            else{
+                delete.setVisibility(View.GONE);
+            }
+        }
+        else{
+            delete.setVisibility(View.GONE);
+        }
 
         input.setOnClickListener(new View.OnClickListener() {                      //댓글 입력시 이벤트
             @Override
             public void onClick(View v) {
                 String comment = comm.getText().toString();
-                String userId = bundle.getString("userId");
+                String userName = bundle.getString("userName");
                 //여기서 유저의 등급 받아서 코멘트 속성으로 부여할지 고민중
                 //현재는 어댑터에서 출력하기 전에 유저 이름으로 등급 검색함
                 comm.setText("");
-                adapter.addComment(comments,userId,comment);
+                adapter.addComment(comments,userName,comment);
                 adapter.notifyItemInserted(comments.size());
                 recyclerView.setAdapter(adapter);
 

@@ -1,19 +1,26 @@
 package com.capston.eduguide.post;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.capston.eduguide.Frag1Feed;
+import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +35,8 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
     private Context context;
     public ArrayList<CommentItem> commentItemList;
     private FragmentManager fm;
+    private String userName;
+    private String feedId;
 
     public interface OnItemClickEventListener { void onItemClick(int a_position);}
 
@@ -52,6 +61,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         public TextView username;
         public TextView commentText;
         public ImageView userImage;
+        public ImageView deleteComment;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference DatabaseReference = database.getReference("comment");
 
@@ -61,16 +71,26 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
             username = itemView.findViewById(R.id.commentUserName);
             commentText = itemView.findViewById(R.id.comment);
             userImage = itemView.findViewById(R.id.commentUserImage);
+            deleteComment = itemView.findViewById(R.id.deleteComment);
 
-            /*itemView.setOnClickListener(new View.OnClickListener() {
+            deleteComment.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View a_view) {
-                    final int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        a_itemClickListener.onItemClick(position);
-                    }
+                public void onClick(View v) {
+                    String pos = Integer.toString(getAdapterPosition());
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    database.getReference("comment").child(feedId).child(pos).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            notifyItemRemoved(Integer.parseInt(pos));
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(v.getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-            });*/
+            });
         }
         public void setItem(CommentItem item){
             username.setText(item.getUsername());
@@ -130,6 +150,11 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         holder.itemView.setBackgroundColor(color);
 
         holder.setItem(item);
+        if(userName == null){
+            holder.deleteComment.setVisibility(View.GONE);
+        } else if (!(userName.equals(item.getUsername()))) {
+            holder.deleteComment.setVisibility(View.GONE);
+        }
     }
 
 
@@ -145,7 +170,6 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
     public void addComment(ArrayList<CommentItem> commentItemList, String userName, String comment){
         CommentItem item = new CommentItem(comment,userName);
 
-        //item.setUserIcon(userImage);
         item.setUsername(userName);
         item.setComment(comment);
 
@@ -158,6 +182,9 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         }
         return null;
     }
+
+    public void setUserName(String userName) { this.userName = userName; }
+    public void setFeedId(String feedId) { this.feedId = feedId; }
 
     public int getCheckedPosition() {
         return mCheckedPosition;
