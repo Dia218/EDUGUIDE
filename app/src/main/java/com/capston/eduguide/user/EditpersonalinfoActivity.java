@@ -38,8 +38,8 @@ public class EditpersonalinfoActivity extends AppCompatActivity {
         userPhone = findViewById(R.id.edit_text_phone);
         userEmail = findViewById(R.id.edit_text_email);
 
-        Button submitButton = findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(v -> savePersonalInfo());
+        //Button submitButton = findViewById(R.id.submit_button);
+        //submitButton.setOnClickListener(v -> savePersonalInfo());
 
         Button changePasswordButton = findViewById(R.id.button_change_password);
         changePasswordButton.setOnClickListener(v -> {
@@ -78,7 +78,7 @@ public class EditpersonalinfoActivity extends AppCompatActivity {
 
     //개인정보 저장
     private void savePersonalInfo() {
-        String name = userName.getText().toString().trim();
+        /*String name = userName.getText().toString().trim();
         String birth = userBirth.getText().toString().trim();
         String phone = userPhone.getText().toString().trim();
         String email = userEmail.getText().toString().trim();
@@ -100,7 +100,7 @@ public class EditpersonalinfoActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(EditpersonalinfoActivity.this, "개인정보 저장에 실패했습니다.", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
     }
 
     private void unregisterUser() {
@@ -108,19 +108,31 @@ public class EditpersonalinfoActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         if (user != null) {
-            // Firebase 인증을 사용하여 사용자 삭제
-            user.delete()
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+            // 데이터베이스에서 사용자 정보 삭제
+            databaseReference.child(user.getUid()).removeValue()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // 사용자 삭제 성공
-                            Toast.makeText(EditpersonalinfoActivity.this, "회원 탈퇴되었습니다.", Toast.LENGTH_SHORT).show();
-                            // 로그인 화면으로 이동
-                            Intent intent = new Intent(EditpersonalinfoActivity.this, LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
+                            // 사용자 정보 삭제 성공
+                            // Firebase 인증을 사용하여 사용자 삭제
+                            user.delete()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            // 사용자 삭제 성공
+                                            Toast.makeText(EditpersonalinfoActivity.this, "회원 탈퇴되었습니다.", Toast.LENGTH_SHORT).show();
+                                            // 로그인 화면으로 이동
+                                            Intent intent = new Intent(EditpersonalinfoActivity.this, LoginActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            // 사용자 삭제 실패
+                                            Toast.makeText(EditpersonalinfoActivity.this, "회원 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         } else {
-                            // 사용자 삭제 실패
+                            // 사용자 정보 삭제 실패
                             Toast.makeText(EditpersonalinfoActivity.this, "회원 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });

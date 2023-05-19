@@ -1,5 +1,8 @@
 package com.capston.eduguide.login;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class User {
     private String id;
     private String password;
@@ -7,6 +10,15 @@ public class User {
     private String phone;
     private String name;
     private String age;
+
+    //사용자 페이지 프로필 추가
+    private String nickname;
+
+    private String intro;
+
+    public User() {
+        // 기본 생성자 추가
+    }
 
     public User(String id, String password, String email, String phone, String name, String age) {
         this.id = id;
@@ -64,5 +76,31 @@ public class User {
     public void setAge(String age) {
         this.age = age;
     }
+
+    //사용자 페이지 프로필 추가
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public void saveToFirebase() {
+        // Get the Firebase database reference
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        // Save the user object to the "users" collection in Firebase
+        databaseRef.child("users").child(id).setValue(this);
+    }
 }
+
 
