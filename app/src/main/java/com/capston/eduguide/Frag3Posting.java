@@ -116,10 +116,10 @@ public class Frag3Posting extends Fragment {
                 String fId = fId(prepId);
                 item.setFeedId(fId);
 
-                databaseReference.child("post").child(fId).setValue(item);
+                GuideFragment guideFragment = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                if(!guideFragment.regGuideContent(fId)) return; //가이드 등록 호출, 최소 개수 미 충족 시 등록 중단
 
-                GuideFragment guideAdapter = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
-                guideAdapter.regGuideContent(fId);
+                databaseReference.child("post").child(fId).setValue(item); //게시글 등록 호출
 
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
