@@ -109,11 +109,11 @@ public class Frag3Posting extends Fragment {
                 item.setGrade(0);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
-                String fId = fId(feedId);
+                String fId = fId(prepId);
                 item.setFeedId(fId);
 
                 databaseReference.child("post").child(fId).setValue(item);
-                Log.d("id_test",feedId);
+                Log.d("id_test",fId);
             }
         });
 
