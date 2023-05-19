@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.capston.eduguide.Frag1Feed;
+import com.capston.eduguide.Frag4Notice;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.capston.eduguide.guideTool.GuideTool;
@@ -44,6 +45,7 @@ public class CommentSimple extends Fragment {
     private ImageView userImage;
     private ImageView feedUserImage;
     ArrayList<CommentItem> comments = new ArrayList<>();
+    Frag4Notice frag4Notice = new Frag4Notice();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,10 +109,6 @@ public class CommentSimple extends Fragment {
         CommentSimpleAdapter adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
         recyclerView.setAdapter(adapter);
 
-        //댓글아이템 추가
-        /*adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null),
-                "댓글단 유저 아이디1","임시 댓글 내용1");*/
-
         input.setOnClickListener(new View.OnClickListener() {                      //댓글 입력시 이벤트
             @Override
             public void onClick(View v) {
@@ -123,6 +121,12 @@ public class CommentSimple extends Fragment {
                 //comments.add(new CommentItem(ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null), comment,userId));
                 adapter.notifyItemInserted(comments.size());
                 recyclerView.setAdapter(adapter);
+
+
+                // showNotification() 함수 호출
+                frag4Notice.showNotification(0,bundle.getString("title_text"),userId);
+
+
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

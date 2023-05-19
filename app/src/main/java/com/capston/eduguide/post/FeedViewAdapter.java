@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.capston.eduguide.Frag4Notice;
 import com.capston.eduguide.R;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +34,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     private ArrayList<FeedViewItem> feedViewItemList = new ArrayList<FeedViewItem>() ;
     private FragmentManager fm;
     private int position;
+
+    Frag4Notice frag4Notice = new Frag4Notice();
 
     // ListViewAdapter의 생성자
     public FeedViewAdapter(FragmentManager fm, Context context){
@@ -77,6 +80,12 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     if(v.isSelected()){
                         int count = Integer.parseInt(like_count.getText().toString());
                         like_count.setText(Integer.toString(++count));
+                        int pos = getAdapterPosition();
+                        FeedViewItem item = feedViewItemList.get(pos);
+                        String title = item.getTitle() ;
+                        String userid = item.getUserId();
+                        frag4Notice.showNotification(1,title,userid);
+
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
@@ -94,6 +103,11 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     if(v.isSelected()){
                         int count = Integer.parseInt(bookmark_count.getText().toString());
                         bookmark_count.setText(Integer.toString(++count));
+                        int pos = getAdapterPosition();
+                        FeedViewItem item = feedViewItemList.get(pos);
+                        String title = item.getTitle() ;
+                        String userid = item.getUserId();
+                        frag4Notice.showNotification(2,title,userid);
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());
