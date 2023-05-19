@@ -12,9 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.capston.eduguide.login.LoginActivity;
-import com.capston.eduguide.db.TestFirebase;
 import com.google.android.material.navigation.NavigationBarView;
-import com.capston.eduguide.db.DatabaseHelper;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,9 +34,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference databaseReference = database.getReference("users");
 
     private static String currentMenu; //현재 메뉴
-    private static DatabaseHelper helper; //디비
 
-    TestFirebase testFirebase = new TestFirebase();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +153,4 @@ public class MainActivity extends AppCompatActivity {
         return currentMenu;
     }
 
-    //디비 반환 메소드
-    public static DatabaseHelper getHelper() { return helper; }
 }

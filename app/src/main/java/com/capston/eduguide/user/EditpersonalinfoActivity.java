@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.capston.eduguide.R;
-import com.capston.eduguide.db.DatabaseHelper;
 
 public class EditpersonalinfoActivity extends AppCompatActivity {
 
@@ -22,7 +21,6 @@ public class EditpersonalinfoActivity extends AppCompatActivity {
     EditText userEmail;
 
     SQLiteDatabase userDB;
-    DatabaseHelper helper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,9 +31,6 @@ public class EditpersonalinfoActivity extends AppCompatActivity {
         userBirth = findViewById(R.id.edit_text_birth);
         userPhone = findViewById(R.id.edit_text_phone);
         userEmail = findViewById(R.id.edit_text_email);
-
-        helper = new DatabaseHelper(getApplicationContext(), "userDB", null, 1);
-        userDB = helper.getWritableDatabase();
 
         Button submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener(v -> savePersonalInfo());
