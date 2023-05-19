@@ -129,7 +129,10 @@ public class FeedViewItem {
             return guide;
         }
 
-        public void getGuide(int boxSize) {
+        public void getGuide(String postId) {
+            guide.setGuide(postId);
+
+            /* 현수가 짰던 코드
             Bundle bundle = new Bundle();
             ArrayList<String> key = new ArrayList<>();
             for (int i = 0; i < 15; i++) {
@@ -138,7 +141,7 @@ public class FeedViewItem {
             bundle.putInt("guideboxsize", boxSize);
             bundle.putInt("guidelinesize", 9);
             bundle.putStringArrayList("key", key);
-            guide.setArguments(bundle);
+            guide.setArguments(bundle);*/
         }
 
         @Override

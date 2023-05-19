@@ -131,7 +131,7 @@ public class Frag1Feed extends Fragment {
         for(int i=0;i<items.size();i++){
             FeedViewItem item = items.get(i);
             FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(adapter.getFm());
-            bpa.getGuide(12);
+            bpa.getGuide(item.getFeedId());
             item.setViewPagerAdapter(bpa);
             setUserIconForGrade(item);
             items.set(i,item);
