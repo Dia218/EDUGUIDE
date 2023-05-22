@@ -159,6 +159,11 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         CommentSimple comment = new CommentSimple();
                         comment.setArguments(bundle);
 
+                        if (feedId == null) {
+                            Log.d("FeedViewAdapter", "feedId is null");
+                        }
+
+
                         AppCompatActivity activity = (AppCompatActivity)v.getContext();
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.main_frame,comment)

@@ -28,7 +28,7 @@ public class UserSecondButtonActivity extends AppCompatActivity {
     private UserFeedViewAdapter adapter;
     private ArrayList<FeedViewItem> feedList;
 
-    private String currentUserId;
+    private String currentUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +52,11 @@ public class UserSecondButtonActivity extends AppCompatActivity {
             // Firebase 인증에서 현재 사용자 정보 가져오기
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                currentUserId = user.getUid();
+                currentUserEmail = user.getEmail();
 
                 // Firebase Realtime Database에서 현재 사용자의 북마크된 게시물 가져오기
                 DatabaseReference bookmarkRef = FirebaseDatabase.getInstance().getReference("bookmark")
-                        .child(currentUserId);
+                        .child(currentUserEmail);
 
                 bookmarkRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

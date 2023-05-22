@@ -2,6 +2,7 @@ package com.capston.eduguide.post;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +111,10 @@ public class CommentSimple extends Fragment {
             fId = bundle.getString("feedId");
             userGrade = bundle.getInt("userGrade");
             userImage.setImageResource(grade(userGrade));
+        }
+
+        if (userImage == null) {
+            Log.d("CommentSimple", "userImage is null");
         }
 
         //번들로 받아온 fId를 통해 오버라이딩한 생성자로 가이드객체 생성.
