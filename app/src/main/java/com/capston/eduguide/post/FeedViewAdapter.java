@@ -19,6 +19,7 @@ import com.capston.eduguide.R;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.capston.eduguide.guideTool.GuideFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHolder> {
 
     private Context context;
-    // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<FeedViewItem> feedViewItemList = new ArrayList<FeedViewItem>() ;
     private FragmentManager fm;
     private int position;
@@ -51,13 +51,12 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         public TextView tagText;
         public ImageView userImage;
         public Button like;
-        //public Button delete;
         public TextView like_count;
         public Button bookmark;
         public TextView bookmark_count;
         public ViewPager vp;
-        public FeedViewItem.BannerPagerAdapter bpa; //= new FeedViewItem.BannerPagerAdapter(getFm());
-        //public Integer userGrade;
+        public FeedViewItem.BannerPagerAdapter bpa;
+
 
 
         ViewHolder(View itemView){
@@ -72,7 +71,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
             tagText = itemView.findViewById(R.id.tag);
             userImage = itemView.findViewById(R.id.feedUserImage);
             vp = (ViewPager) itemView.findViewById(R.id.vp);
-            //userGrade = 10;
+
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -131,6 +130,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                 }
             });
 
+            //제목부분 클릭시 상세화면으로 넘어감. 넘어갈때 여러가지 값을 번들로 넘겨줌
             titleText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,6 +169,9 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                 }
             });
         }
+
+        //리사이클러뷰의 아이템이 바인드 될때 호출. 각 뷰에 아이템을 지정하고 아이템의 feedId로 가이드 생성자를 선언하여
+        //데이터가 존재하는 가이드 객체 생성.
         public void setItem(FeedViewItem item){
             username.setText(item.getUserName());
             titleText.setText(item.getTitle());
@@ -225,15 +228,15 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
 
                     }
                 });
-                bpa = new FeedViewItem.BannerPagerAdapter(getFm());
-                bpa= item.getViewPagerAdapter();
-                bpa.guide.setGuide(item.getFeedId());
-
-                Log.d("user~~",String.valueOf(userGrade));
+                bpa = new FeedViewItem.BannerPagerAdapter(getFm(),item.getFeedId());
+                bpa = item.getViewPagerAdapter();
             }
         }
+
+        //뷰페이저 세팅.
         public void setVp(int position,FeedViewItem.BannerPagerAdapter bpa){
             vp.setId(position);
+            vp.setOffscreenPageLimit(1);
             vp.setAdapter(bpa);
         }
     }
@@ -256,16 +259,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
 
         FeedViewItem item = feedViewItemList.get(position);
         holder.setItem(item);
-        //holder.bpa = item.getViewPagerAdapter();
-        //holder.bpa.guide.setGuide(item.getFeedId());
 
-        /*if(!holder.bpa.guide.isStart){
-            holder.bpa.guide.setGuide(item.getFeedId());
-        }*/
-
-        //holder.vp.setId(position+1);
-        //holder.vp.setOffscreenPageLimit(1);
-        //holder.vp.setAdapter(holder.bpa);
         holder.setVp(position+1,holder.bpa);
 
     }

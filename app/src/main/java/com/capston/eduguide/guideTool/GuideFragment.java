@@ -47,7 +47,8 @@ public class GuideFragment extends Fragment {
     static int guideMaxNum = 18;
     static int guideMinNum = 9;
 
-    public boolean isStart = false;
+    public boolean isDestroyed = false;
+    static String id;
 
     Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
     Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
@@ -65,14 +66,29 @@ public class GuideFragment extends Fragment {
         fg.setArguments(args);
         return fg; }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        isStart = true;
-        Log.i("guide onStart", "guide Start!!!");
+    //기본 생성자
+    public GuideFragment(){
+
     }
 
+    //생성자를 이용해 선언 시부터 데이터가 들어간 가이드객체를 생성
+    public GuideFragment(String feedId){
+        setGuide(feedId);
+    }
 
+    public void onStart(){
+        super.onStart();
+        if(isDestroyed){
+            setFixmode(); //fix모드 메소드 호출
+            isDestroyed = false;
+        }
+    }
+
+    //뷰가 destroy될 경우 변수를 true로 변경(체크용)
+    public void onDestroyView() {
+        super.onDestroyView();
+        isDestroyed = true;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +99,12 @@ public class GuideFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.guide_guidetool, container, false);
+
+        //isdestroyed가 true일 경우 비워진 해쉬맵을 다시 채워줌, fix모드 적용 안됨
+        if(isDestroyed){
+            setGuide(id);
+            guideAddButtons.get(0).setVisibility(View.GONE);
+        }
 
         //가이드박스 벡터에 저장
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox1));
@@ -314,6 +336,7 @@ public class GuideFragment extends Fragment {
 
     //파이어베이스에서 가이드 데이터 가져오기
     public void setGuide(String postId) {
+        id = postId;
         guideDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

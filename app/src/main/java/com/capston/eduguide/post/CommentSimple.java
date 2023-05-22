@@ -66,7 +66,7 @@ public class CommentSimple extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
+                // 뒤로가기 버튼을 누르면 메인피드로 화면 전환. 전환될 때 새로운 피드 객체를 생성하므로 번들로 userName과 grade 전달.
                 Bundle bundle = new Bundle();
                 bundle.putString("userName",userName);
                 bundle.putInt("userGrade",userGrade);
@@ -91,8 +91,8 @@ public class CommentSimple extends Fragment {
         userImage = view.findViewById(R.id.userImage);
         Button delete = (Button)view.findViewById(R.id.deleteButton);
         Button input = (Button) view.findViewById(R.id.commentInput);
-        //item = new FeedViewItem();
 
+        //FeedViewAdapter에서 번들로 여러가지 값을 받아오고 저장.
         Bundle bundle = getArguments();
         if (getArguments() != null)
         {
@@ -109,16 +109,16 @@ public class CommentSimple extends Fragment {
             Integer pos = bundle.getInt("position");
             fId = bundle.getString("feedId");
             userGrade = bundle.getInt("userGrade");
-            //사용자의 뱃지 이미지. 일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
             userImage.setImageResource(grade(userGrade));
         }
 
+        //번들로 받아온 fId를 통해 오버라이딩한 생성자로 가이드객체 생성.
         vp = (ViewPager) view.findViewById(R.id.vp);
-        bpa = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager());
-        bpa.getGuide(fId);
+        bpa = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager(),fId);
         vp.setAdapter(bpa);
         vp.setCurrentItem(0);
 
+        //fId에 해당하는 댓글 전체 불러오기
         ValueEventListener mListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -135,7 +135,7 @@ public class CommentSimple extends Fragment {
 
             }
         };
-        DatabaseReference.child(fId).addValueEventListener(mListener);
+        DatabaseReference.child(fId).addValueEventListener(mListener);      //댓글 불러오기
 
         // 댓글 리사이클러뷰 참조
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.commentList);
@@ -147,6 +147,8 @@ public class CommentSimple extends Fragment {
         adapter.setFeedId(fId);
         recyclerView.setAdapter(adapter);
 
+
+        //유저 데이터가 존재하고 이름이 같을때만 삭제 버튼 활성화
         if(userName!=null){
             if(userName.equals(feedUserName)){
                 delete.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +158,10 @@ public class CommentSimple extends Fragment {
                         database.getReference().child("post").child(fId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
+                                database.getReference().child("guide").child(fId).removeValue();
+                                database.getReference().child("comment").child(fId).removeValue();
+                                database.getReference().child("bookmark").child(userName).child(fId).removeValue();
+                                database.getReference().child("like").child(userName).child(fId).removeValue();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("userName",userName);
                                 Frag1Feed feed = new Frag1Feed();
@@ -185,9 +191,7 @@ public class CommentSimple extends Fragment {
             @Override
             public void onClick(View v) {
                 String comment = comm.getText().toString();
-                String userName = bundle.getString("userName");
-                //여기서 유저의 등급 받아서 코멘트 속성으로 부여할지 고민중
-                //현재는 어댑터에서 출력하기 전에 유저 이름으로 등급 검색함
+                String userName = bundle.getString("userName");             //어댑터로 받아온 유저네임 등록
                 comm.setText("");
                 adapter.addComment(comments,userName,comment);
                 adapter.notifyItemInserted(comments.size());

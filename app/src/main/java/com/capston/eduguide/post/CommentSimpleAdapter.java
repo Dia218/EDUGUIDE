@@ -74,6 +74,8 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
             userImage = itemView.findViewById(R.id.commentUserImage);
             deleteComment = itemView.findViewById(R.id.deleteComment);
 
+            //댓글 삭제 이벤트. 클릭한 아이템의 위치를 받아와 위치에 해당하는 댓글 아이템 받아옴.
+            //받아온 댓글의 comment를 비교해서 일치하면 키값(댓글id)를 받고, 받은 키값으로 comment의 아이템 제거.
             deleteComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -116,7 +118,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
             username.setText(item.getUsername());
             commentText.setText(item.getComment());
             String commUserName = item.getUsername();
-            //유저 이름으로 파이어베이스에서 유저 등급 받아오기
+            //유저 이름으로 파이어베이스에서 유저 등급 받아오기. 받아온 등급으로 유저의 뱃지 표시
             ValueEventListener mListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -151,7 +153,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         return cvh;
     }
 
-    //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
+    //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시. 댓글의 네임과 유저네임이 일치하지 않으면 삭제버튼 비활성화
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
