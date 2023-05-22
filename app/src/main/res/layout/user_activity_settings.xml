@@ -7,8 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/logo_image">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/profile_edit"
@@ -28,6 +27,18 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="개인정보 설정" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/scrap_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="스크랩된 가이드" />
 
         <View
             android:layout_width="match_parent"

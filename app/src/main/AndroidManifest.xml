@@ -40,8 +40,7 @@
         <activity android:name="com.capston.eduguide.user.ListinquiryActivity" />
         <activity android:name="com.capston.eduguide.user.WriteNoticeActivity" />
         <activity android:name="com.capston.eduguide.user.EditPasswordActivity" />
-        <activity android:name="com.capston.eduguide.user.UserFirstButtonActivity" />
-        <activity android:name="com.capston.eduguide.user.UserSecondButtonActivity" />
+        <activity android:name="com.capston.eduguide.user.UserScrapActivity" />
         <activity android:name="com.capston.eduguide.user.UserNotice1Activity" />
         <activity android:name="com.capston.eduguide.user.UserNotice2Activity" />
         <activity android:name="com.capston.eduguide.user.UserNotice3Activity" />

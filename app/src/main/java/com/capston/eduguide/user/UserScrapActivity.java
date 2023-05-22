@@ -1,0 +1,64 @@
+package com.capston.eduguide.user;
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.capston.eduguide.R;
+import com.capston.eduguide.post.FeedViewItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+public class UserScrapActivity extends AppCompatActivity {
+    ArrayList<FeedViewItem> items;
+    UserScrapAdapter scrapAdapter;
+    private RecyclerView scrapRecyclerView;
+    private String userEmail; // userEmail 추가
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.user_scrap);
+
+        // userEmail 값 받기
+        userEmail = getIntent().getStringExtra("userEmail");
+
+        // 스크랩 관련 뷰 초기화
+        scrapRecyclerView = findViewById(R.id.my_scraps);
+        items = new ArrayList<>();
+        scrapAdapter = new UserScrapAdapter(this, items, userEmail);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        scrapRecyclerView.setLayoutManager(gridLayoutManager);
+
+        // Firebase에서 스크랩 데이터 가져오기 및 설정
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference("bookmark");
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                items.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    FeedViewItem item = snapshot.getValue(FeedViewItem.class);
+                    items.add(item);
+                }
+                scrapAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 에러 처리
+            }
+        });
+
+        scrapRecyclerView.setAdapter(scrapAdapter); // 어댑터 설정 추가
+    }
+}

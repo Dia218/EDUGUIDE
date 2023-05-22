@@ -13,10 +13,15 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private String userEmail;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_settings);
+
+        // userEmail 값 받기
+        userEmail = getIntent().getStringExtra("userEmail");
 
         // 프로필 편집 클릭
         TextView profileEdit = findViewById(R.id.profile_edit);
@@ -29,6 +34,14 @@ public class SettingsActivity extends AppCompatActivity {
         TextView personalinfoEdit = findViewById(R.id.personalinfo_edit);
         personalinfoEdit.setOnClickListener(view -> {
             Intent intent = new Intent(SettingsActivity.this, EditpersonalinfoActivity.class);
+            startActivity(intent);
+        });
+
+        // 스크랩 클릭
+        TextView Scrap = findViewById(R.id.scrap_user);
+        Scrap.setOnClickListener(view -> {
+            Intent intent = new Intent(SettingsActivity.this, UserScrapActivity.class);
+            intent.putExtra("userEmail", userEmail); // userEmail 전달
             startActivity(intent);
         });
 

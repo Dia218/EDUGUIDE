@@ -71,7 +71,6 @@
 
     </LinearLayout>
 
-    <!-- 버튼 추가 -->
     <LinearLayout
         android:id="@+id/profile_buttons"
         android:layout_width="match_parent"
@@ -79,29 +78,18 @@
         android:orientation="horizontal"
         android:layout_below="@+id/profile_info">
 
-        <!-- 첫 번째 버튼 -->
         <Button
             android:id="@+id/first_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/my_guide"
+            android:text="My Guides"
             android:backgroundTint="#BDD7EE"
             android:textColor="#000000"
             android:textSize="15sp"
-            tools:ignore="VisualLintButtonSize" />
+            tools:ignore="VisualLintButtonSize"
+            android:enabled="false"/>
 
-        <!-- 두 번째 버튼 -->
-        <Button
-            android:id="@+id/second_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/save_contents"
-            android:backgroundTint="#BDD7EE"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 
     <!-- 게시물 -->
@@ -118,6 +106,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_buttons"
         app:spanCount="3"
         tools:listitem="@layout/user_item_grid" />
+
 
 </RelativeLayout>
 

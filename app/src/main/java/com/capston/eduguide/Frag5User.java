@@ -14,14 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.login.User;
 import com.capston.eduguide.post.FeedViewItem;
 import com.capston.eduguide.user.SettingsActivity;
 import com.capston.eduguide.user.UserFeedViewAdapter;
-import com.capston.eduguide.user.UserFirstButtonActivity;
-import com.capston.eduguide.user.UserSecondButtonActivity;
+import com.capston.eduguide.user.UserScrapAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -57,24 +57,9 @@ public class Frag5User extends Fragment {
         settingsButton.setOnClickListener(v -> {
             if (getActivity() != null) {
                 Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                intent.putExtra("userEmail", userEmail); // userEmail 전달
                 startActivity(intent);
             }
-        });
-
-        // UserFirstButtonActivity로 userEmail 전달하기
-        Button userFirstButton = view.findViewById(R.id.first_button);
-        userFirstButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), UserFirstButtonActivity.class);
-            intent.putExtra("userEmail", userEmail);
-            startActivity(intent);
-        });
-
-        // UserFirstSecondActivity로 userEmail 전달하기
-        Button userSecondButton = view.findViewById(R.id.second_button);
-        userSecondButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), UserSecondButtonActivity.class);
-            intent.putExtra("userEmail", userEmail);
-            startActivity(intent);
         });
 
         // 저장된 닉네임과 자기소개 가져와서 TextView에 반영하기
@@ -88,6 +73,8 @@ public class Frag5User extends Fragment {
         rcView.setLayoutManager(gridLayoutManager);
 
         items = new ArrayList<>();
+        adapter = new UserFeedViewAdapter(getContext(), items);
+        rcView.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference("post");
@@ -108,6 +95,7 @@ public class Frag5User extends Fragment {
                 // 처리 중단 또는 에러 처리
             }
         });
+
 
         adapter = new UserFeedViewAdapter(getContext(), items);
         rcView.setAdapter(adapter);

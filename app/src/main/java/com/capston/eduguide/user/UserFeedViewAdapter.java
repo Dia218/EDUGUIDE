@@ -6,12 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.R;
+import com.capston.eduguide.login.User;
 import com.capston.eduguide.post.CommentSimple;
 import com.capston.eduguide.post.FeedViewItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -19,6 +27,7 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
 
     private static ArrayList<FeedViewItem> items;
     private Context mContext;
+    private String userEmail; // userEmail 추가
 
     // 생성자
     public UserFeedViewAdapter(Context context, ArrayList<FeedViewItem> feedList) {
@@ -39,6 +48,32 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         final FeedViewItem currentFeed = items.get(position);
         holder.mFeedTitle.setText(currentFeed.getTitle());
+
+        // userEmail을 사용하여 사용자 검색 및 게시물 필터링
+        String userEmail = currentFeed.getUserEmail();
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+        userRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                        User user = userSnapshot.getValue(User.class);
+                        if (user != null) {
+                            String userName = user.getName();
+                            if (userName.equals(currentFeed.getUserName())) {
+                                // 사용자 이름과 게시물의 작성자 이름이 일치하면 아이템 추가
+                                holder.mFeedTitle.setText(currentFeed.getTitle() + " by " + userName);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // 처리 중단 또는 에러 처리
+            }
+        });
     }
 
     // 뷰 홀더 클래스
