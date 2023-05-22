@@ -44,7 +44,7 @@ public class Frag3Posting extends Fragment {
 
         //피드 아이템의 bpa 이용. 피드 아이디를 넘기지 않으므로 일반 가이드객체 생성해서 연결.
         vp = (ViewPager) view.findViewById(R.id.vp);
-        FeedViewItem.BannerPagerAdapter bannerPagerAdapter = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager(),"");
+        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(getChildFragmentManager());
         vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
@@ -139,6 +139,23 @@ public class Frag3Posting extends Fragment {
         });
 
         return view;
+    }
+
+    private class BannerPagerAdapter extends FragmentPagerAdapter {
+
+        public BannerPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return GuideFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
     }
 
     private String fId(String prepId){

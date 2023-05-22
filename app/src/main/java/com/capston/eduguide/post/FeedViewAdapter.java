@@ -137,8 +137,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
                         FeedViewItem item = feedViewItemList.get(pos);
-                        String titleStr = item.getTitle() ;
-                        String textStr = item.getText() ;
+                        String titleStr = item.getTitle();
+                        String textStr = item.getText();
                         String tagStr = item.getTag();
                         String usernameStr = item.getUserName();
                         Integer grade = item.getGrade();
