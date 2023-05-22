@@ -16,6 +16,7 @@
         android:theme="@style/Theme.EduGuide"
         tools:targetApi="31">
 
+
         <!-- 1번째 화면 - 로딩 화면 -->
         <activity android:name="com.capston.eduguide.LoadingActivity" android:exported="true">
             <intent-filter>
@@ -40,9 +41,6 @@
         <activity android:name="com.capston.eduguide.user.ListinquiryActivity" />
         <activity android:name="com.capston.eduguide.user.WriteNoticeActivity" />
         <activity android:name="com.capston.eduguide.user.EditPasswordActivity" />
-        <activity android:name="com.capston.eduguide.user.UserNotice1Activity" />
-        <activity android:name="com.capston.eduguide.user.UserNotice2Activity" />
-        <activity android:name="com.capston.eduguide.user.UserNotice3Activity" />
     </application>
 
 </manifest>

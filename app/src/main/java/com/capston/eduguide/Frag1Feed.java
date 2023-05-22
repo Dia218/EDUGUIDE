@@ -39,7 +39,7 @@ public class Frag1Feed extends Fragment {
     private DatabaseReference userDatabaseReference;
     private ValueEventListener mListener;
     RecyclerView recyclerView;
-    String userName;
+    String userId;
     String userEmail;
     // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
     /*public static Frag1Feed newInstance(){
@@ -54,8 +54,8 @@ public class Frag1Feed extends Fragment {
 
         Bundle bundle = getArguments();
         if (userEmail == null){
-            if (bundle.getString("userName")!=null) {
-                userName = bundle.getString("userName");
+            if (bundle.getString("userId")!=null) {
+                userId = bundle.getString("userId");
             }
             else if(bundle.getString("userEmail")!= null)
                 userEmail = bundle.getString("userEmail");
@@ -71,7 +71,7 @@ public class Frag1Feed extends Fragment {
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정
         adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
         callFeedList();
-        callUserName();
+        callUserId();
         recyclerView.setAdapter(adapter);
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe);
@@ -126,6 +126,7 @@ public class Frag1Feed extends Fragment {
 
 
     public void addGuide() {
+        //ArrayList<FeedViewItem> result = items;
         //가이드 툴 추가는 여기서(가이드 툴 db 받으면 게시글 db와 비교로 가져와서 넣기), 뱃지는 등급-팀원들과 상의 필요
         for(int i=0;i<items.size();i++){
             FeedViewItem item = items.get(i);
@@ -175,7 +176,7 @@ public class Frag1Feed extends Fragment {
         databaseReference.addValueEventListener(mListener);
     }
 
-    public void callUserName(){
+    public void callUserId(){
         if(userEmail != null){
             userDatabaseReference = database.getReference("users");
             userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -184,12 +185,12 @@ public class Frag1Feed extends Fragment {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                         HashMap<String, Object> value = (HashMap<String, Object>)dataSnapshot.getValue();
                         if(userEmail.equals((String)value.get("email"))){
-                            userName = (String)value.get("name");
-                            adapter.setUserName(userName);
+                            userId = (String)value.get("id");
+                            adapter.setUserId(userId);
                             recyclerView.setAdapter(adapter);
                         }
                     }
-                    if(userName == null){
+                    if(userId == null){
                         recyclerView.setAdapter(adapter);
                     }
                 }
@@ -200,8 +201,8 @@ public class Frag1Feed extends Fragment {
                 }
             });
         }
-        else if(userName != null){
-            adapter.setUserName(userName);
+        else if(userId != null){
+            adapter.setUserId(userId);
             adapter.setItems(items);
             recyclerView.setAdapter(adapter);
         }

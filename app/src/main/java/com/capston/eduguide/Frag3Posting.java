@@ -1,6 +1,5 @@
 package com.capston.eduguide;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,9 +27,9 @@ public class Frag3Posting extends Fragment {
 
     private View view;
     private ViewPager vp;
-    private String prepId="null";
-    private String feedId;
-    private String userName;
+    private String prepId;
+    private String userId;
+
     private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -60,10 +59,7 @@ public class Frag3Posting extends Fragment {
                         prepId = snapshot.getKey();
                     }
                 }
-                if(!(prepId.equals("null")))
-                    feedId = String.valueOf((Integer.parseInt(prepId)+1));
-                else
-                    feedId = "0";
+                Log.d("pId_test2","preId:"+prepId);
             }
 
             @Override
@@ -79,7 +75,7 @@ public class Frag3Posting extends Fragment {
                     HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
                     if(bundle.getString("userEmail")!=null) {
                         if (bundle.getString("userEmail").equals((String) user.get("email"))) {
-                            userName = (String)user.get("name");
+                            userId = (String)user.get("id");
                         }
                     }
                 }
@@ -108,18 +104,18 @@ public class Frag3Posting extends Fragment {
                 item.setTitle(pTitle);
                 item.setText(pInfo);
                 item.setTag(pTag);
-                if(userName!=null)
-                    item.setUserName(userName);
+                if(userId!=null)
+                    item.setUserId(userId);
                 item.setGrade(0);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = fId(prepId);
                 item.setFeedId(fId);
 
-                GuideFragment guideFragment = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
-                if(!guideFragment.regGuideContent(fId)) return; //가이드 등록 호출, 최소 개수 미 충족 시 등록 중단
+                databaseReference.child("post").child(fId).setValue(item);
 
-                databaseReference.child("post").child(fId).setValue(item); //게시글 등록 호출
+                GuideFragment guideAdapter = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                guideAdapter.regGuideContent(fId);
 
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
@@ -146,9 +142,7 @@ public class Frag3Posting extends Fragment {
         }
     }
     private String fId(String prepId){
-        Integer fIdNum=0;
-        if(!(prepId.equals("null")))
-            fIdNum = Integer.parseInt(prepId)+1;
+        Integer fIdNum = Integer.parseInt(prepId)+1;
         return String.valueOf(fIdNum);
     }
 }

@@ -74,7 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="등록"
-            android:textColor="#795548" />
+            android:background="@color/button_color"
+            android:textColor="@color/text_color" />
 
     </LinearLayout>
 </ScrollView>

@@ -34,6 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="유저의 아이디"
+                    android:textColor="@color/text_color"
                     android:layout_toRightOf="@id/userImage"/>
 
                 <Button
@@ -42,6 +43,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
+                    android:background="@color/button_color"
+                    android:textColor="@color/text_color"
                     android:text="Back"/>
 
             </RelativeLayout>
@@ -66,6 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:textColor="@color/comment_color"
                     android:text="본문 내용 표시"
                     android:textSize="18sp" />
                 <!--android:text=""-->
@@ -76,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/commentMain"
                     android:background="@drawable/post_down_stroke"
+                    android:textColor="@color/comment_color"
                     android:text="본문 태그 내용 표시"
                     android:textSize="15sp" />
 
@@ -106,11 +111,14 @@
         <EditText
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/comment_color"
             android:hint="댓글을 입력하세요"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/button_color"
+            android:textColor="@color/text_color"
             android:text="입력"/>
 
     </LinearLayout>

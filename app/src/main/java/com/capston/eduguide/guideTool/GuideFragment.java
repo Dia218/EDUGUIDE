@@ -46,10 +46,10 @@ public class GuideFragment extends Fragment {
     static int guideMaxNum = 18;
     static int guideMinNum = 9;
 
-    private Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
-    private Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
-    private Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
-    private HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
+    Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
+    Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
+    Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
+    HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); // 파이어베이스 DB
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
@@ -254,7 +254,7 @@ public class GuideFragment extends Fragment {
     }
 
     //파이어베이스에 가이드 데이터 저장
-    public boolean regGuideContent(String postId) {
+    public void regGuideContent(String postId) {
         Log.d("GuideItem", "regGuideContent called. postId: " + postId);
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
@@ -264,12 +264,7 @@ public class GuideFragment extends Fragment {
 
             // 가이드박스 키워드 가져오기
             String keyword = String.valueOf(guideBox.getText());
-
-            //미입력 상태인 경우 = [숫자]단계 형식일 경우
-            if(keyword.replace("단계", "").matches("^[0-9]*$")) {
-                if(guideBoxViews.indexOf(guideBox) < guideMinNum) return false; //가이드박스 최소 개수를 충족하지 않는 경우, 등록 중단
-                else continue; //최소 개수는 만족했을 경우, 빈 부분 스킵
-            }
+            if(keyword.replace("단계", "").matches("^[0-9]*$")) { continue; } //미입력 상태인 경우([숫자]단계 형식일 경우), 스킵
 
             //가이드박스 설명글 가져오기
             int indexKey = guideBoxViews.indexOf(guideBox);
@@ -304,8 +299,6 @@ public class GuideFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
-
-        return true;
     }
 
     //파이어베이스에서 가이드 데이터 가져오기

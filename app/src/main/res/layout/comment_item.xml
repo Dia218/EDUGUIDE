@@ -27,6 +27,7 @@
             <TextView
                 android:id="@+id/commentUserName"
                 android:layout_width="match_parent"
+                android:textColor="@color/text_color"
                 android:layout_height="20dp"
                 android:text="유저 아이디"
                 android:textSize="15sp"/>
@@ -35,6 +36,7 @@
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
                 android:textSize="18dp"
                 android:text="댓글 내용"/>
         </LinearLayout>

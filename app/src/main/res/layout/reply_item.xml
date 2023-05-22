@@ -27,6 +27,7 @@
                 android:id="@+id/replyUserName"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
+                android:textColor="@color/text_color"
                 android:text="댓글을 작성한 유저 아이디"
                 android:textSize="15sp"/>
 
@@ -34,6 +35,7 @@
                 android:id="@+id/reply"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textColor="@color/text_color"
                 android:text="댓글 내용\n\n"/>
         </LinearLayout>
 

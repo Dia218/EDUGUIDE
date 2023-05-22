@@ -84,6 +84,8 @@
                     android:id="@+id/delete_feed"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
+                    android:backgroundTint="#609966"
+                    android:textColor="@color/background_color"
                     android:layout_alignParentRight="true"
                     android:text="삭제"/>
             </RelativeLayout>
@@ -95,7 +97,7 @@
 
                 android:gravity="center_vertical"
                 android:text="Title text"
-                android:textColor="#000000"
+                android:textColor="@color/text_color"
                 android:textSize="22sp" />
 
             <!--<TextView
@@ -113,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="#tag1 #tag2"
-                android:textColor="#666666"
+                android:textColor="#609966"
                 android:textSize="16sp" />
 
     </LinearLayout>

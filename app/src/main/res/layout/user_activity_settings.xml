@@ -11,7 +11,8 @@
         android:layout_height="67dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:src="@drawable/loading_image" />
+        android:src="@drawable/user_logo"
+        android:contentDescription="@string/logo_description" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,60 +22,74 @@
 
         <TextView
             android:id="@+id/profile_edit"
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="프로필 편집" />
+            android:textColor="@color/text_color"
+            android:text="@string/edit_profile" />
 
         <View
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
         <TextView
             android:id="@+id/personalinfo_edit"
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="개인정보 설정" />
+            android:textColor="@color/text_color"
+            android:text="@string/edit_personinfo" />
 
         <View
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
         <TextView
             android:id="@+id/inquiry_edit"
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="문의" />
+            android:textColor="@color/text_color"
+            android:text="@string/edit_inquiry" />
 
         <View
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
         <TextView
             android:id="@+id/notice_edit"
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="공지사항" />
+            android:textColor="@color/text_color"
+            android:text="@string/edit_notice" />
 
 
         <View
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_width="350dp"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
         <Button
             android:id="@+id/logout_edit"
-            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:backgroundTint="#BDD7EE"
-            android:textColor="#555555"
+            android:backgroundTint="@color/button_color"
+            android:textColor="@color/text_color"
             android:text="@string/edit_logout"
             tools:ignore="VisualLintButtonSize" />
     </LinearLayout>

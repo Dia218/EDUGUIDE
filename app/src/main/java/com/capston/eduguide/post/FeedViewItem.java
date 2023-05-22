@@ -17,7 +17,7 @@ public class FeedViewItem {
     private String titleStr;
     private String textStr;
     private String tagStr;
-    private String userName;
+    private String userId;
     private Integer like_count;
     private Integer bookmark_count;
     private Integer grade;
@@ -40,9 +40,13 @@ public class FeedViewItem {
     public void setText(String text) {
         textStr = text;
     }
-    public void setTag(String tag){ tagStr = tag; }
-    public void setUserName(String name) {
-        userName = name;
+
+    public void setTag(String tag) {
+        tagStr = tag;
+    }
+
+    public void setUserId(String name) {
+        userId = name;
     }
 
     public void setLike_count(Integer count) {
@@ -57,6 +61,8 @@ public class FeedViewItem {
         this.grade = grade;
     }
 
+    //public void setComment(ArrayList<CommentItem> comment) { this.comments = comment; }
+    //public void setComment(ArrayList<String> comment) { this.comment = comment; }
     public void setViewPagerAdapter(BannerPagerAdapter bpa) {
         this.viewPagerAdapter = bpa;
     }
@@ -78,8 +84,15 @@ public class FeedViewItem {
     public String getText() {
         return this.textStr;
     }
-    public String getTag(){ return this.tagStr; }
-    public String getUserName() { return this.userName ;}
+
+    public String getTag() {
+        return this.tagStr;
+    }
+
+    public String getUserId() {
+        return this.userId;
+    }
+
     public Integer getLike_count() {
         return this.like_count;
     }
@@ -91,9 +104,15 @@ public class FeedViewItem {
     public Integer getGrade() {
         return this.grade;
     }
+
+    //public ArrayList<CommentItem> getComment() { return this.comments; }
+    //public ArrayList<String> getComment() { return this.comment; }
     public BannerPagerAdapter getViewPagerAdapter() {
         return this.viewPagerAdapter;
     }
+
+    //public void addComments(CommentItem comm) { comments.add(comm); }
+    //public void addComment(String comm) { comment.add(comm); }
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
@@ -112,6 +131,17 @@ public class FeedViewItem {
 
         public void getGuide(String postId) {
             guide.setGuide(postId);
+
+            /* 현수가 짰던 코드
+            Bundle bundle = new Bundle();
+            ArrayList<String> key = new ArrayList<>();
+            for (int i = 0; i < 15; i++) {
+                key.add("keyword" + i);
+            }
+            bundle.putInt("guideboxsize", boxSize);
+            bundle.putInt("guidelinesize", 9);
+            bundle.putStringArrayList("key", key);
+            guide.setArguments(bundle);*/
         }
 
         @Override
