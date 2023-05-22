@@ -31,6 +31,7 @@ public class Frag3Posting extends Fragment {
     private String prepId="null";
     private String feedId = "";
     private String userName;
+    private String userEmail;
     private Integer userGrade;
     private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -44,11 +45,11 @@ public class Frag3Posting extends Fragment {
 
         //피드 아이템의 bpa 이용. 피드 아이디를 넘기지 않으므로 일반 가이드객체 생성해서 연결.
         vp = (ViewPager) view.findViewById(R.id.vp);
-        FeedViewItem.BannerPagerAdapter bannerPagerAdapter = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager(),"");
+        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(getChildFragmentManager());
         vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
-        Bundle bundle = getArguments();
+        Bundle Mainbundle = getArguments();
 
         AppCompatEditText postTitle = view.findViewById(R.id.postTitle); //제목
         AppCompatEditText postInfo = view.findViewById(R.id.postInfo); //내용
@@ -81,8 +82,9 @@ public class Frag3Posting extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()){
                     HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
-                    if(bundle.getString("userEmail")!=null) {
-                        if (bundle.getString("userEmail").equals((String) user.get("email"))) {
+                    if(Mainbundle.getString("userEmail")!=null) {
+                        userEmail = Mainbundle.getString("userEmail");
+                        if (Mainbundle.getString("userEmail").equals((String) user.get("email"))) {
                             userName = (String)user.get("name");
                             userGrade = Integer.parseInt((String) user.get("grade"));
                         }
@@ -127,9 +129,8 @@ public class Frag3Posting extends Fragment {
 
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity != null) {
-                    //activity.replaceFragment(new Frag1Feed());
                     Bundle bundle = new Bundle();
-                    bundle.putString("userName",userName);
+                    bundle.putString("userEmail",userEmail);
                     Frag1Feed feed = new Frag1Feed();
                     feed.setArguments(bundle);
                     activity.replaceFragment(feed);
@@ -142,13 +143,15 @@ public class Frag3Posting extends Fragment {
 
     private class BannerPagerAdapter extends FragmentPagerAdapter {
 
+        GuideFragment guide = new GuideFragment();
+
         public BannerPagerAdapter(FragmentManager fm){
             super(fm);
         }
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return GuideFragment.newInstance(position);
+            return guide;
         }
 
         @Override

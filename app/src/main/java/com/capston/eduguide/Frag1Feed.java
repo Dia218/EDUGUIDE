@@ -1,6 +1,7 @@
 package com.capston.eduguide;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +50,13 @@ public class Frag1Feed extends Fragment {
         //번들로 Main으로부터 userEmail을 받거나 CommentSimple로부터 userName을 받아옴
         Bundle bundle = getArguments();
         if (userEmail == null){
-            if (bundle.getString("userName")!=null) {
-                userName = bundle.getString("userName");
-                userGrade = bundle.getInt("userGrade");
-            }
-            else if(bundle.getString("userEmail")!= null)
+            if(bundle.getString("userEmail")!= null)
                 userEmail = bundle.getString("userEmail");
         }
+
+        Log.d("유저 네임 테스트",String.valueOf(userName));
+        Log.d("유저 이메일 테스트",String.valueOf(userEmail));
+        Log.d("유저 등급 테스트",String.valueOf(userGrade));
 
         // 리스트 뷰 참조 및 Adapter 달기
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
@@ -142,13 +143,12 @@ public class Frag1Feed extends Fragment {
                         if(userEmail.equals(value.get("email"))){
                             userName = value.get("name");
                             userGrade = Integer.parseInt(value.get("grade"));
-                            adapter.setUserName(userName,userGrade);
-                            adapter.setUserEmail(userEmail);
+                            adapter.setUserName(userName,userGrade,userEmail);
                         }
                     }
                     if(userName == null){
                         userName = "";
-                        adapter.setUserName(userName,5);
+                        adapter.setUserName(userName,5,userEmail);
                     }
                 }
 
@@ -158,12 +158,9 @@ public class Frag1Feed extends Fragment {
                 }
             });
         }
-        else if(userName != null){
-            adapter.setUserName(userName,userGrade);
-        }
         else{
             userName = "";
-            adapter.setUserName(userName,5);
+            adapter.setUserName(userName,5,"");
         }
     }
 }

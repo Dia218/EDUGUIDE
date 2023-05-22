@@ -96,7 +96,7 @@ public class FeedViewItem {
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        GuideFragment guide;
+        GuideFragment guide = new GuideFragment();
         String feedId;
         public Integer adapterId;
 
@@ -114,6 +114,9 @@ public class FeedViewItem {
         public Fragment getItem(int position) {
             if(!(feedId.equals(""))){
                 guide = new GuideFragment(feedId);
+            }
+            else if(feedId.equals("feed")){
+
             }
             else
                 guide = new GuideFragment();

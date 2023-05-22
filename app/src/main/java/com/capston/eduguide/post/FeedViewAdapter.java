@@ -117,7 +117,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databaseReference = database.getReference();
                         databaseReference.child("post").child(item.getFeedId()).child("bookmark_count").setValue(count);
-                        databaseReference.child("bookmark").child(userEmail).child(item.getFeedId()).child("postId").setValue(pos);
+                        databaseReference.child("bookmark").child(userEmail.substring(0,userEmail.lastIndexOf("."))).child(item.getFeedId()).child("postId").setValue(pos);
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());
@@ -127,7 +127,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference databaseReference = database.getReference();
                             databaseReference.child("post").child(item.getFeedId()).child("bookmark_count").setValue(count);
-                            databaseReference.child("bookmark").child(userEmail).child(item.getFeedId()).removeValue();
+                            databaseReference.child("bookmark").child(userEmail.substring(0,userEmail.lastIndexOf("."))).child(item.getFeedId()).removeValue();
                         }
                     }
                 }
@@ -149,7 +149,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
 
                         // TODO : use item data.
                         Bundle bundle = new Bundle();
-                        bundle.putInt("position",pos);
+                        //bundle.putInt("position",pos);
                         bundle.putString("title_text",titleStr);
                         bundle.putString("main_text",textStr);
                         bundle.putString("tag_text",tagStr);
@@ -158,6 +158,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         bundle.putString("userName",userName);
                         bundle.putString("feedId",feedId);
                         bundle.putInt("userGrade",userGrade);
+                        bundle.putString("userEmail",userEmail);
 
                         CommentSimple comment = new CommentSimple();
                         comment.setArguments(bundle);
@@ -215,7 +216,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            if (userEmail.equals(dataSnapshot.getKey())) {
+                            if (userEmail.substring(0,userEmail.lastIndexOf(".")).equals(dataSnapshot.getKey())) {
                                 for (DataSnapshot keySnapshot : dataSnapshot.getChildren()) {
                                     if (item.getFeedId().equals(keySnapshot.getKey())) {
                                         if (!bookmark.isSelected())
@@ -286,13 +287,10 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         feedViewItemList = items;
     }
 
-    public void setUserName(String userName,Integer userGrade) {
+    public void setUserName(String userName,Integer userGrade,String userEmail) {
         this.userName = userName;
         this.userGrade = userGrade;
-    }
-    public void setUserEmail(String userEmail){
-        String email = userEmail.substring(0,userEmail.lastIndexOf("."));
-        this.userEmail = email;
+        this.userEmail = userEmail;
     }
 
     //public FeedViewItem getItem(int position){ return feedViewItemList.get(position); }
