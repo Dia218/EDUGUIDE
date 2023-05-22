@@ -2,6 +2,8 @@ package com.capston.eduguide.post;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -11,7 +13,6 @@ import com.capston.eduguide.guideTool.GuideFragment;
 import java.util.ArrayList;
 
 public class FeedViewItem {
-    //private Drawable iconDrawable ;
     private String feedId;
     private Drawable userIcon;
     private String titleStr;
@@ -24,7 +25,6 @@ public class FeedViewItem {
     private BannerPagerAdapter viewPagerAdapter;
 
 
-    //public void setIcon(Drawable icon) { iconDrawable = icon;}
     public void setFeedId(String id) {
         feedId = id;
     }
@@ -61,8 +61,6 @@ public class FeedViewItem {
         this.viewPagerAdapter = bpa;
     }
 
-
-    //public Drawable getIcon() { return this.iconDrawable ;}
     public String getFeedId() {
         return this.feedId;
     }
@@ -97,20 +95,31 @@ public class FeedViewItem {
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        GuideFragment guide = new GuideFragment();
+        GuideFragment guide;
+        String feedId;
+        public Integer adapterId;
 
-        public BannerPagerAdapter(FragmentManager fm) {
+        //바인드 될 때마다 호출.getItem()을 임의로 호출해서 바인드 될 때마다 가이드 객체가 생성되도록 함.
+        public BannerPagerAdapter(FragmentManager fm,String feedId) {
             super(fm);
+            this.feedId = feedId;
+            getItem(0);
         }
 
+        //뷰페이저가 노출될 때 호출하는 함수로, 노출될 때 한번만 호출된다. 호출될때 feedId가 존재하면
+        //오버라이딩 생성자를 통해 데이터가 존재하는 가이드 객체 생성, 아니면 일반 객체 생성
         @Override
         public Fragment getItem(int position) {
-            //Guide guide = Guide.newInstance(position);
-            //Guide guide = new Guide();
+            if(!(feedId.equals(""))){
+                guide = new GuideFragment(feedId);
+            }
+            else
+                guide = new GuideFragment();
             return guide;
         }
 
         public void getGuide(String postId) {
+            setAdapterId(Integer.parseInt(postId));
             guide.setGuide(postId);
         }
 
@@ -118,5 +127,14 @@ public class FeedViewItem {
         public int getCount() {
             return 1;
         }
+
+        public Integer getAdapterId(){
+            return this.adapterId;
+        }
+
+        public void setAdapterId(int position){
+            this.adapterId = position;
+        }
+
     }
 }

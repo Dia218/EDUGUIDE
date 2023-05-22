@@ -1,8 +1,6 @@
 package com.capston.eduguide;
 
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.capston.eduguide.guideTool.GuideFragment;
 import com.capston.eduguide.post.FeedViewAdapter;
 import com.capston.eduguide.post.FeedViewItem;
 import com.google.firebase.database.DataSnapshot;
@@ -29,11 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Frag1Feed extends Fragment {
-
-    private GuideFragment fragmentGuide;
     FeedViewAdapter adapter;
-    ArrayList<FeedViewItem> items;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    ArrayList<FeedViewItem> items = new ArrayList<>();
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private DatabaseReference userDatabaseReference;
@@ -41,10 +33,7 @@ public class Frag1Feed extends Fragment {
     RecyclerView recyclerView;
     String userName;
     String userEmail;
-    // 각각의 Fragment마다 Instance를 반환해 줄 메소드를 생성.
-    /*public static Frag1Feed newInstance(){
-        return new Frag1Feed();
-    }*/
+    Integer userGrade;
 
     @Nullable
     @Override
@@ -52,10 +41,12 @@ public class Frag1Feed extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.frag1_feed, container, false);
 
+        //번들로 Main으로부터 userEmail을 받거나 CommentSimple로부터 userName을 받아옴
         Bundle bundle = getArguments();
         if (userEmail == null){
             if (bundle.getString("userName")!=null) {
                 userName = bundle.getString("userName");
+                userGrade = bundle.getInt("userGrade");
             }
             else if(bundle.getString("userEmail")!= null)
                 userEmail = bundle.getString("userEmail");
@@ -64,79 +55,27 @@ public class Frag1Feed extends Fragment {
         // 리스트 뷰 참조 및 Adapter 달기
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        items = new ArrayList<>();
+        recyclerView.setItemAnimator(null);
 
         database = FirebaseDatabase.getInstance();
 
-        // 리사이클러뷰에 SimpleTextAdapter 객체 지정
+        // 리사이클러뷰에 tAdapter 객체 지정
         adapter = new FeedViewAdapter(getChildFragmentManager(), getActivity());
-        callFeedList();
         callUserName();
+        callFeedList();
         recyclerView.setAdapter(adapter);
 
-        swipeRefreshLayout = rootView.findViewById(R.id.swipe);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //swipe 시 수행할 동작
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(Frag1Feed.this).attach(Frag1Feed.this).commit();
-                //업데이트 끝남.필수
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
         return rootView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i("onStart","check Start!");
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        Log.i("onStart","check Start!");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i("onResume","check Resume!");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i("onStop","check Stop!");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("onPause", "check Pause!");
-    }
-
+    //화면이 전환되면 이벤트 리스너 제거
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.i("onDestroyView", "check DestroyView!");
         databaseReference.removeEventListener(mListener);
     }
 
-
-    public void addGuide() {
-        //가이드 툴 추가는 여기서(가이드 툴 db 받으면 게시글 db와 비교로 가져와서 넣기), 뱃지는 등급-팀원들과 상의 필요
-        for(int i=0;i<items.size();i++){
-            FeedViewItem item = items.get(i);
-            FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(adapter.getFm());
-            bpa.getGuide(item.getFeedId());
-            item.setViewPagerAdapter(bpa);
-            setUserIconForGrade(item);
-            items.set(i,item);
-        }
-    }
-
+    //피드 아이템의 등급으로 유저의 뱃지 설정
     public void setUserIconForGrade(FeedViewItem item){
         if(item.getGrade()==0){
             item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seed, null));
@@ -150,7 +89,12 @@ public class Frag1Feed extends Fragment {
         else if (item.getGrade()==3) {
             item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.tree, null));
         }
+        else
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
     }
+
+    //파이어베이스 post의 게시글 전체 불러오기. bpa를 오버라이딩한 생성자로 선언해서 선언시부터 데이터가 들어감.해당 bpa를 피드아이템의 bpa로 추가(set).
+    //추가한 아이템의 리스트를 어댑터의 아이템리스트에 등록(setItems). 이후 어댑터 연결.
     public void callFeedList(){
         databaseReference = database.getReference("post");
         mListener = new ValueEventListener() {
@@ -159,11 +103,13 @@ public class Frag1Feed extends Fragment {
                 items.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     FeedViewItem item = snapshot.getValue(FeedViewItem.class);
+                    FeedViewItem.BannerPagerAdapter bpa = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager(), item.getFeedId());
+                    item.setViewPagerAdapter(bpa);
+                    setUserIconForGrade(item);
                     items.add(item);
                 }
-                addGuide();
                 adapter.setItems(items);
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
                 recyclerView.setAdapter(adapter);
             }
 
@@ -175,6 +121,8 @@ public class Frag1Feed extends Fragment {
         databaseReference.addValueEventListener(mListener);
     }
 
+    //번들로 받은 userEmail이 있으면 검색해서 userName에 등록. users의 name속성을 받아온다. 이후 받아온 userName을 어댑터에 등록.
+    //userEmail이 아니라 userName을 직접 받아오면(CommentSimple로부터) 그냥 바로 등록하고 어댑터에도 바로 등록한다.
     public void callUserName(){
         if(userEmail != null){
             userDatabaseReference = database.getReference("users");
@@ -182,15 +130,16 @@ public class Frag1Feed extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                        HashMap<String, Object> value = (HashMap<String, Object>)dataSnapshot.getValue();
-                        if(userEmail.equals((String)value.get("email"))){
-                            userName = (String)value.get("name");
-                            adapter.setUserName(userName);
-                            recyclerView.setAdapter(adapter);
+                        HashMap<String, String> value = (HashMap<String, String>)dataSnapshot.getValue();
+                        if(userEmail.equals(value.get("email"))){
+                            userName = value.get("name");
+                            userGrade = Integer.parseInt(value.get("grade"));
+                            adapter.setUserName(userName,userGrade);
                         }
                     }
                     if(userName == null){
-                        recyclerView.setAdapter(adapter);
+                        userName = "";
+                        adapter.setUserName(userName,5);
                     }
                 }
 
@@ -201,13 +150,11 @@ public class Frag1Feed extends Fragment {
             });
         }
         else if(userName != null){
-            adapter.setUserName(userName);
-            adapter.setItems(items);
-            recyclerView.setAdapter(adapter);
+            adapter.setUserName(userName,userGrade);
         }
         else{
-            adapter.setItems(items);
-            recyclerView.setAdapter(adapter);
+            userName = "";
+            adapter.setUserName(userName,5);
         }
     }
 }

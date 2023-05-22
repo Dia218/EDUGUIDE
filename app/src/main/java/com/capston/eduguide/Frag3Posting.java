@@ -31,6 +31,7 @@ public class Frag3Posting extends Fragment {
     private String prepId="null";
     private String feedId;
     private String userName;
+    private Integer userGrade;
     private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -41,8 +42,9 @@ public class Frag3Posting extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.frag3_posting, container, false);
 
+        //피드 아이템의 bpa 이용. 피드 아이디를 넘기지 않으므로 일반 가이드객체 생성해서 연결.
         vp = (ViewPager) view.findViewById(R.id.vp);
-        FeedViewItem.BannerPagerAdapter bannerPagerAdapter = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager());
+        FeedViewItem.BannerPagerAdapter bannerPagerAdapter = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager(),"");
         vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
@@ -72,6 +74,7 @@ public class Frag3Posting extends Fragment {
             }
         });
 
+        //Main에서 받아온 userEmail로 users 검색, 일치하는 데이터의 userName("name")와 uerGrade(grade)를 받아옴.
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -80,6 +83,7 @@ public class Frag3Posting extends Fragment {
                     if(bundle.getString("userEmail")!=null) {
                         if (bundle.getString("userEmail").equals((String) user.get("email"))) {
                             userName = (String)user.get("name");
+                            userGrade = Integer.parseInt((String) user.get("grade"));
                         }
                     }
                 }
@@ -110,41 +114,33 @@ public class Frag3Posting extends Fragment {
                 item.setTag(pTag);
                 if(userName!=null)
                     item.setUserName(userName);
-                item.setGrade(0);
+                item.setGrade(userGrade);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = fId(prepId);
                 item.setFeedId(fId);
 
-                GuideFragment guideFragment = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
-                if(!guideFragment.regGuideContent(fId)) return; //가이드 등록 호출, 최소 개수 미 충족 시 등록 중단
+                databaseReference.child("post").child(fId).setValue(item);
 
-                databaseReference.child("post").child(fId).setValue(item); //게시글 등록 호출
+                GuideFragment guideAdapter = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                Log.d("확인",fId);
+                guideAdapter.regGuideContent(fId);
 
                 MainActivity activity = (MainActivity) getActivity();
-                if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
+                if (activity != null) {
+                    //activity.replaceFragment(new Frag1Feed());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userName",userName);
+                    Frag1Feed feed = new Frag1Feed();
+                    feed.setArguments(bundle);
+                    activity.replaceFragment(feed);
+                } // 등록 후 메인 피드로 전환. 전환할 때 유저네임 번들로 넘겨줌.
             }
         });
 
         return view;
     }
 
-    private class BannerPagerAdapter extends FragmentPagerAdapter {
-
-        public BannerPagerAdapter(FragmentManager fm){
-            super(fm);
-        }
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return GuideFragment.newInstance(position);
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
-    }
     private String fId(String prepId){
         Integer fIdNum=0;
         if(!(prepId.equals("null")))
@@ -152,4 +148,3 @@ public class Frag3Posting extends Fragment {
         return String.valueOf(fIdNum);
     }
 }
-

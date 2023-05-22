@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==0){
             if (resultCode==RESULT_OK) {
                 if(data != null){
-                    userId = data.getExtras().getString("userId");
-                    Log.d("테스팅",userId);
+                    userEmail = data.getExtras().getString("userEmail");
+                    Log.d("테스팅중입니다",userEmail);
                 }
             }
         }
@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putString("userEmail",userEmail);
-        //bundle.putString("userId",userId); //mypage branch
 
         switch (n) {
             case 0:

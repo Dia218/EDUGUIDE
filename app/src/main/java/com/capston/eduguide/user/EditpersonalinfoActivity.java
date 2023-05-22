@@ -76,7 +76,7 @@ public class EditpersonalinfoActivity extends AppCompatActivity {
         });
     }
 
-    //개인정보 저장
+    //개인정보 저장 -> 이 부분을 주석 처리!!
     private void savePersonalInfo() {
         /*String name = userName.getText().toString().trim();
         String birth = userBirth.getText().toString().trim();

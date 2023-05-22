@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.google.firebase.database.ChildEventListener;
@@ -26,18 +27,18 @@ import java.util.List;
 import java.util.Vector;
 
 /*
-* 가이드 띄우기, 가이드 관리, 가이드 - 파이어베이스 연동 등을 처리함
-*
-* 필드 : 가이드 박스 개수, 가이드 구성 인터페이스 저장 구조, 파이어베이스 인스턴스
-* 생성 시 : 인터페이스 저장 구조 초기화, 이벤트 리스너 부착, 고정 모드 활성화 여부 결정
-*
-* 메소드 :
-* 터치 이벤트 - 키워드 작성,
-* 길게 누르기 이벤트 - 설명글 작성,
-* 고정 모드 - addButton 비활성화,
-* 가이드 데이터베이스 저장
-* 가이드 데이터베이스 조회
-* */
+ * 가이드 띄우기, 가이드 관리, 가이드 - 파이어베이스 연동 등을 처리함
+ *
+ * 필드 : 가이드 박스 개수, 가이드 구성 인터페이스 저장 구조, 파이어베이스 인스턴스
+ * 생성 시 : 인터페이스 저장 구조 초기화, 이벤트 리스너 부착, 고정 모드 활성화 여부 결정
+ *
+ * 메소드 :
+ * 터치 이벤트 - 키워드 작성,
+ * 길게 누르기 이벤트 - 설명글 작성,
+ * 고정 모드 - addButton 비활성화,
+ * 가이드 데이터베이스 저장
+ * 가이드 데이터베이스 조회
+ * */
 
 public class GuideFragment extends Fragment {
 
@@ -46,10 +47,13 @@ public class GuideFragment extends Fragment {
     static int guideMaxNum = 18;
     static int guideMinNum = 9;
 
-    private Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
-    private Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
-    private Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
-    private HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
+    public boolean isDestroyed = false;
+    static String id;
+
+    Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
+    Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
+    Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
+    HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); // 파이어베이스 DB
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
@@ -62,6 +66,29 @@ public class GuideFragment extends Fragment {
         fg.setArguments(args);
         return fg; }
 
+    //기본 생성자
+    public GuideFragment(){
+
+    }
+
+    //생성자를 이용해 선언 시부터 데이터가 들어간 가이드객체를 생성
+    public GuideFragment(String feedId){
+        setGuide(feedId);
+    }
+
+    public void onStart(){
+        super.onStart();
+        if(isDestroyed){
+            setFixmode(); //fix모드 메소드 호출
+            isDestroyed = false;
+        }
+    }
+
+    //뷰가 destroy될 경우 변수를 true로 변경(체크용)
+    public void onDestroyView() {
+        super.onDestroyView();
+        isDestroyed = true;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +99,12 @@ public class GuideFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.guide_guidetool, container, false);
+
+        //isdestroyed가 true일 경우 비워진 해쉬맵을 다시 채워줌, fix모드 적용 안됨
+        if(isDestroyed){
+            setGuide(id);
+            guideAddButtons.get(0).setVisibility(View.GONE);
+        }
 
         //가이드박스 벡터에 저장
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox1));
@@ -254,7 +287,7 @@ public class GuideFragment extends Fragment {
     }
 
     //파이어베이스에 가이드 데이터 저장
-    public boolean regGuideContent(String postId) {
+    public void regGuideContent(String postId) {
         Log.d("GuideItem", "regGuideContent called. postId: " + postId);
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
@@ -264,17 +297,12 @@ public class GuideFragment extends Fragment {
 
             // 가이드박스 키워드 가져오기
             String keyword = String.valueOf(guideBox.getText());
-
-            //미입력 상태인 경우 = [숫자]단계 형식일 경우
-            if(keyword.replace("단계", "").matches("^[0-9]*$")) {
-                if(guideBoxViews.indexOf(guideBox) < guideMinNum) return false; //가이드박스 최소 개수를 충족하지 않는 경우, 등록 중단
-                else continue; //최소 개수는 만족했을 경우, 빈 부분 스킵
-            }
+            if(keyword.replace("단계", "").matches("^[0-9]*$")) { continue; } //미입력 상태인 경우([숫자]단계 형식일 경우), 스킵
 
             //가이드박스 설명글 가져오기
             int indexKey = guideBoxViews.indexOf(guideBox);
             String boxInfo;
-            if(boxInfos.get(indexKey).equals("설명")) //미입력 상태인 경우
+            if(boxInfos.get(indexKey)==null) //미입력 상태인 경우
                 boxInfo = "내용없음";
             else
                 boxInfo = boxInfos.get(indexKey);
@@ -304,18 +332,17 @@ public class GuideFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
-
-        return true;
     }
 
     //파이어베이스에서 가이드 데이터 가져오기
     public void setGuide(String postId) {
+        id = postId;
         guideDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // 데이터가 존재할 경우 처리
-                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBox");
+                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBoxList");
                     int numGuideBoxes = (int) guideSnapshot.getChildrenCount();
 
                     //가이드 박스 개수 맞추기
@@ -334,7 +361,7 @@ public class GuideFragment extends Fragment {
                     int index = 0;
                     while (guideboxIt.hasNext()) {
                         Button guideBox = guideboxIt.next();
-                        guideBox.setText(guideSnapshot.child(String.valueOf(index)).child("boxWord").getValue(String.class)); //박스에 키워드 표시
+                        guideBox.setText(guideSnapshot.child(String.valueOf(index)).child("keyword").getValue(String.class)); //박스에 키워드 표시
                         boxInfos.put(index, guideSnapshot.child(String.valueOf(index)).child("boxInfo").getValue(String.class)); //해시맵에 설명글 저장
                         index++;
                     }
@@ -355,5 +382,4 @@ public class GuideFragment extends Fragment {
     }
 
 }
-
 
