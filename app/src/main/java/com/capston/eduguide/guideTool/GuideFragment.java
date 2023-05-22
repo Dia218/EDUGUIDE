@@ -50,10 +50,10 @@ public class GuideFragment extends Fragment {
     public boolean isDestroyed = false;
     static String id;
 
-    Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
-    Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
-    Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
-    HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
+    private Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
+    private Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
+    private Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
+    private HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); // 파이어베이스 DB
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
@@ -68,7 +68,6 @@ public class GuideFragment extends Fragment {
 
     //기본 생성자
     public GuideFragment(){
-
     }
 
     //생성자를 이용해 선언 시부터 데이터가 들어간 가이드객체를 생성
@@ -294,6 +293,7 @@ public class GuideFragment extends Fragment {
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
+        Log.d("/////////////////", String.valueOf(guideBoxViews.isEmpty()));
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
 

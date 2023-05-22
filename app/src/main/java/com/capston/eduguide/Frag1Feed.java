@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.capston.eduguide.post.FeedViewAdapter;
 import com.capston.eduguide.post.FeedViewItem;
@@ -34,6 +35,10 @@ public class Frag1Feed extends Fragment {
     String userName;
     String userEmail;
     Integer userGrade;
+    public static Frag1Feed newInstance(){
+        return new Frag1Feed();
+    }
+
 
     @Nullable
     @Override
@@ -55,7 +60,10 @@ public class Frag1Feed extends Fragment {
         // 리스트 뷰 참조 및 Adapter 달기
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(null);
+        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
 
         database = FirebaseDatabase.getInstance();
 
@@ -118,7 +126,7 @@ public class Frag1Feed extends Fragment {
 
             }
         };
-        databaseReference.addValueEventListener(mListener);
+        databaseReference.addListenerForSingleValueEvent(mListener);
     }
 
     //번들로 받은 userEmail이 있으면 검색해서 userName에 등록. users의 name속성을 받아온다. 이후 받아온 userName을 어댑터에 등록.
@@ -135,6 +143,7 @@ public class Frag1Feed extends Fragment {
                             userName = value.get("name");
                             userGrade = Integer.parseInt(value.get("grade"));
                             adapter.setUserName(userName,userGrade);
+                            adapter.setUserEmail(userEmail);
                         }
                     }
                     if(userName == null){
