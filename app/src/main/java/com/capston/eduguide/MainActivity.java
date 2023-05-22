@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private Frag5User frag5;
     private String userEmail;
     public String userId;
-    public Bundle bundle = new Bundle();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("users");
 
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode==RESULT_OK) {
                 if(data != null){
                     userEmail = data.getExtras().getString("userEmail");
-                    Log.d("테스팅중입니다",userEmail);
                 }
             }
         }
@@ -97,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
     private void setFrag(int n) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
-        bundle.putString("userEmail",userEmail);
 
         Bundle bundle = new Bundle();
         bundle.putString("userEmail",userEmail);

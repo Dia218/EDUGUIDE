@@ -1,6 +1,7 @@
 package com.capston.eduguide;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.capston.eduguide.post.FeedViewAdapter;
 import com.capston.eduguide.post.FeedViewItem;
@@ -34,6 +36,10 @@ public class Frag1Feed extends Fragment {
     String userName;
     String userEmail;
     Integer userGrade;
+    public static Frag1Feed newInstance(){
+        return new Frag1Feed();
+    }
+
 
     @Nullable
     @Override
@@ -44,18 +50,21 @@ public class Frag1Feed extends Fragment {
         //번들로 Main으로부터 userEmail을 받거나 CommentSimple로부터 userName을 받아옴
         Bundle bundle = getArguments();
         if (userEmail == null){
-            if (bundle.getString("userName")!=null) {
-                userName = bundle.getString("userName");
-                userGrade = bundle.getInt("userGrade");
-            }
-            else if(bundle.getString("userEmail")!= null)
+            if(bundle.getString("userEmail")!= null)
                 userEmail = bundle.getString("userEmail");
         }
+
+        Log.d("유저 네임 테스트",String.valueOf(userName));
+        Log.d("유저 이메일 테스트",String.valueOf(userEmail));
+        Log.d("유저 등급 테스트",String.valueOf(userGrade));
 
         // 리스트 뷰 참조 및 Adapter 달기
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(null);
+        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
 
         database = FirebaseDatabase.getInstance();
 
@@ -118,7 +127,7 @@ public class Frag1Feed extends Fragment {
 
             }
         };
-        databaseReference.addValueEventListener(mListener);
+        databaseReference.addListenerForSingleValueEvent(mListener);
     }
 
     //번들로 받은 userEmail이 있으면 검색해서 userName에 등록. users의 name속성을 받아온다. 이후 받아온 userName을 어댑터에 등록.
@@ -134,12 +143,12 @@ public class Frag1Feed extends Fragment {
                         if(userEmail.equals(value.get("email"))){
                             userName = value.get("name");
                             userGrade = Integer.parseInt(value.get("grade"));
-                            adapter.setUserName(userName,userGrade);
+                            adapter.setUserName(userName,userGrade,userEmail);
                         }
                     }
                     if(userName == null){
                         userName = "";
-                        adapter.setUserName(userName,5);
+                        adapter.setUserName(userName,5,userEmail);
                     }
                 }
 
@@ -149,12 +158,9 @@ public class Frag1Feed extends Fragment {
                 }
             });
         }
-        else if(userName != null){
-            adapter.setUserName(userName,userGrade);
-        }
         else{
             userName = "";
-            adapter.setUserName(userName,5);
+            adapter.setUserName(userName,5,"");
         }
     }
 }

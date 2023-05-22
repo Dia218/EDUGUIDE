@@ -41,7 +41,7 @@ public class UserFirstButtonActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
         // 어댑터 초기화
-        feedList = new ArrayList<>(); // 적절한 FeedViewItem 리스트를 설정해야 합니다.
+        feedList = new ArrayList<>();
         adapter = new UserFeedViewAdapter(this, feedList);
         recyclerView.setAdapter(adapter);
 

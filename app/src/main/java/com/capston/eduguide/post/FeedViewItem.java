@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.guideTool.GuideFragment;
 
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class FeedViewItem {
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        GuideFragment guide;
+        GuideFragment guide = new GuideFragment();
         String feedId;
         public Integer adapterId;
 
@@ -103,7 +104,8 @@ public class FeedViewItem {
         public BannerPagerAdapter(FragmentManager fm,String feedId) {
             super(fm);
             this.feedId = feedId;
-            getItem(0);
+            if(!MainActivity.getCurrentMenu().equals("posting"))
+                getItem(0);
         }
 
         //뷰페이저가 노출될 때 호출하는 함수로, 노출될 때 한번만 호출된다. 호출될때 feedId가 존재하면
@@ -112,6 +114,9 @@ public class FeedViewItem {
         public Fragment getItem(int position) {
             if(!(feedId.equals(""))){
                 guide = new GuideFragment(feedId);
+            }
+            else if(feedId.equals("feed")){
+
             }
             else
                 guide = new GuideFragment();

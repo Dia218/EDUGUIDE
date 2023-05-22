@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,8 @@ import com.capston.eduguide.login.User;
 import com.capston.eduguide.post.FeedViewItem;
 import com.capston.eduguide.user.SettingsActivity;
 import com.capston.eduguide.user.UserFeedViewAdapter;
+import com.capston.eduguide.user.UserFirstButtonActivity;
+import com.capston.eduguide.user.UserSecondButtonActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,10 +40,17 @@ public class Frag5User extends Fragment {
     ArrayList<FeedViewItem> items;
     UserFeedViewAdapter adapter;
 
+    private String userEmail;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag5_user, container, false);
+
+        // userEmail 값을 Bundle에서 받아오기
+        if (getArguments() != null) {
+            userEmail = getArguments().getString("userEmail");
+        }
 
         ImageButton settingsButton = view.findViewById(R.id.settings_icon);
 
@@ -49,6 +59,22 @@ public class Frag5User extends Fragment {
                 Intent intent = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(intent);
             }
+        });
+
+        // UserFirstButtonActivity로 userEmail 전달하기
+        Button userFirstButton = view.findViewById(R.id.first_button);
+        userFirstButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), UserFirstButtonActivity.class);
+            intent.putExtra("userEmail", userEmail);
+            startActivity(intent);
+        });
+
+        // UserFirstSecondActivity로 userEmail 전달하기
+        Button userSecondButton = view.findViewById(R.id.second_button);
+        userSecondButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), UserSecondButtonActivity.class);
+            intent.putExtra("userEmail", userEmail);
+            startActivity(intent);
         });
 
         // 저장된 닉네임과 자기소개 가져와서 TextView에 반영하기
