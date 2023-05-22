@@ -11,7 +11,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="#F6F5F5"
+        android:background="@color/background_color"
         android:imeOptions="actionSearch"
         android:queryHint="검색할 태그를 입력해주세요" />
 
