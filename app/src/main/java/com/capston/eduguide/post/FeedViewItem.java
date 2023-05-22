@@ -11,7 +11,6 @@ import com.capston.eduguide.guideTool.GuideFragment;
 import java.util.ArrayList;
 
 public class FeedViewItem {
-    //private Drawable iconDrawable ;
     private String feedId;
     private Drawable userIcon;
     private String titleStr;
@@ -24,7 +23,6 @@ public class FeedViewItem {
     private BannerPagerAdapter viewPagerAdapter;
 
 
-    //public void setIcon(Drawable icon) { iconDrawable = icon;}
     public void setFeedId(String id) {
         feedId = id;
     }
@@ -61,8 +59,6 @@ public class FeedViewItem {
         this.viewPagerAdapter = bpa;
     }
 
-
-    //public Drawable getIcon() { return this.iconDrawable ;}
     public String getFeedId() {
         return this.feedId;
     }
@@ -98,6 +94,7 @@ public class FeedViewItem {
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
         GuideFragment guide = new GuideFragment();
+        public Integer adapterId;
 
         public BannerPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -111,6 +108,7 @@ public class FeedViewItem {
         }
 
         public void getGuide(String postId) {
+            setAdapterId(Integer.parseInt(postId));
             guide.setGuide(postId);
         }
 
@@ -118,5 +116,14 @@ public class FeedViewItem {
         public int getCount() {
             return 1;
         }
+
+        public Integer getAdapterId(){
+            return this.adapterId;
+        }
+
+        public void setAdapterId(int position){
+            this.adapterId = position;
+        }
+
     }
 }

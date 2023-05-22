@@ -47,12 +47,14 @@ public class CommentSimple extends Fragment {
     private EditText comm;
     private Integer gradeInt;
     private ImageView userImage;
-    private ImageView feedUserImage;
-    private String fId;
     private String userName;
+    private Integer userGrade;
+    private ImageView feedUserImage;
     private String feedUserName;
+    private String fId;
     FeedViewItem item;
     CommentSimpleAdapter adapter;
+    FeedViewItem.BannerPagerAdapter bpa;
     ArrayList<CommentItem> comments = new ArrayList<>();
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference DatabaseReference = firebaseDatabase.getReference("comment");
@@ -67,6 +69,7 @@ public class CommentSimple extends Fragment {
                 // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
                 Bundle bundle = new Bundle();
                 bundle.putString("userName",userName);
+                bundle.putInt("userGrade",userGrade);
                 Frag1Feed feed = new Frag1Feed();
                 feed.setArguments(bundle);
                 ((MainActivity) requireActivity()).replaceFragment(feed);
@@ -88,11 +91,7 @@ public class CommentSimple extends Fragment {
         userImage = view.findViewById(R.id.userImage);
         Button delete = (Button)view.findViewById(R.id.deleteButton);
         Button input = (Button) view.findViewById(R.id.commentInput);
-        item = new FeedViewItem();
-
-        vp = (ViewPager) view.findViewById(R.id.vp);
-        vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
-        vp.setCurrentItem(0);
+        //item = new FeedViewItem();
 
         Bundle bundle = getArguments();
         if (getArguments() != null)
@@ -105,13 +104,20 @@ public class CommentSimple extends Fragment {
             main.setText(mainStr);
             tag.setText(tagStr);
             username.setText(userName);
-            gradeInt =  bundle.getInt("user_grade");
+            gradeInt =  bundle.getInt("feedUser_grade");
             feedUserImage.setImageResource(grade(gradeInt));
             Integer pos = bundle.getInt("position");
             fId = bundle.getString("feedId");
+            userGrade = bundle.getInt("userGrade");
             //사용자의 뱃지 이미지. 일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
-            userImage.setImageResource(grade(gradeInt));
+            userImage.setImageResource(grade(userGrade));
         }
+
+        vp = (ViewPager) view.findViewById(R.id.vp);
+        bpa = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager());
+        bpa.getGuide(fId);
+        vp.setAdapter(bpa);
+        vp.setCurrentItem(0);
 
         ValueEventListener mListener = new ValueEventListener() {
             @Override
@@ -171,6 +177,8 @@ public class CommentSimple extends Fragment {
         }
         else{
             delete.setVisibility(View.GONE);
+            input.setVisibility(View.GONE);
+            comm.setClickable(false);
         }
 
         input.setOnClickListener(new View.OnClickListener() {                      //댓글 입력시 이벤트
@@ -216,22 +224,5 @@ public class CommentSimple extends Fragment {
             return R.drawable.tree;
         else
             return R.drawable.grade1;
-    }
-
-    private class BannerPagerAdapter extends FragmentPagerAdapter {
-
-        public BannerPagerAdapter(FragmentManager fm){
-            super(fm);
-        }
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return GuideFragment.newInstance(position);
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
     }
 }

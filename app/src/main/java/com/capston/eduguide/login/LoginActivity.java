@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        intent.putExtra("userId", email);
+                                        intent.putExtra("userEmail", email);
                                         //startActivity(intent);
                                         setResult(RESULT_OK, intent);
                                         finish();
@@ -178,7 +178,7 @@ public class LoginActivity extends AppCompatActivity {
             newUser.saveToFirebase();
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("userId", email);
+            intent.putExtra("userEmail", email);
             setResult(RESULT_OK, intent);
             finish();
         }

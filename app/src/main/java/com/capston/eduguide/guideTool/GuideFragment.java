@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.google.firebase.database.ChildEventListener;
@@ -46,6 +47,8 @@ public class GuideFragment extends Fragment {
     static int guideMaxNum = 18;
     static int guideMinNum = 9;
 
+    public boolean isStart = false;
+
     Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
     Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
     Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
@@ -61,6 +64,14 @@ public class GuideFragment extends Fragment {
         args.putInt("param1", param1);
         fg.setArguments(args);
         return fg; }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isStart = true;
+        Log.i("guide onStart", "guide Start!!!");
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -269,7 +280,7 @@ public class GuideFragment extends Fragment {
             //가이드박스 설명글 가져오기
             int indexKey = guideBoxViews.indexOf(guideBox);
             String boxInfo;
-            if(boxInfos.get(indexKey).equals("설명")) //미입력 상태인 경우
+            if(boxInfos.get(indexKey)==null) //미입력 상태인 경우
                 boxInfo = "내용없음";
             else
                 boxInfo = boxInfos.get(indexKey);
@@ -308,7 +319,7 @@ public class GuideFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // 데이터가 존재할 경우 처리
-                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBox");
+                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBoxList");
                     int numGuideBoxes = (int) guideSnapshot.getChildrenCount();
 
                     //가이드 박스 개수 맞추기
@@ -327,7 +338,7 @@ public class GuideFragment extends Fragment {
                     int index = 0;
                     while (guideboxIt.hasNext()) {
                         Button guideBox = guideboxIt.next();
-                        guideBox.setText(guideSnapshot.child(String.valueOf(index)).child("boxWord").getValue(String.class)); //박스에 키워드 표시
+                        guideBox.setText(guideSnapshot.child(String.valueOf(index)).child("keyword").getValue(String.class)); //박스에 키워드 표시
                         boxInfos.put(index, guideSnapshot.child(String.valueOf(index)).child("boxInfo").getValue(String.class)); //해시맵에 설명글 저장
                         index++;
                     }

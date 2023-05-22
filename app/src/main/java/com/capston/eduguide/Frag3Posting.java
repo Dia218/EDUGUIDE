@@ -31,6 +31,7 @@ public class Frag3Posting extends Fragment {
     private String prepId="null";
     private String feedId;
     private String userName;
+    private Integer userGrade;
     private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -80,6 +81,7 @@ public class Frag3Posting extends Fragment {
                     if(bundle.getString("userEmail")!=null) {
                         if (bundle.getString("userEmail").equals((String) user.get("email"))) {
                             userName = (String)user.get("name");
+                            userGrade = (Integer)user.get("grade");
                         }
                     }
                 }
@@ -110,7 +112,7 @@ public class Frag3Posting extends Fragment {
                 item.setTag(pTag);
                 if(userName!=null)
                     item.setUserName(userName);
-                item.setGrade(0);
+                item.setGrade(userGrade);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
                 String fId = fId(prepId);
@@ -119,10 +121,18 @@ public class Frag3Posting extends Fragment {
                 databaseReference.child("post").child(fId).setValue(item);
 
                 GuideFragment guideAdapter = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                Log.d("확인",fId);
                 guideAdapter.regGuideContent(fId);
 
                 MainActivity activity = (MainActivity) getActivity();
-                if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
+                if (activity != null) {
+                    //activity.replaceFragment(new Frag1Feed());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userName",userName);
+                    Frag1Feed feed = new Frag1Feed();
+                    feed.setArguments(bundle);
+                    activity.replaceFragment(feed);
+                } // 등록 후 메인 피드로 전환
             }
         });
 

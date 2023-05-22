@@ -37,7 +37,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
 
     private ValueEventListener mListener;
     private String userName;
-    private Integer check = 0;
+    private Integer userGrade;
 
     // ListViewAdapter의 생성자
     public FeedViewAdapter(FragmentManager fm, Context context){
@@ -56,8 +56,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         public Button bookmark;
         public TextView bookmark_count;
         public ViewPager vp;
-        public FeedViewItem.BannerPagerAdapter bpa;
-        public Integer userGrade;
+        public FeedViewItem.BannerPagerAdapter bpa; //= new FeedViewItem.BannerPagerAdapter(getFm());
+        //public Integer userGrade;
 
 
         ViewHolder(View itemView){
@@ -87,7 +87,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         DatabaseReference databaseReference = database.getReference();
                         databaseReference.child("post").child(item.getFeedId()).child("like_count").setValue(count);
                         databaseReference.child("like").child(userName).child(item.getFeedId()).child("postId").setValue(pos);
-                        Log.d("포지션 테스트",item.getFeedId());
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
@@ -152,9 +151,10 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         bundle.putString("main_text",textStr);
                         bundle.putString("tag_text",tagStr);
                         bundle.putString("feedUser_name",usernameStr);
-                        bundle.putInt("user_grade",grade);
+                        bundle.putInt("feedUser_grade",grade);
                         bundle.putString("userName",userName);
                         bundle.putString("feedId",feedId);
+                        bundle.putInt("userGrade",userGrade);
 
                         CommentSimple comment = new CommentSimple();
                         comment.setArguments(bundle);
@@ -225,7 +225,16 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
 
                     }
                 });
+                bpa = new FeedViewItem.BannerPagerAdapter(getFm());
+                bpa= item.getViewPagerAdapter();
+                bpa.guide.setGuide(item.getFeedId());
+
+                Log.d("user~~",String.valueOf(userGrade));
             }
+        }
+        public void setVp(int position,FeedViewItem.BannerPagerAdapter bpa){
+            vp.setId(position);
+            vp.setAdapter(bpa);
         }
     }
 
@@ -247,11 +256,18 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
 
         FeedViewItem item = feedViewItemList.get(position);
         holder.setItem(item);
-        holder.bpa = item.getViewPagerAdapter();
+        //holder.bpa = item.getViewPagerAdapter();
+        //holder.bpa.guide.setGuide(item.getFeedId());
 
-        holder.vp.setId(position+1);
-        holder.vp.setOffscreenPageLimit(1);
-        holder.vp.setAdapter(holder.bpa);
+        /*if(!holder.bpa.guide.isStart){
+            holder.bpa.guide.setGuide(item.getFeedId());
+        }*/
+
+        //holder.vp.setId(position+1);
+        //holder.vp.setOffscreenPageLimit(1);
+        //holder.vp.setAdapter(holder.bpa);
+        holder.setVp(position+1,holder.bpa);
+
     }
 
     @Override
@@ -273,7 +289,10 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         feedViewItemList = items;
     }
 
-    public void setUserName(String userName) { this.userName = userName; }
+    public void setUserName(String userName,Integer userGrade) {
+        this.userName = userName;
+        this.userGrade = userGrade;
+    }
 
     //public FeedViewItem getItem(int position){ return feedViewItemList.get(position); }
     //public void setItem(int position, FeedViewItem item){ feedViewItemList.set(position, item);}
