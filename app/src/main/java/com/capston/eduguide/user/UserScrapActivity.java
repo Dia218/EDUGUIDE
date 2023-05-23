@@ -1,7 +1,9 @@
 package com.capston.eduguide.user;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,8 @@ public class UserScrapActivity extends AppCompatActivity {
     UserScrapAdapter scrapAdapter;
     private RecyclerView scrapRecyclerView;
     private String userEmail; // userEmail 추가
+    String bookmarkKey;
+    //ArrayList<String> bookmarkList; //bookmarkList 추가
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class UserScrapActivity extends AppCompatActivity {
 
         // userEmail 값 받기
         userEmail = getIntent().getStringExtra("userEmail");
+        bookmarkKey = userEmail.substring(0,userEmail.lastIndexOf('.'));
 
         // 스크랩 관련 뷰 초기화
         scrapRecyclerView = findViewById(R.id.my_scraps);
@@ -40,17 +45,37 @@ public class UserScrapActivity extends AppCompatActivity {
 
         // Firebase에서 스크랩 데이터 가져오기 및 설정
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference("bookmark");
+        DatabaseReference databaseReference = database.getReference();
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("post").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 items.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    FeedViewItem item = snapshot.getValue(FeedViewItem.class);
-                    items.add(item);
-                }
-                scrapAdapter.notifyDataSetChanged();
+                databaseReference.child("bookmark").child(bookmarkKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<String> bookmarkList = new ArrayList<>();
+                        for (DataSnapshot bookmarkSnapshot : snapshot.getChildren()) {
+                            String feedId = bookmarkSnapshot.getKey();
+                            bookmarkList.add(feedId);
+                        }
+
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            FeedViewItem item = postSnapshot.getValue(FeedViewItem.class);
+                            Log.d("////////post", item.getFeedId());
+
+                            if (bookmarkList.contains(item.getFeedId())) {
+                                items.add(item);
+                            }
+                        }
+                        scrapAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // 에러 처리
+                    }
+                });
             }
 
             @Override
@@ -58,6 +83,7 @@ public class UserScrapActivity extends AppCompatActivity {
                 // 에러 처리
             }
         });
+
 
         scrapRecyclerView.setAdapter(scrapAdapter); // 어댑터 설정 추가
     }

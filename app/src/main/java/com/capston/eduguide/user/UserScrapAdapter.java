@@ -2,6 +2,7 @@ package com.capston.eduguide.user;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.ViewHolder> {
 
     private static ArrayList<FeedViewItem> items;
     private final Context mContext;
-    private String userEmail;
+    private static String userEmail;
 
     public UserScrapAdapter(Context context, ArrayList<FeedViewItem> feedList, String userEmail) {
         mContext = context;
@@ -49,7 +51,7 @@ public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.View
         holder.mFeedTitle.setText(currentFeed.getTitle());
 
         // userEmail을 사용하여 사용자 검색 및 게시물 필터링
-        String userEmail = currentFeed.getUserEmail();
+        /*String userEmail = currentFeed.getUserName();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
         userRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -72,24 +74,10 @@ public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.View
             public void onCancelled(@NonNull DatabaseError error) {
                 // 처리 중단 또는 에러 처리
             }
-        });
+        });*/
 
-        String lastWord = userEmail.substring(userEmail.lastIndexOf('.') + 1);
-        String bookmarkKey = "Bookmark_" + lastWord;
-        DatabaseReference bookmarkRef = FirebaseDatabase.getInstance().getReference("Bookmark");
-        bookmarkRef.child(bookmarkKey).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChild(currentFeed.getFeedId())) {
-                    holder.mFeedTitle.setText(currentFeed.getTitle());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // 처리 중단 또는 에러 처리
-            }
-        });
+        //String lastWord = userEmail.substring(userEmail.lastIndexOf('.') + 1);
+        //String bookmarkKey = "Bookmark_" + lastWord;
     }
 
 
@@ -101,6 +89,7 @@ public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mFeedTitle;
+        public ArrayList<FeedViewItem> List = new ArrayList<>();
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -131,6 +120,37 @@ public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.View
                     activity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.main_frame, comment)
                             .commit();
+                }
+            });
+
+
+        }
+
+        public void setItem(FeedViewItem item){
+            String bookmarkKey = userEmail.substring(0,userEmail.lastIndexOf('.'));
+            DatabaseReference bookmarkRef = FirebaseDatabase.getInstance().getReference("Bookmark");
+            bookmarkRef.child(bookmarkKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    //if (snapshot.exists() && snapshot.hasChild(currentFeed.getFeedId())) {
+                    //    Log.d("////////",currentFeed.getFeedId());
+                    //    holder.mFeedTitle.setText(currentFeed.getTitle());
+                    //}
+
+                    for (DataSnapshot Snapshot : snapshot.getChildren()){
+                        String feedId = snapshot.getKey();
+                        Log.d("//////////",item.getFeedId());
+                        Log.d("//////////",feedId);
+                        if(feedId.equals(item.getFeedId())){
+                            Log.d("//////////",item.getFeedId());
+                            mFeedTitle.setText(item.getTitle());
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // 처리 중단 또는 에러 처리
                 }
             });
         }

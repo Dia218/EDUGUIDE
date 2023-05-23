@@ -26,13 +26,14 @@ import java.util.ArrayList;
 public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapter.ViewHolder> {
 
     private static ArrayList<FeedViewItem> items;
-    private Context mContext;
-    private String userEmail; // userEmail 추가
+    private final Context mContext;
+    private static String userEmail; // userEmail 추가
 
     // 생성자
-    public UserFeedViewAdapter(Context context, ArrayList<FeedViewItem> feedList) {
+    public UserFeedViewAdapter(Context context, ArrayList<FeedViewItem> feedList, String userEmail) {
         mContext = context;
         items = feedList;
+        this.userEmail = userEmail;
     }
 
     // 뷰 홀더 생성
@@ -63,6 +64,9 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
                             if (userName.equals(currentFeed.getUserName())) {
                                 // 사용자 이름과 게시물의 작성자 이름이 일치하면 아이템 추가
                                 holder.mFeedTitle.setText(currentFeed.getTitle() + " by " + userName);
+                                items.add(currentFeed);
+                                notifyDataSetChanged();
+                                break; // 추가된 아이템이 있으면 반복문 종료
                             }
                         }
                     }
@@ -75,6 +79,7 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
             }
         });
     }
+
 
     // 뷰 홀더 클래스
     public static class ViewHolder extends RecyclerView.ViewHolder {

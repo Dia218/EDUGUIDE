@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -69,22 +70,48 @@ public class Frag5User extends Fragment {
         updateProfileInfo();
 
         RecyclerView rcView = view.findViewById(R.id.my_posts);
+        items = new ArrayList<>();
+        adapter = new UserFeedViewAdapter(getContext(), items, userEmail);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         rcView.setLayoutManager(gridLayoutManager);
-
-        items = new ArrayList<>();
-        adapter = new UserFeedViewAdapter(getContext(), items);
         rcView.setAdapter(adapter);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference("post");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        Query query = databaseReference.orderByChild("email").equalTo(userEmail);
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String userId = "";
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            userId = user.getId();
+                        }
+                    }
+                    loadUserPosts(userId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // 처리 중단 또는 에러 처리
+            }
+        });
+
+        return view;
+    }
+
+    private void loadUserPosts(String userId) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("post");
+
+        databaseReference.orderByChild("userName").equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 items.clear();
-                for (DataSnapshot Snapshot : snapshot.getChildren()) {
-                    FeedViewItem item = Snapshot.getValue(FeedViewItem.class);
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    FeedViewItem item = dataSnapshot.getValue(FeedViewItem.class);
                     items.add(item);
                 }
                 adapter.notifyDataSetChanged();
@@ -96,11 +123,6 @@ public class Frag5User extends Fragment {
             }
         });
 
-
-        adapter = new UserFeedViewAdapter(getContext(), items);
-        rcView.setAdapter(adapter);
-
-        return view;
     }
 
     private void updateProfileInfo() {
@@ -135,4 +157,3 @@ public class Frag5User extends Fragment {
         }
     }
 }
-
