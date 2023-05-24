@@ -65,6 +65,7 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
                     HashMap<String, String> user = (HashMap<String, String>)dataSnapshot.getValue();
                     if (user != null) {
                         userName = user.get("name");
+                        userGrade=Integer.parseInt(user.get("grade"));
                         currentFeed.setUserName(userName); // FeedViewItem의 userName 설정
                         currentFeed.setGrade(Integer.parseInt(user.get("grade"))); // FeedViewItem의 grade 설정
                     }
@@ -77,7 +78,7 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
             }
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 feedId = currentFeed.getFeedId(); // feedId 설정
@@ -96,7 +97,7 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
                         .addToBackStack(null)
                         .commit();
             }
-        });
+        });*/
     }
 
 
