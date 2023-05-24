@@ -22,18 +22,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapter.ViewHolder> {
 
     private static ArrayList<FeedViewItem> items;
     private final Context mContext;
+    private static String userName;
+    private static Integer userGrade;
+    private static String feedId;
     private static String userEmail; // userEmail 추가
 
     // 생성자
-    public UserFeedViewAdapter(Context context, ArrayList<FeedViewItem> feedList, String userEmail) {
+    public UserFeedViewAdapter(Context context, ArrayList<FeedViewItem> feedList, String userEmail, Integer userGrade) {
         mContext = context;
         items = feedList;
         this.userEmail = userEmail;
+        this.userGrade = userGrade;
     }
 
     // 뷰 홀더 생성
@@ -55,27 +60,41 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
         userRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        User user = userSnapshot.getValue(User.class);
-                        if (user != null) {
-                            String userName = user.getName();
-                            if (userName.equals(currentFeed.getUserName())) {
-                                // 사용자 이름과 게시물의 작성자 이름이 일치하면 아이템 추가
-                                holder.mFeedTitle.setText(currentFeed.getTitle() + " by " + userName);
-                                items.add(currentFeed);
-                                notifyDataSetChanged();
-                                break; // 추가된 아이템이 있으면 반복문 종료
-                            }
-                        }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    HashMap<String, String> user = (HashMap<String, String>)dataSnapshot.getValue();
+                    if (user != null) {
+                        userName = user.get("name");
+                        currentFeed.setUserName(userName); // FeedViewItem의 userName 설정
+                        currentFeed.setGrade(Integer.parseInt(user.get("grade"))); // FeedViewItem의 grade 설정
                     }
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // 처리 중단 또는 에러 처리
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 에러 처리
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                feedId = currentFeed.getFeedId(); // feedId 설정
+
+                Bundle bundle = new Bundle();
+                bundle.putString("feedId", feedId);
+                bundle.putInt("userGrade", userGrade);
+                bundle.putString("userEmail", userEmail);
+
+                CommentSimple commentSimple = new CommentSimple();
+                commentSimple.setArguments(bundle);
+
+                AppCompatActivity activity = (AppCompatActivity) mContext;
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.commentMain, commentSimple)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
@@ -96,20 +115,26 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
                         FeedViewItem item = items.get(pos);
-                        String titleStr = item.getTitle() ;
-                        String textStr = item.getText() ;
+                        String titleStr = item.getTitle();
+                        String textStr = item.getText();
                         String tagStr = item.getTag();
-                        String usernameStr = item.getUserName(); // 이 부분 수정해야 할 것임,
-                        Integer grade = 0;
+                        String usernameStr = item.getUserName();
+                        Integer grade = item.getGrade();
+                        String feedId = item.getFeedId();
 
                         // TODO : use item data.
                         Bundle bundle = new Bundle();
-                        bundle.putInt("position",pos);
+                        //bundle.putInt("position",pos);
                         bundle.putString("title_text",titleStr);
                         bundle.putString("main_text",textStr);
                         bundle.putString("tag_text",tagStr);
-                        bundle.putString("user_name",usernameStr);
-                        bundle.putInt("user_grade",grade);
+                        bundle.putString("feedUser_name",usernameStr);
+                        bundle.putInt("feedUser_grade",grade);
+                        bundle.putString("userName",userName);
+                        bundle.putString("feedId",feedId);
+                        bundle.putInt("userGrade",userGrade);
+                        bundle.putString("userEmail",userEmail);
+
 
                         CommentSimple comment = new CommentSimple();
                         comment.setArguments(bundle);

@@ -15,6 +15,7 @@ public class User {
     private String nickname;
 
     private String intro;
+    private String grade;
 
     public User() {
         // 기본 생성자 추가
@@ -92,6 +93,14 @@ public class User {
 
     public void setIntro(String intro) {
         this.intro = intro;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 
     public void saveToFirebase() {

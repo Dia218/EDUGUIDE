@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Frag5User extends Fragment {
 
@@ -42,6 +44,11 @@ public class Frag5User extends Fragment {
     UserFeedViewAdapter adapter;
 
     private String userEmail;
+    private String feedId;
+    private Integer userGrade;
+    private Integer feedUserGrade;
+    private DatabaseReference userDatabaseReference;
+    private FirebaseDatabase database;
 
     @Nullable
     @Override
@@ -63,6 +70,7 @@ public class Frag5User extends Fragment {
             }
         });
 
+
         // 저장된 닉네임과 자기소개 가져와서 TextView에 반영하기
         profileNameTextView = view.findViewById(R.id.profile_name);
         selfIntroTextView = view.findViewById(R.id.self_intro);
@@ -71,11 +79,12 @@ public class Frag5User extends Fragment {
 
         RecyclerView rcView = view.findViewById(R.id.my_posts);
         items = new ArrayList<>();
-        adapter = new UserFeedViewAdapter(getContext(), items, userEmail);
+        adapter = new UserFeedViewAdapter(getContext(), items, userEmail, userGrade);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         rcView.setLayoutManager(gridLayoutManager);
         rcView.setAdapter(adapter);
 
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
         Query query = databaseReference.orderByChild("email").equalTo(userEmail);
 
@@ -123,6 +132,53 @@ public class Frag5User extends Fragment {
             }
         });
 
+    }
+
+
+    //피드 아이템의 유저 이름으로 등급 검색, 검색된 등급을 피드의 등급에 저장하고 그걸로 뱃지 표시
+    public void setUserIconForGrade(FeedViewItem item){
+
+        String feedUserName = item.getUserName();
+        feedUserGrade = 5;
+
+        userDatabaseReference = database.getReference("users");
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    HashMap<String, String> value = (HashMap<String, String>)dataSnapshot.getValue();
+                    if(String.valueOf(feedUserName).equals(value.get("name"))){
+                        feedUserGrade = Integer.parseInt(value.get("grade"));
+                        item.setGrade(feedUserGrade);
+                        break;
+                    }
+                    else if(String.valueOf(feedUserName).equals("null")){
+                        feedUserGrade = 5;
+                        item.setGrade(feedUserGrade);
+                        break;
+                    }
+                }
+                if(feedUserGrade==0){
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seed, null));
+                }
+                else if (feedUserGrade==1) {
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.sprout, null));
+                }
+                else if (feedUserGrade==2) {
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seedling, null));
+                }
+                else if (feedUserGrade==3) {
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.tree, null));
+                }
+                else if (feedUserGrade==5)
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void updateProfileInfo() {
