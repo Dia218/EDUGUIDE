@@ -1,5 +1,6 @@
 package com.capston.eduguide.post;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.capston.eduguide.Frag1Feed;
+import com.capston.eduguide.Frag4Notice;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.capston.eduguide.guideTool.GuideFragment;
@@ -33,9 +36,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import com.capston.eduguide.notice.NotificationHelper;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CommentSimple extends Fragment {
 
@@ -55,9 +57,12 @@ public class CommentSimple extends Fragment {
     private ImageView feedUserImage;
     private String feedUserName;
     private String fId;
+
     FeedViewItem item;
     CommentSimpleAdapter adapter;
     BannerPagerAdapter bpa;
+
+    private NotificationHelper notificationHelper; //알림
     ArrayList<CommentItem> comments = new ArrayList<>();
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference DatabaseReference = firebaseDatabase.getReference("");
@@ -78,6 +83,7 @@ public class CommentSimple extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        notificationHelper=new NotificationHelper(requireContext()); //알림
     }
 
     @Nullable
@@ -152,11 +158,8 @@ public class CommentSimple extends Fragment {
                 }
                 adapter.notifyDataSetChanged();
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         };
         DatabaseReference.child("comment").child(fId).addValueEventListener(mListener);      //댓글 불러오기
 
@@ -169,7 +172,6 @@ public class CommentSimple extends Fragment {
         adapter.setUserName(userName);
         adapter.setFeedId(fId);
         recyclerView.setAdapter(adapter);
-
 
         //유저 데이터가 존재하고 이름이 같을때만 삭제 버튼 활성화
         if(userName!=null){
@@ -193,16 +195,12 @@ public class CommentSimple extends Fragment {
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
-                            }
+                            public void onFailure(@NonNull Exception e) { Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show(); }
                         });
                     }
                 });
             }
-            else{
-                delete.setVisibility(View.GONE);
-            }
+            else{ delete.setVisibility(View.GONE); }
         }
         else{
             delete.setVisibility(View.GONE);
@@ -222,6 +220,7 @@ public class CommentSimple extends Fragment {
 
                 //파이어베이스에 데이터 입력
                 DatabaseReference.child("comment").child(fId).setValue(comments);
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -229,13 +228,14 @@ public class CommentSimple extends Fragment {
                     }
                 }, 200);
 
+                sendNotification(main.getText().toString(), userName); //알림
+
                 //recyclerView.scrollToPosition(comments.size()-1);
             }
         });
         return view;
     }
     private class BannerPagerAdapter extends FragmentPagerAdapter {
-
         GuideFragment guide;
         String feedId;
 
@@ -248,9 +248,7 @@ public class CommentSimple extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            if(!(feedId.equals(""))){
-                guide = new GuideFragment(feedId);
-            }
+            if(!(feedId.equals(""))){ guide = new GuideFragment(feedId); }
             return guide;
         }
 
@@ -278,5 +276,30 @@ public class CommentSimple extends Fragment {
             return R.drawable.grade1;
         else
             return R.drawable.grade1;
+    }
+
+    //알림 관련 메소드
+    private void sendNotification(String title,String userId) {
+        String channelId="comment_channel";
+        String channelName="Comment Notification";
+        String channelDescription="Receive notification for new comments";
+        int notificationId=1;
+
+        notificationHelper.createNotificationChannel(channelId,channelName,channelDescription);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(),channelId)
+                .setContentTitle(title)
+                .setContentText("게시글에 새로운 댓글이 달렸습니다")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = notificationHelper.getNotificationManager();
+        notificationManager.notify(notificationId,builder.build());
+
+        Frag4Notice noticeFragment = (Frag4Notice) getChildFragmentManager().findFragmentByTag("noticeFragment");
+        if (noticeFragment != null) {
+            String noticeMessage = "'" + title + "' 게시글에 새로운 댓글이 달렸습니다";
+            noticeFragment.updateNotice(noticeMessage);
+        }
     }
 }

@@ -88,7 +88,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         DatabaseReference databaseReference = database.getReference();
                         databaseReference.child("post").child(item.getFeedId()).child("like_count").setValue(count);
                         databaseReference.child("like").child(userName).child(item.getFeedId()).child("postId").setValue(pos);
-
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
