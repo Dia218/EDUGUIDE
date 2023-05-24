@@ -24,6 +24,7 @@ public class UserScrapActivity extends AppCompatActivity {
     UserScrapAdapter scrapAdapter;
     private RecyclerView scrapRecyclerView;
     private String userEmail; // userEmail 추가
+    private String feedId;
     String bookmarkKey;
     //ArrayList<String> bookmarkList; //bookmarkList 추가
 

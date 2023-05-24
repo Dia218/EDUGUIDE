@@ -29,16 +29,17 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
     private static ArrayList<FeedViewItem> items;
     private final Context mContext;
     private static String userName;
-    private static Integer userGrade;
+
     private static String feedId;
     private static String userEmail; // userEmail 추가
 
+    private static Integer userGrade;
+
     // 생성자
-    public UserFeedViewAdapter(Context context, ArrayList<FeedViewItem> feedList, String userEmail, Integer userGrade) {
+    public UserFeedViewAdapter(Context context, ArrayList<FeedViewItem> feedList, String userEmail) {
         mContext = context;
         items = feedList;
         this.userEmail = userEmail;
-        this.userGrade = userGrade;
     }
 
     // 뷰 홀더 생성
@@ -62,10 +63,10 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    HashMap<String, String> user = (HashMap<String, String>)dataSnapshot.getValue();
+                    HashMap<String, String> user = (HashMap<String, String>) userSnapshot.getValue();
                     if (user != null) {
                         userName = user.get("name");
-                        userGrade=Integer.parseInt(user.get("grade"));
+                        userGrade = Integer.parseInt(user.get("grade"));
                         currentFeed.setUserName(userName); // FeedViewItem의 userName 설정
                         currentFeed.setGrade(Integer.parseInt(user.get("grade"))); // FeedViewItem의 grade 설정
                     }
@@ -133,7 +134,7 @@ public class UserFeedViewAdapter extends RecyclerView.Adapter<UserFeedViewAdapte
                         bundle.putInt("feedUser_grade",grade);
                         bundle.putString("userName",userName);
                         bundle.putString("feedId",feedId);
-                        bundle.putInt("userGrade",userGrade);
+                        bundle.putInt("userGrade",grade);
                         bundle.putString("userEmail",userEmail);
 
 

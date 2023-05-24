@@ -79,7 +79,7 @@ public class Frag5User extends Fragment {
 
         RecyclerView rcView = view.findViewById(R.id.my_posts);
         items = new ArrayList<>();
-        adapter = new UserFeedViewAdapter(getContext(), items, userEmail, userGrade);
+        adapter = new UserFeedViewAdapter(getContext(), items, userEmail);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         rcView.setLayoutManager(gridLayoutManager);
         rcView.setAdapter(adapter);

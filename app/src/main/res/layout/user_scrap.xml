@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="My Guides"
+            android:text="SCRAP GUIDES"
             android:backgroundTint="#BDD7EE"
             android:textColor="#000000"
             android:textSize="15sp"

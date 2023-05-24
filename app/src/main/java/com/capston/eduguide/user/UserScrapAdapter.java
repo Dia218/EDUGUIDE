@@ -30,6 +30,8 @@ public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.View
     private static ArrayList<FeedViewItem> items;
     private final Context mContext;
     private static String userEmail;
+    private static String userName;
+    private static String feedId;
 
     public UserScrapAdapter(Context context, ArrayList<FeedViewItem> feedList, String userEmail) {
         mContext = context;
@@ -103,22 +105,27 @@ public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.View
                     String textStr = item.getText();
                     String tagStr = item.getTag();
                     String usernameStr = item.getUserName();
-                    Integer grade = 0;
+                    Integer grade = item.getGrade();
+                    String feedId = item.getFeedId();
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("position", pos);
-                    bundle.putString("title_text", titleStr);
-                    bundle.putString("main_text", textStr);
-                    bundle.putString("tag_text", tagStr);
-                    bundle.putString("user_name", usernameStr);
-                    bundle.putInt("user_grade", grade);
+                    bundle.putString("title_text",titleStr);
+                    bundle.putString("main_text",textStr);
+                    bundle.putString("tag_text",tagStr);
+                    bundle.putString("feedUser_name",usernameStr);
+                    bundle.putInt("feedUser_grade",grade);
+                    bundle.putString("userName",userName);
+                    bundle.putString("feedId",feedId);
+                    bundle.putInt("userGrade",grade);
+                    bundle.putString("userEmail",userEmail);
 
                     CommentSimple comment = new CommentSimple();
                     comment.setArguments(bundle);
 
                     AppCompatActivity activity = (AppCompatActivity) v.getContext();
                     activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_frame, comment)
+                            .replace(R.id.scraps_chart, comment)
                             .commit();
                 }
             });
