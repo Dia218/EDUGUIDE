@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/post_edittext_rounded_rectangle"
+            android:background="@drawable/border"
             android:hint="@string/title_please"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginHorizontal="10dp"
+            android:textColor="@color/text_color"
             android:text="@string/desc"
             android:textSize="20sp"
             android:textStyle="bold"/>
@@ -42,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginHorizontal="10dp"
-            android:background="@drawable/post_edittext_rounded_rectangle"
+            android:background="@drawable/guide_border"
             android:gravity="top"
             android:hint="@string/content_please"
             android:importantForAutofill="no"
@@ -54,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:text="@string/tag"
+            android:textColor="@color/text_color"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
@@ -62,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="10dp"
-            android:background="@drawable/post_edittext_rounded_rectangle"
+            android:background="@drawable/border"
             android:hint="@string/tag_please"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
@@ -73,8 +75,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="등록"
-            android:background="@color/button_color"
+            android:text="SUBMIT"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color" />
 
     </LinearLayout>

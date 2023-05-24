@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
-                    android:background="@color/button_color"
+                    android:background="@drawable/round_button"
                     android:textColor="@color/text_color"
                     android:text="Back"/>
 
@@ -109,17 +109,19 @@
             />
 
         <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/comment_color"
-            android:hint="댓글을 입력하세요"/>
+            android:layout_width="280dp"
+            android:layout_height="45dp"
+            android:background="@drawable/border"
+            android:hint="댓글을 입력하세요"
+            android:textColor="@color/comment_color" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/button_color"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
-            android:text="입력"/>
+            android:text="SUBMIT"/>
 
     </LinearLayout>
 

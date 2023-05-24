@@ -23,7 +23,7 @@
             android:layout_row="0"
             android:layout_rowWeight="1"
             android:layout_column="0"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="1단계" />
@@ -31,12 +31,12 @@
         <Button
             android:id="@+id/line1"
             android:layout_width="50dp"
-            android:layout_height="2dp"
+            android:layout_height="5dp"
             android:layout_row="0"
-            android:layout_rowWeight="1"
+            android:layout_rowWeight="2"
             android:layout_column="1"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false" />
 
         <Button
@@ -44,7 +44,7 @@
             android:layout_row="0"
             android:layout_rowWeight="1"
             android:layout_column="2"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="2단계" />
@@ -57,7 +57,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false"
             android:visibility="visible" />
 
@@ -66,7 +66,7 @@
             android:layout_row="0"
             android:layout_rowWeight="1"
             android:layout_column="4"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="3단계" />
@@ -89,7 +89,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false"
             android:rotation="90" />
 
@@ -99,7 +99,7 @@
             android:layout_row="2"
             android:layout_rowWeight="1"
             android:layout_column="0"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="6단계" />
@@ -112,7 +112,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false" />
 
         <Button
@@ -120,7 +120,7 @@
             android:layout_row="2"
             android:layout_rowWeight="1"
             android:layout_column="2"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="5단계" />
@@ -133,7 +133,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false" />
 
         <Button
@@ -141,7 +141,7 @@
             android:layout_row="2"
             android:layout_rowWeight="1"
             android:layout_column="4"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="4단계" />
@@ -154,7 +154,7 @@
             android:layout_rowWeight="1"
             android:layout_column="0"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false"
             android:rotation="90" />
 
@@ -174,7 +174,7 @@
             android:layout_row="4"
             android:layout_rowWeight="1"
             android:layout_column="0"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="7단계" />
@@ -187,7 +187,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false" />
 
         <Button
@@ -195,7 +195,7 @@
             android:layout_row="4"
             android:layout_rowWeight="1"
             android:layout_column="2"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="8단계" />
@@ -208,7 +208,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false" />
 
         <Button
@@ -216,7 +216,7 @@
             android:layout_row="4"
             android:layout_rowWeight="1"
             android:layout_column="4"
-            android:background="@color/background_color"
+            android:background="@drawable/round_button"
             android:textColor="@color/text_color"
             android:inputType="text"
             android:text="9단계" />
@@ -240,7 +240,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false"
             android:rotation="90"
             android:visibility="invisible" />
@@ -253,7 +253,7 @@
             android:layout_rowWeight="1"
             android:layout_column="0"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="12단계"
             android:visibility="invisible" />
@@ -270,7 +270,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/line11"
@@ -280,7 +280,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false"
             android:visibility="invisible" />
 
@@ -290,7 +290,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="11단계"
             android:visibility="gone" />
@@ -307,7 +307,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/line10"
@@ -317,7 +317,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false"
             android:visibility="invisible" />
 
@@ -327,7 +327,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="10단계"
             android:visibility="gone" />
@@ -355,7 +355,7 @@
             android:layout_rowWeight="1"
             android:layout_column="0"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/background_color"
+            android:background="@color/button_color"
             android:clickable="false"
             android:rotation="90"
             android:visibility="invisible" />
@@ -383,7 +383,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/guideBox13"
@@ -391,7 +391,7 @@
             android:layout_rowWeight="1"
             android:layout_column="0"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="13단계"
             android:visibility="gone" />
@@ -403,7 +403,7 @@
             android:layout_row="8"
             android:layout_column="1"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@color/button_color"
             android:clickable="false"
             android:visibility="invisible" />
 
@@ -419,7 +419,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/guideBox14"
@@ -427,7 +427,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="14단계"
             android:visibility="gone" />
@@ -440,7 +440,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@color/button_color"
             android:clickable="false"
             android:visibility="invisible" />
 
@@ -456,7 +456,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/guideBox15"
@@ -464,7 +464,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="15단계"
             android:visibility="gone" />
@@ -489,7 +489,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@color/button_color"
             android:clickable="false"
             android:rotation="90"
             android:visibility="invisible" />
@@ -506,7 +506,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/guideBox16"
@@ -514,7 +514,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="16단계"
             android:visibility="gone" />
@@ -527,7 +527,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@color/button_color"
             android:clickable="false"
             android:visibility="invisible" />
 
@@ -543,7 +543,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/guideBox17"
@@ -551,7 +551,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="17단계"
             android:visibility="gone" />
@@ -564,7 +564,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@color/button_color"
             android:clickable="false"
             android:visibility="invisible" />
 
@@ -580,7 +580,7 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:srcCompat="@drawable/guide_ic_plus_circle"
-            app:tint="@color/guideColor" />
+            app:tint="@color/button_color" />
 
         <Button
             android:id="@+id/guideBox18"
@@ -588,7 +588,7 @@
             android:layout_rowWeight="1"
             android:layout_column="0"
             android:layout_gravity="center|center_vertical"
-            android:background="@color/guideColor"
+            android:background="@drawable/round_button"
             android:inputType="text"
             android:text="18단계"
             android:visibility="gone" />

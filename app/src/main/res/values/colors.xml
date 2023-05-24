@@ -17,6 +17,6 @@
 
     <color name="background_color">#EDF1D6</color>
     <color name="text_color">#40513B</color>
-    <color name="button_color">#9DC08B</color>
+    <color name="button_color">#AFCAA1</color>
     <color name="comment_color">#609966</color>
 </resources>

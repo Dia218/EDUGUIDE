@@ -11,7 +11,7 @@
         android:layout_width="102dp"
         android:layout_height="67dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/logo_description"
         android:src="@drawable/user_logo" />
@@ -32,13 +32,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
+        android:layout_marginTop="20dp"
         android:hint="@string/nickname_edit">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/profile_name_edittext"
             android:layout_marginStart="30dp"
             android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/border"
             android:inputType="text"
             android:maxLines="1"
             android:textColor="@color/black"
@@ -58,7 +61,9 @@
             android:id="@+id/self_intro_edittext"
             android:layout_marginStart="30dp"
             android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/border"
             android:textColor="@color/black"
             android:textColorHint="#616161"
             android:textSize="16sp"
@@ -72,8 +77,8 @@
         android:layout_marginStart="30dp"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/button_color"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/round_button"
         android:textColor="@color/text_color"
         android:text="@string/proedit_com"
         tools:ignore="VisualLintButtonSize" />
