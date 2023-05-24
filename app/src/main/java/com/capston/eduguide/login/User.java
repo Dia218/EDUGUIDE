@@ -11,15 +11,6 @@ public class User {
     private String name;
     private String age;
 
-    //사용자 페이지 프로필 추가
-    private String nickname;
-
-    private String intro;
-
-    public User() {
-        // 기본 생성자 추가
-    }
-
     public User(String id, String password, String email, String phone, String name, String age) {
         this.id = id;
         this.password = password;
@@ -77,22 +68,6 @@ public class User {
         this.age = age;
     }
 
-    //사용자 페이지 프로필 추가
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getIntro() {
-        return intro;
-    }
-
-    public void setIntro(String intro) {
-        this.intro = intro;
-    }
 
     public void saveToFirebase() {
         // Get the Firebase database reference
@@ -102,5 +77,4 @@ public class User {
         databaseRef.child("users").child(id).setValue(this);
     }
 }
-
 

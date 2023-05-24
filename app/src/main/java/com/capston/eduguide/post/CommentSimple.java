@@ -91,7 +91,7 @@ public class CommentSimple extends Fragment {
         comm = view.findViewById(R.id.commentDetail);
         feedUserImage = view.findViewById(R.id.feedUserImage);
         userImage = view.findViewById(R.id.userImage);
-        Button delete = (Button)view.findViewById(R.id.deleteButton);
+        Button delete = (Button)view.findViewById(R.id.back);
         Button input = (Button) view.findViewById(R.id.commentInput);
 
         //FeedViewAdapter에서 번들로 여러가지 값을 받아오고 저장.
@@ -243,7 +243,7 @@ public class CommentSimple extends Fragment {
             super(fm);
             this.feedId = feedId;
             //if(!MainActivity.getCurrentMenu().equals("posting"))
-                //getItem(0);
+            //getItem(0);
         }
         @NonNull
         @Override

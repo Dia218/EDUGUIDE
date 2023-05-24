@@ -29,14 +29,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:text="유저 아이디"
-                android:textSize="15sp"/>
+                android:textColor="@color/text_color"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/comment"
-                android:layout_width="match_parent"
+                android:layout_width="340dp"
                 android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:text="댓글 내용"/>
+                android:background="@drawable/border"
+                android:text="  댓글 내용"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>

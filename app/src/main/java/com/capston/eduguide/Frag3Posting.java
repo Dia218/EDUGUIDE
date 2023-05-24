@@ -160,4 +160,3 @@ public class Frag3Posting extends Fragment {
         }
     }
 }
-

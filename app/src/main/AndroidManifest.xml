@@ -9,13 +9,12 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:enableOnBackInvokedCallback="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/eduguide_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-
         android:theme="@style/Theme.EduGuide"
         tools:targetApi="31">
+
 
         <!-- 1번째 화면 - 로딩 화면 -->
         <activity android:name="com.capston.eduguide.LoadingActivity" android:exported="true">
@@ -41,9 +40,6 @@
         <activity android:name="com.capston.eduguide.user.ListinquiryActivity" />
         <activity android:name="com.capston.eduguide.user.WriteNoticeActivity" />
         <activity android:name="com.capston.eduguide.user.EditPasswordActivity" />
-        <activity android:name="com.capston.eduguide.user.UserNotice1Activity" />
-        <activity android:name="com.capston.eduguide.user.UserNotice2Activity" />
-        <activity android:name="com.capston.eduguide.user.UserNotice3Activity" />
     </application>
 
 </manifest>

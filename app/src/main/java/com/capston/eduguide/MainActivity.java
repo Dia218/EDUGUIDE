@@ -1,6 +1,7 @@
 package com.capston.eduguide;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,6 +10,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.capston.eduguide.login.LoginActivity;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Bundle bundle = new Bundle();
         //bundle.putString("userId",userId);
+
     }
 
 
@@ -97,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
         ft = fm.beginTransaction();
 
         Bundle bundle = new Bundle();
-        bundle.putString("userEmail",userEmail);
-        //bundle.putString("userId",userId); //mypage branch
+        bundle.putString("userId",userId);
 
         switch (n) {
             case 0:

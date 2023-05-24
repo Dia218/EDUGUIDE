@@ -19,6 +19,7 @@
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/comment_color"
             android:text="TextView" />
 
     </LinearLayout>
@@ -86,7 +87,7 @@
 
                 android:gravity="center_vertical"
                 android:text="Title text"
-                android:textColor="#000000"
+                android:textColor="@color/text_color"
                 android:textSize="22sp" />
 
             <TextView
@@ -96,7 +97,7 @@
 
                 android:gravity="center_vertical"
                 android:text="guide desc/ 가이드에 대한 설명 추가\n\n"
-                android:textColor="#000000"
+                android:textColor="@color/text_color"
                 android:textSize="18sp" />
 
             <TextView
@@ -105,7 +106,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="#tag1 #tag2"
-                android:textColor="#666666"
+                android:textColor="@color/comment_color"
                 android:textSize="16sp" />
 
     </LinearLayout>
