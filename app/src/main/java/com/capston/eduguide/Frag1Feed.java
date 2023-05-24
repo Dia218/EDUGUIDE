@@ -36,6 +36,9 @@ public class Frag1Feed extends Fragment {
     String userName;
     String userEmail;
     Integer userGrade;
+
+    Integer feedUserGrade;
+
     public static Frag1Feed newInstance(){
         return new Frag1Feed();
     }
@@ -86,6 +89,7 @@ public class Frag1Feed extends Fragment {
 
     //피드 아이템의 등급으로 유저의 뱃지 설정
     public void setUserIconForGrade(FeedViewItem item){
+
         if(item.getGrade()==0){
             item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seed, null));
         }
@@ -100,6 +104,48 @@ public class Frag1Feed extends Fragment {
         }
         else
             item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
+
+        String feedUserName = item.getUserName();
+        feedUserGrade = 5;
+
+        userDatabaseReference = database.getReference("users");
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    HashMap<String, String> value = (HashMap<String, String>)dataSnapshot.getValue();
+                    if(String.valueOf(feedUserName).equals(value.get("name"))){
+                        feedUserGrade = Integer.parseInt(value.get("grade"));
+                        item.setGrade(feedUserGrade);
+                        break;
+                    }
+                    else if(String.valueOf(feedUserName).equals("null")){
+                        feedUserGrade = 5;
+                        item.setGrade(feedUserGrade);
+                        break;
+                    }
+                }
+                if(feedUserGrade==0){
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seed, null));
+                }
+                else if (feedUserGrade==1) {
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.sprout, null));
+                }
+                else if (feedUserGrade==2) {
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seedling, null));
+                }
+                else if (feedUserGrade==3) {
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.tree, null));
+                }
+                else if (feedUserGrade==5)
+                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     //파이어베이스 post의 게시글 전체 불러오기. bpa를 오버라이딩한 생성자로 선언해서 선언시부터 데이터가 들어감.해당 bpa를 피드아이템의 bpa로 추가(set).

@@ -50,10 +50,10 @@ public class GuideFragment extends Fragment {
     public boolean isDestroyed = false;
     static String id;
 
-    Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
-    Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
-    Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
-    HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
+    private Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
+    private Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
+    private Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
+    private HashMap<Integer, String> boxInfos = new HashMap<>(guideMaxNum); // 가이드 박스 설명글
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); // 파이어베이스 DB
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
@@ -81,6 +81,8 @@ public class GuideFragment extends Fragment {
         if(isDestroyed){
             setFixmode(); //fix모드 메소드 호출
             isDestroyed = false;
+            isDestroyed = false;
+            setFixmode();
         }
     }
 
@@ -185,10 +187,12 @@ public class GuideFragment extends Fragment {
             });
         }
 
-        //게시글 작성 메뉴가 아닐 경우
+        //게시글 작성 메뉴가 아닐 경우 -> post일 경우 추가 버튼 나타나게 함
         if(!MainActivity.getCurrentMenu().equals("posting")) {
             setFixmode(); //fix모드 메소드 호출
-            //setGuide(postId); //가이드 데이터 가져오기 호출? 호출은 바깥에서 해야하나? 게시글 ID를 어떻게 받아올까?
+        }
+        if(MainActivity.getCurrentMenu().equals("posting")) {
+            guideAddButtons.get(0).setVisibility(View.VISIBLE);
         }
 
         return view;
@@ -254,10 +258,10 @@ public class GuideFragment extends Fragment {
         guideAddButtons.get(++indexAdd).setVisibility(View.VISIBLE);
     }
 
-    //가이드 고정(보여주기) 모드
+    //가이드 고정(보여주기) 모드 ->  버튼 숨김이 적용되지 않아 레이아웃 변경 후 post일때만 나타나게 변경.
     public void setFixmode() {
         //추가 버튼 나타나지 않게 함
-        guideAddButtons.get(0).setVisibility(View.GONE);
+        //guideAddButtons.get(0).setVisibility(View.GONE);
 
         //짧게 터치 이벤트 리스너 달기
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
@@ -292,6 +296,7 @@ public class GuideFragment extends Fragment {
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
+        Log.d("/////////////////", String.valueOf(guideBoxViews.isEmpty()));
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
 
@@ -307,10 +312,12 @@ public class GuideFragment extends Fragment {
             else
                 boxInfo = boxInfos.get(indexKey);
 
+            Log.d("",keyword+boxInfo+"////////////////////////////////");
             guideBoxItems.add(new GuideBoxItem(keyword, boxInfo)); //리스트에 가이드박스 넣기
         }
 
         GuideItem guideItem = new GuideItem(postId, guideBoxItems); // 가이드 객체 생성
+        Log.d("",String.valueOf(guideItem.getGuideBoxList()));
         guideDatabaseReference.child(postId).setValue(guideItem); //가이드 객체 DB에 넣기
 
         //위 코드에서 에러가 발생할 경우 해당 코드로 수정 :

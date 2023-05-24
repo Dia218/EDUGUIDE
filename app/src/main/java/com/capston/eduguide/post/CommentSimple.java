@@ -244,6 +244,7 @@ public class CommentSimple extends Fragment {
             this.feedId = feedId;
             //if(!MainActivity.getCurrentMenu().equals("posting"))
             //getItem(0);
+                //getItem(0);
         }
         @NonNull
         @Override
@@ -274,6 +275,8 @@ public class CommentSimple extends Fragment {
             return R.drawable.seedling;
         else if(gradeInt == 3)
             return R.drawable.tree;
+        else if(gradeInt == 5)
+            return R.drawable.grade1;
         else
             return R.drawable.grade1;
     }
