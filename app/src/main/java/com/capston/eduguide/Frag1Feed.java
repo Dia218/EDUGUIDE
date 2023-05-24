@@ -55,9 +55,7 @@ public class Frag1Feed extends Fragment {
                 userEmail = bundle.getString("userEmail");
         }
 
-        Log.d("유저 네임 테스트",String.valueOf(userName));
         Log.d("유저 이메일 테스트",String.valueOf(userEmail));
-        Log.d("유저 등급 테스트",String.valueOf(userGrade));
 
         // 리스트 뷰 참조 및 Adapter 달기
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerGuide);
