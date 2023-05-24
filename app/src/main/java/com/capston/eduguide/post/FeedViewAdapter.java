@@ -88,7 +88,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         DatabaseReference databaseReference = database.getReference();
                         databaseReference.child("post").child(item.getFeedId()).child("like_count").setValue(count);
                         databaseReference.child("like").child(userName).child(item.getFeedId()).child("postId").setValue(pos);
-
                     }
                     else{
                         int count = Integer.parseInt(like_count.getText().toString());
@@ -217,6 +216,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Log.d("///////////////",String.valueOf(userEmail));
                             if (userEmail.substring(0,userEmail.lastIndexOf(".")).equals(dataSnapshot.getKey())) {
                                 for (DataSnapshot keySnapshot : dataSnapshot.getChildren()) {
                                     if (item.getFeedId().equals(keySnapshot.getKey())) {
