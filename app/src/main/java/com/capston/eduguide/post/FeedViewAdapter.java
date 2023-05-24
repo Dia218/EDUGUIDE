@@ -35,8 +35,6 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
     private FragmentManager fm;
     private int position;
 
-    Frag4Notice frag4Notice = new Frag4Notice();
-
     // ListViewAdapter의 생성자
     public FeedViewAdapter(FragmentManager fm, Context context){
         this.context = context;
@@ -82,9 +80,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         like_count.setText(Integer.toString(++count));
                         int pos = getAdapterPosition();
                         FeedViewItem item = feedViewItemList.get(pos);
-                        String title = item.getTitle() ;
-                        String userid = item.getUserId();
-                        frag4Notice.showNotification(1,title,userid);
+
 
                     }
                     else{
@@ -105,9 +101,8 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                         bookmark_count.setText(Integer.toString(++count));
                         int pos = getAdapterPosition();
                         FeedViewItem item = feedViewItemList.get(pos);
-                        String title = item.getTitle() ;
-                        String userid = item.getUserId();
-                        frag4Notice.showNotification(2,title,userid);
+
+
                     }
                     else{
                         int count = Integer.parseInt(bookmark_count.getText().toString());

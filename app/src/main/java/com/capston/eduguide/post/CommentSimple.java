@@ -1,5 +1,6 @@
 package com.capston.eduguide.post;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -27,6 +29,7 @@ import com.capston.eduguide.Frag4Notice;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.capston.eduguide.guideTool.GuideTool;
+import com.capston.eduguide.notice.NotificationHelper;
 
 import java.util.ArrayList;
 
@@ -44,8 +47,9 @@ public class CommentSimple extends Fragment {
     private Integer gradeInt;
     private ImageView userImage;
     private ImageView feedUserImage;
+
+    private NotificationHelper notificationHelper;
     ArrayList<CommentItem> comments = new ArrayList<>();
-    Frag4Notice frag4Notice = new Frag4Notice();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +62,7 @@ public class CommentSimple extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        notificationHelper=new NotificationHelper(requireContext());
     }
 
     @Nullable
@@ -123,17 +128,14 @@ public class CommentSimple extends Fragment {
                 recyclerView.setAdapter(adapter);
 
 
-                // showNotification() 함수 호출
-                frag4Notice.showNotification(0,bundle.getString("title_text"),userId);
-
-
-
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         recyclerView.scrollToPosition(comments.size()-1);
                     }
                 }, 200);
+
+                sendNotification(main.getText().toString(),userId);
 
                 //recyclerView.scrollToPosition(comments.size()-1);
             }
@@ -174,6 +176,29 @@ public class CommentSimple extends Fragment {
         @Override
         public int getCount() {
             return 1;
+        }
+    }
+    private void sendNotification(String title,String userId){
+        String channelId="comment_channel";
+        String channelName="Comment Notification";
+        String channelDescription="Receive notification for new comments";
+        int notificationId=1;
+
+        notificationHelper.createNotificationChannel(channelId,channelName,channelDescription);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(),channelId)
+                .setContentTitle(title)
+                .setContentText("게시글에 새로운 댓글이 달렸습니다")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = notificationHelper.getNotificationManager();
+        notificationManager.notify(notificationId,builder.build());
+
+        Frag4Notice noticeFragment = (Frag4Notice) getChildFragmentManager().findFragmentByTag("noticeFragment");
+        if (noticeFragment != null) {
+            String noticeMessage = "'" + title + "' 게시글에 새로운 댓글이 달렸습니다";
+            noticeFragment.updateNotice(noticeMessage);
         }
     }
 }
