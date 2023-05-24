@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -98,8 +99,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if (mAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(getApplication(), MainActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent();
+            Log.d("유저 정보 테스트",mAuth.getCurrentUser().getEmail());
+            intent.putExtra("userEmail", mAuth.getCurrentUser().getEmail());
+            setResult(RESULT_OK, intent);
             finish();
         }
         // Configure Google Sign In

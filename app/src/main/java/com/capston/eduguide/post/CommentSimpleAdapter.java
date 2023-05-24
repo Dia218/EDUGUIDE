@@ -72,7 +72,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
             username = itemView.findViewById(R.id.commentUserName);
             commentText = itemView.findViewById(R.id.comment);
             userImage = itemView.findViewById(R.id.commentUserImage);
-            deleteComment = itemView.findViewById(R.id.back);
+            deleteComment = itemView.findViewById(R.id.deleteComment);
 
             //댓글 삭제 이벤트. 클릭한 아이템의 위치를 받아와 위치에 해당하는 댓글 아이템 받아옴.
             //받아온 댓글의 comment를 비교해서 일치하면 키값(댓글id)를 받고, 받은 키값으로 comment의 아이템 제거.

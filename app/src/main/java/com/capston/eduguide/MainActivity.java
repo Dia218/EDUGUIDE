@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         ft = fm.beginTransaction();
 
         Bundle bundle = new Bundle();
-        bundle.putString("userId",userId);
+        bundle.putString("userEmail",userEmail);
 
         switch (n) {
             case 0:
