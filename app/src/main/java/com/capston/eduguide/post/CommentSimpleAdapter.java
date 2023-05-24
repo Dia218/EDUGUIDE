@@ -37,6 +37,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
     private FragmentManager fm;
     private String userName;
     private String feedId;
+    private String cId;
 
     public interface OnItemClickEventListener { void onItemClick(int a_position);}
 
@@ -63,7 +64,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         public ImageView userImage;
         public ImageView deleteComment;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference DatabaseReference = database.getReference("comment");
+        DatabaseReference DatabaseReference = database.getReference("users");
 
         //클릭리스너는 뷰홀더에서 작성
         public ViewHolder(@NonNull View itemView, final OnItemClickEventListener a_itemClickListener) {
@@ -73,20 +74,41 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
             userImage = itemView.findViewById(R.id.commentUserImage);
             deleteComment = itemView.findViewById(R.id.deleteComment);
 
+            //댓글 삭제 이벤트. 클릭한 아이템의 위치를 받아와 위치에 해당하는 댓글 아이템 받아옴.
+            //받아온 댓글의 comment를 비교해서 일치하면 키값(댓글id)를 받고, 받은 키값으로 comment의 아이템 제거.
             deleteComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String pos = Integer.toString(getAdapterPosition());
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    database.getReference("comment").child(feedId).child(pos).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    CommentItem item= commentItemList.get(Integer.parseInt(pos));
+                    cId = "";
+                    database.getReference("comment").child(feedId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onSuccess(Void unused) {
-                            notifyItemRemoved(Integer.parseInt(pos));
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                HashMap<String, String> value = (HashMap<String, String>) dataSnapshot.getValue();
+                                if (value.get("comment").equals(item.getComment())) {
+                                    cId = (String) dataSnapshot.getKey();
+                                    database.getReference("comment").child(feedId).child(cId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            notifyItemRemoved(Integer.parseInt(cId));
+                                            //notifyDataSetChanged();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(v.getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
+
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(v.getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
                 }
@@ -95,17 +117,16 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         public void setItem(CommentItem item){
             username.setText(item.getUsername());
             commentText.setText(item.getComment());
-            String userName = item.getUsername();
-            final Integer[] userGrade = new Integer[1];
-            //유저 이름으로 파이어베이스에서 유저 등급 받아오기
-            /*ValueEventListener mListener = new ValueEventListener() {
+            String commUserName = item.getUsername();
+            //유저 이름으로 파이어베이스에서 유저 등급 받아오기. 받아온 등급으로 유저의 뱃지 표시
+            ValueEventListener mListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        HashMap<String, Object> value = (HashMap<String, Object>)snapshot.getValue();
-                        if(userName == (String)value.get("name")){
-                            userGrade[0] = (Integer) value.get("grade");
-                            userImage.setImageResource(grade(userGrade[0]));
+                        HashMap<String, String> value = (HashMap<String, String>)snapshot.getValue();
+                        if(commUserName.equals(value.get("name"))){
+                            Integer userGrade = Integer.valueOf(value.get("grade"));
+                            userImage.setImageResource(grade(userGrade));
                         }
                     }
                 }
@@ -115,10 +136,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
 
                 }
             };
-            DatabaseReference.addValueEventListener(mListener);*/
-
-            //현재는 임의로 등급 입력
-            userImage.setImageResource(grade(0));
+            DatabaseReference.addValueEventListener(mListener);
         }
     }
 
@@ -135,7 +153,7 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
         return cvh;
     }
 
-    //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
+    //position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시. 댓글의 네임과 유저네임이 일치하지 않으면 삭제버튼 비활성화
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 

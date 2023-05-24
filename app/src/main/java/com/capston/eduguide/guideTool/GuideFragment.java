@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
 import com.google.firebase.database.ChildEventListener;
@@ -46,6 +47,9 @@ public class GuideFragment extends Fragment {
     static int guideMaxNum = 18;
     static int guideMinNum = 9;
 
+    public boolean isDestroyed = false;
+    static String id;
+
     private Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
     private Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
     private Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
@@ -62,6 +66,28 @@ public class GuideFragment extends Fragment {
         fg.setArguments(args);
         return fg; }
 
+    //기본 생성자
+    public GuideFragment(){
+    }
+
+    //생성자를 이용해 선언 시부터 데이터가 들어간 가이드객체를 생성
+    public GuideFragment(String feedId){
+        setGuide(feedId);
+    }
+
+    public void onStart(){
+        super.onStart();
+        if(isDestroyed){
+            isDestroyed = false;
+            setFixmode();
+        }
+    }
+
+    //뷰가 destroy될 경우 변수를 true로 변경(체크용)
+    public void onDestroyView() {
+        super.onDestroyView();
+        isDestroyed = true;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +98,11 @@ public class GuideFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.guide_guidetool, container, false);
+
+        //isdestroyed가 true일 경우 비워진 해쉬맵을 다시 채워줌, fix모드 적용 안됨
+        if(isDestroyed){
+            setGuide(id);
+        }
 
         //가이드박스 벡터에 저장
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox1));
@@ -152,10 +183,12 @@ public class GuideFragment extends Fragment {
             });
         }
 
-        //게시글 작성 메뉴가 아닐 경우
+        //게시글 작성 메뉴가 아닐 경우 -> post일 경우 추가 버튼 나타나게 함
         if(!MainActivity.getCurrentMenu().equals("posting")) {
             setFixmode(); //fix모드 메소드 호출
-            //setGuide(postId); //가이드 데이터 가져오기 호출? 호출은 바깥에서 해야하나? 게시글 ID를 어떻게 받아올까?
+        }
+        if(MainActivity.getCurrentMenu().equals("posting")) {
+            guideAddButtons.get(0).setVisibility(View.VISIBLE);
         }
 
         return view;
@@ -221,10 +254,10 @@ public class GuideFragment extends Fragment {
         guideAddButtons.get(++indexAdd).setVisibility(View.VISIBLE);
     }
 
-    //가이드 고정(보여주기) 모드
+    //가이드 고정(보여주기) 모드 ->  버튼 숨김이 적용되지 않아 레이아웃 변경 후 post일때만 나타나게 변경.
     public void setFixmode() {
         //추가 버튼 나타나지 않게 함
-        guideAddButtons.get(0).setVisibility(View.GONE);
+        //guideAddButtons.get(0).setVisibility(View.GONE);
 
         //짧게 터치 이벤트 리스너 달기
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
@@ -259,6 +292,7 @@ public class GuideFragment extends Fragment {
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
+        Log.d("/////////////////", String.valueOf(guideBoxViews.isEmpty()));
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
 
@@ -274,15 +308,17 @@ public class GuideFragment extends Fragment {
             //가이드박스 설명글 가져오기
             int indexKey = guideBoxViews.indexOf(guideBox);
             String boxInfo;
-            if(boxInfos.get(indexKey).equals("설명")) //미입력 상태인 경우
+            if(boxInfos.get(indexKey)==null) //미입력 상태인 경우
                 boxInfo = "내용없음";
             else
                 boxInfo = boxInfos.get(indexKey);
 
+            Log.d("",keyword+boxInfo+"////////////////////////////////");
             guideBoxItems.add(new GuideBoxItem(keyword, boxInfo)); //리스트에 가이드박스 넣기
         }
 
         GuideItem guideItem = new GuideItem(postId, guideBoxItems); // 가이드 객체 생성
+        Log.d("",String.valueOf(guideItem.getGuideBoxList()));
         guideDatabaseReference.child(postId).setValue(guideItem); //가이드 객체 DB에 넣기
 
         //위 코드에서 에러가 발생할 경우 해당 코드로 수정 :
@@ -310,12 +346,13 @@ public class GuideFragment extends Fragment {
 
     //파이어베이스에서 가이드 데이터 가져오기
     public void setGuide(String postId) {
+        id = postId;
         guideDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // 데이터가 존재할 경우 처리
-                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBox");
+                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBoxList");
                     int numGuideBoxes = (int) guideSnapshot.getChildrenCount();
 
                     //가이드 박스 개수 맞추기
@@ -334,7 +371,7 @@ public class GuideFragment extends Fragment {
                     int index = 0;
                     while (guideboxIt.hasNext()) {
                         Button guideBox = guideboxIt.next();
-                        guideBox.setText(guideSnapshot.child(String.valueOf(index)).child("boxWord").getValue(String.class)); //박스에 키워드 표시
+                        guideBox.setText(guideSnapshot.child(String.valueOf(index)).child("keyword").getValue(String.class)); //박스에 키워드 표시
                         boxInfos.put(index, guideSnapshot.child(String.valueOf(index)).child("boxInfo").getValue(String.class)); //해시맵에 설명글 저장
                         index++;
                     }

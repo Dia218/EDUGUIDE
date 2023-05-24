@@ -336,7 +336,7 @@
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/guide_ic_plus_circle"
             app:tint="@color/guideColor"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <!-- 8번째 줄 (4 공백라인) -->
         <Button

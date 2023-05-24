@@ -29,8 +29,10 @@ public class Frag3Posting extends Fragment {
     private View view;
     private ViewPager vp;
     private String prepId="null";
-    private String feedId;
+    private String feedId = "";
     private String userName;
+    private String userEmail;
+    private Integer userGrade;
     private
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -41,18 +43,20 @@ public class Frag3Posting extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.frag3_posting, container, false);
 
+        //피드 아이템의 bpa 이용. 피드 아이디를 넘기지 않으므로 일반 가이드객체 생성해서 연결.
         vp = (ViewPager) view.findViewById(R.id.vp);
-        FeedViewItem.BannerPagerAdapter bannerPagerAdapter = new FeedViewItem.BannerPagerAdapter(getChildFragmentManager());
+        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(getChildFragmentManager());
         vp.setAdapter(bannerPagerAdapter);
         vp.setCurrentItem(0);
 
-        Bundle bundle = getArguments();
+        Bundle Mainbundle = getArguments();
 
         AppCompatEditText postTitle = view.findViewById(R.id.postTitle); //제목
         AppCompatEditText postInfo = view.findViewById(R.id.postInfo); //내용
         AppCompatEditText postTag = view.findViewById(R.id.postTag); //태그
 
-        postDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        //피드의 아이디를 받아오는 이벤트 리스너를 실시간 리스너로 변경(여러 사람이 한번에 등록시 중복 방지)
+        postDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -72,14 +76,17 @@ public class Frag3Posting extends Fragment {
             }
         });
 
+        //Main에서 받아온 userEmail로 users 검색, 일치하는 데이터의 userName("name")와 uerGrade(grade)를 받아옴.
         userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()){
                     HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
-                    if(bundle.getString("userEmail")!=null) {
-                        if (bundle.getString("userEmail").equals((String) user.get("email"))) {
+                    if(Mainbundle.getString("userEmail")!=null) {
+                        userEmail = Mainbundle.getString("userEmail");
+                        if (Mainbundle.getString("userEmail").equals((String) user.get("email"))) {
                             userName = (String)user.get("name");
+                            userGrade = Integer.parseInt((String) user.get("grade"));
                         }
                     }
                 }
@@ -110,19 +117,24 @@ public class Frag3Posting extends Fragment {
                 item.setTag(pTag);
                 if(userName!=null)
                     item.setUserName(userName);
-                item.setGrade(0);
+                item.setGrade(userGrade);
                 item.setBookmark_count(0);
                 item.setLike_count(0);
-                String fId = fId(prepId);
+                String fId = feedId;
                 item.setFeedId(fId);
 
-                GuideFragment guideFragment = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
-                if(!guideFragment.regGuideContent(fId)) return; //가이드 등록 호출, 최소 개수 미 충족 시 등록 중단
-
-                databaseReference.child("post").child(fId).setValue(item); //게시글 등록 호출
+                GuideFragment guideAdapter = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
+                guideAdapter.regGuideContent(fId);
+                databaseReference.child("post").child(fId).setValue(item);
 
                 MainActivity activity = (MainActivity) getActivity();
-                if (activity != null) { activity.replaceFragment(new Frag1Feed()); } // 등록 후 메인 피드로 전환
+                if (activity != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userEmail",userEmail);
+                    Frag1Feed feed = new Frag1Feed();
+                    feed.setArguments(bundle);
+                    activity.replaceFragment(feed);
+                } // 등록 후 메인 피드로 전환. 전환할 때 유저네임 번들로 넘겨줌.
             }
         });
 
@@ -131,25 +143,21 @@ public class Frag3Posting extends Fragment {
 
     private class BannerPagerAdapter extends FragmentPagerAdapter {
 
+        GuideFragment guide = new GuideFragment();
+
         public BannerPagerAdapter(FragmentManager fm){
             super(fm);
         }
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return GuideFragment.newInstance(position);
+            return guide;
         }
 
         @Override
         public int getCount() {
             return 1;
         }
-    }
-    private String fId(String prepId){
-        Integer fIdNum=0;
-        if(!(prepId.equals("null")))
-            fIdNum = Integer.parseInt(prepId)+1;
-        return String.valueOf(fIdNum);
     }
 }
 
