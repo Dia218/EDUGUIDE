@@ -12,6 +12,15 @@ public class User {
     private String age;
     private String grade;
 
+    //사용자 페이지 프로필 추가
+    private String nickname;
+
+    private String intro;
+
+    public User() {
+        // 기본 생성자 추가
+    }
+
     public User(String id, String password, String email, String phone, String name, String age) {
         this.id = id;
         this.password = password;
@@ -70,11 +79,27 @@ public class User {
         this.age = age;
     }
 
+    //사용자 페이지 프로필 추가
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
     public String getGrade() { return  grade; }
     public void setGrade(String grade) {
         this.grade = grade;
     }
-
 
     public void saveToFirebase() {
         // Get the Firebase database reference

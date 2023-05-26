@@ -27,18 +27,18 @@ import java.util.List;
 import java.util.Vector;
 
 /*
-* 가이드 띄우기, 가이드 관리, 가이드 - 파이어베이스 연동 등을 처리함
-*
-* 필드 : 가이드 박스 개수, 가이드 구성 인터페이스 저장 구조, 파이어베이스 인스턴스
-* 생성 시 : 인터페이스 저장 구조 초기화, 이벤트 리스너 부착, 고정 모드 활성화 여부 결정
-*
-* 메소드 :
-* 터치 이벤트 - 키워드 작성,
-* 길게 누르기 이벤트 - 설명글 작성,
-* 고정 모드 - addButton 비활성화,
-* 가이드 데이터베이스 저장
-* 가이드 데이터베이스 조회
-* */
+ * 가이드 띄우기, 가이드 관리, 가이드 - 파이어베이스 연동 등을 처리함
+ *
+ * 필드 : 가이드 박스 개수, 가이드 구성 인터페이스 저장 구조, 파이어베이스 인스턴스
+ * 생성 시 : 인터페이스 저장 구조 초기화, 이벤트 리스너 부착, 고정 모드 활성화 여부 결정
+ *
+ * 메소드 :
+ * 터치 이벤트 - 키워드 작성,
+ * 길게 누르기 이벤트 - 설명글 작성,
+ * 고정 모드 - addButton 비활성화,
+ * 가이드 데이터베이스 저장
+ * 가이드 데이터베이스 조회
+ * */
 
 public class GuideFragment extends Fragment {
 
@@ -68,6 +68,7 @@ public class GuideFragment extends Fragment {
 
     //기본 생성자
     public GuideFragment(){
+
     }
 
     //생성자를 이용해 선언 시부터 데이터가 들어간 가이드객체를 생성
@@ -78,6 +79,8 @@ public class GuideFragment extends Fragment {
     public void onStart(){
         super.onStart();
         if(isDestroyed){
+            setFixmode(); //fix모드 메소드 호출
+            isDestroyed = false;
             isDestroyed = false;
             setFixmode();
         }
@@ -102,6 +105,7 @@ public class GuideFragment extends Fragment {
         //isdestroyed가 true일 경우 비워진 해쉬맵을 다시 채워줌, fix모드 적용 안됨
         if(isDestroyed){
             setGuide(id);
+            guideAddButtons.get(0).setVisibility(View.GONE);
         }
 
         //가이드박스 벡터에 저장
@@ -385,5 +389,4 @@ public class GuideFragment extends Fragment {
     }
 
 }
-
 

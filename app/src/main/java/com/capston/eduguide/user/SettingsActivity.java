@@ -14,12 +14,17 @@ import com.capston.eduguide.login.LoginActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private String userEmail;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_activity_settings);
 
-        //프로필 편집 클릭
+        // userEmail 값 받기
+        userEmail = getIntent().getStringExtra("userEmail");
+
+        // 프로필 편집 클릭
         TextView profileEdit = findViewById(R.id.profile_edit);
         profileEdit.setOnClickListener(view -> {
             Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
@@ -33,7 +38,15 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //문의 클릭
+        // 스크랩 클릭
+        TextView Scrap = findViewById(R.id.scrap_user);
+        Scrap.setOnClickListener(view -> {
+            Intent intent = new Intent(SettingsActivity.this, UserScrapActivity.class);
+            intent.putExtra("userEmail", userEmail); // userEmail 전달
+            startActivity(intent);
+        });
+
+        // 문의 클릭
         TextView inquiryWrite = findViewById(R.id.inquiry_edit);
         inquiryWrite.setOnClickListener(view -> {
             Intent intent = new Intent(SettingsActivity.this, ListinquiryActivity.class);

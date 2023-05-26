@@ -24,6 +24,7 @@ public class FeedViewItem {
     private Integer bookmark_count;
     private Integer grade;
     private BannerPagerAdapter viewPagerAdapter;
+    private String userEmail;
 
 
     public void setFeedId(String id) {
@@ -92,6 +93,10 @@ public class FeedViewItem {
     }
     public BannerPagerAdapter getViewPagerAdapter() {
         return this.viewPagerAdapter;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
     }
 
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
