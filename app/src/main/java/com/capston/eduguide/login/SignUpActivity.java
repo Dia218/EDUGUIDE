@@ -70,6 +70,8 @@ public class SignUpActivity extends AppCompatActivity {
                                     String userId = user.getUid();
 
                                     User newUser = new User(id, password, email, phone, name, age);
+                                    newUser.setGrade("0"); // 항상 등급을 0으로 설정
+
                                     newUser.saveToFirebase();
 
                                     databaseReference.child(userId).setValue(newUser)

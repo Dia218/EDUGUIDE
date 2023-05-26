@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClickListenr {
@@ -31,6 +32,11 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
     private RecyclerView recyclerView;
     private SearchView searchView;
     private SearchAdapter adapter;
+
+    String userEmail;
+    String userName;
+
+    Integer userGrade;
 
     public Frag2Search() {
 
@@ -65,6 +71,13 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                 return true;
             }
         });
+        Bundle bundle = getArguments();
+        if (userEmail == null){
+            if(bundle.getString("userEmail")!= null) {
+                userEmail = bundle.getString("userEmail");
+                callUserName();
+            }
+        }
 
         return view;
     }
@@ -73,12 +86,15 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
         Fragment fragment = new CommentSimple();
 
         Bundle bundle = new Bundle();
-        bundle.putString("position",searchItem.getPostId());
+        bundle.putString("feedId",searchItem.getPostId());
         bundle.putString("title_text",searchItem.getTitle());
         bundle.putString("tag_text",searchItem.getTag());
         bundle.putString("main_text",searchItem.getDescription());
-        bundle.putString("user_name", searchItem.getUserId());
-
+        bundle.putString("feedUser_name", searchItem.getUserId());
+        bundle.putInt("feedUser_grade",searchItem.getGrade());
+        bundle.putString("userEmail",userEmail);
+        bundle.putInt("userGrade",userGrade);
+        bundle.putString("userName",userName);
         fragment.setArguments(bundle);
 
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -107,8 +123,9 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                                 String postId=snapshot.getKey();
                                 String description = snapshot.child("description").getValue(String.class);
                                 String userId = snapshot.child("userId").getValue(String.class);
-                                Log.d("testing1","태그:"+tag+"제목:"+title+postId);
-                                SearchItem searchItem=new SearchItem(postId,title,tag,description,userId);
+                                Integer grade=snapshot.child("grade").getValue(Integer.class);
+
+                                SearchItem searchItem=new SearchItem(postId,title,tag,description,userId,grade);
                                 searchItems.add(searchItem);
 
                                 Log.d("testing2", String.valueOf(searchItems));
@@ -124,5 +141,35 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                         Log.e("Frag2Search","onCancelled",databaseError.toException());
                     }
                 });
+    }
+    public void callUserName(){
+
+        if(userEmail != null){
+            databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        HashMap<String, String> value = (HashMap<String, String>)dataSnapshot.getValue();
+                        if(userEmail.equals(value.get("email"))){
+                            userName = value.get("name");
+                            userGrade = Integer.parseInt(value.get("grade"));
+
+                        }
+                    }
+                    if(userName == null){
+                        userName = "";
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else{
+            userName = "";
+        }
     }
 }

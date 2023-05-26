@@ -3,6 +3,7 @@ package com.capston.eduguide.post;
 import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -228,7 +229,6 @@ public class CommentSimple extends Fragment {
                     }
                 }, 200);
 
-                sendNotification(main.getText().toString(), userName); //알림
 
                 //recyclerView.scrollToPosition(comments.size()-1);
             }
@@ -279,27 +279,5 @@ public class CommentSimple extends Fragment {
     }
 
     //알림 관련 메소드
-    private void sendNotification(String title,String userId) {
-        String channelId="comment_channel";
-        String channelName="Comment Notification";
-        String channelDescription="Receive notification for new comments";
-        int notificationId=1;
 
-        notificationHelper.createNotificationChannel(channelId,channelName,channelDescription);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(),channelId)
-                .setContentTitle(title)
-                .setContentText("게시글에 새로운 댓글이 달렸습니다")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true);
-
-        NotificationManager notificationManager = notificationHelper.getNotificationManager();
-        notificationManager.notify(notificationId,builder.build());
-
-        Frag4Notice noticeFragment = (Frag4Notice) getChildFragmentManager().findFragmentByTag("noticeFragment");
-        if (noticeFragment != null) {
-            String noticeMessage = "'" + title + "' 게시글에 새로운 댓글이 달렸습니다";
-            noticeFragment.updateNotice(noticeMessage);
-        }
-    }
 }

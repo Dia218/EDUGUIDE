@@ -7,12 +7,15 @@ public class SearchItem{
     private String description;
     private String userId;
 
-    public SearchItem(String postId,String title,String tag,String description,String userId){
+    private Integer grade;
+
+    public SearchItem(String postId,String title,String tag,String description,String userId,Integer grade){
         this.postId=postId;
         this.title=title;
         this.tag=tag;
         this.description=description;
         this.userId=userId;
+        this.grade=grade;
     }
     public String getPostId(){return postId;}
     public String getTitle(){
@@ -23,4 +26,7 @@ public class SearchItem{
     }
     public String getDescription(){return description;}
     public String getUserId(){return userId;}
+    public Integer getGrade(){
+        return grade;
+    }
 }
