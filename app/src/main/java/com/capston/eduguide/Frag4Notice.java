@@ -1,6 +1,7 @@
 package com.capston.eduguide;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +28,4 @@ public class Frag4Notice extends Fragment {
         return view;
     }
 
-    public void updateNotice(String message) {
-
-        if (noticeText != null) {
-            noticeText.setText(message);
-        }
-
-    }
 }
