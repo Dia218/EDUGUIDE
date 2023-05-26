@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.capston.eduguide.MainActivity"
+    android:id="@+id/scraps_post">
 
     <LinearLayout
         android:id="@+id/scraps_chart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <Button
@@ -26,6 +28,11 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/scraps_layout">
     <!-- 게시물 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_scraps"
@@ -35,8 +42,7 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
         tools:listitem="@layout/user_scrap_grid" />
-
-
+    </FrameLayout>
 
 
 </LinearLayout>

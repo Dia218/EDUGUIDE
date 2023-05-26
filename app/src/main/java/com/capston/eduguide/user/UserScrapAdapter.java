@@ -1,6 +1,7 @@
 package com.capston.eduguide.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -123,9 +124,9 @@ public class UserScrapAdapter extends RecyclerView.Adapter<UserScrapAdapter.View
                     CommentSimple comment = new CommentSimple();
                     comment.setArguments(bundle);
 
-                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                   AppCompatActivity activity = (AppCompatActivity) v.getContext();
                     activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.scraps_chart, comment)
+                            .replace(R.id.scraps_layout, comment)
                             .commit();
                 }
             });

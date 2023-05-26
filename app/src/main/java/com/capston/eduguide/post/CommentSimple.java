@@ -2,12 +2,15 @@ package com.capston.eduguide.post;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +48,7 @@ public class CommentSimple extends Fragment {
     private TextView main;
     private TextView tag;
     private TextView username;
+    LinearLayout commentInput;
     private ViewPager vp;
     private EditText comm;
     private Integer gradeInt;
@@ -173,6 +177,7 @@ public class CommentSimple extends Fragment {
 
         //유저 데이터가 존재하고 이름이 같을때만 삭제 버튼 활성화
         if(userName!=null){
+            Log.d("//////////////", userName+"  "+feedUserName);
             if(userName.equals(feedUserName)){
                 delete.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -205,6 +210,7 @@ public class CommentSimple extends Fragment {
             }
         }
         else{
+            Log.d("//////////////", String.valueOf(userName)+"  "+feedUserName);
             delete.setVisibility(View.GONE);
             input.setVisibility(View.GONE);
             comm.setClickable(false);
