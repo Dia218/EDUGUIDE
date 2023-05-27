@@ -3,8 +3,16 @@ package com.capston.eduguide.guideTool;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -39,7 +47,9 @@ import java.util.Vector;
  * 가이드 데이터베이스 조회
  * */
 
-public class GuideFragment extends Fragment {
+/*
+
+public class GuideFragment_delete extends Fragment {
 
 
     //가이드 박스 개수
@@ -47,7 +57,7 @@ public class GuideFragment extends Fragment {
     static int guideMinNum = 9;
 
     public boolean isDestroyed = false;
-    static String postId; //게시글 아이디
+    static String id;
 
     private Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
     private Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
@@ -58,31 +68,30 @@ public class GuideFragment extends Fragment {
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
 
     private View view;
-    public static GuideFragment newInstance(int param1){
-        GuideFragment fg = new GuideFragment();
+    public static GuideFragment_delete newInstance(int param1){
+        GuideFragment_delete fg = new GuideFragment_delete();
         Bundle args = new Bundle();
         args.putInt("param1", param1);
         fg.setArguments(args);
         return fg; }
 
-    //생성자
-    public GuideFragment(){
-        if(!MainActivity.getCurrentMenu().equals("posting"))  {
-            Toast.makeText(getActivity(), "ERROR 잘못된 접근, 생성 시 postId 필요", Toast.LENGTH_SHORT).show();
-            Log.d("GuideFragment", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! GuideFragment 생성 오류!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 게시물 작성 모드가 아닐 경우 생성 시 postID 값을 넘여줘야만 박스를 개수만큼 생성할 수 있음!!!!!!!!!!!!!!!!!");
-            //this.postId = error; //잘못된 접근 시 임시로 넣을 게시물 아이디 값 필요
-        }
-    } //postID 없이 생성할 경우, 가이드 박스를 가이드 박스 데이터 개수 만큼 배치할 수 없음
-    public GuideFragment(String feedId) {
-        this.postId = feedId; //게시글 아이디
-        setGuideData(postId);
+    //기본 생성자
+    public GuideFragment_delete(){
+
+    }
+
+    //생성자를 이용해 선언 시부터 데이터가 들어간 가이드객체를 생성
+    public GuideFragment_delete(String feedId){
+        setGuideContent(feedId);
     }
 
     public void onStart(){
         super.onStart();
         if(isDestroyed){
-            setGuideData(postId);
+            setFixmode(); //fix모드 메소드 호출
             isDestroyed = false;
+            isDestroyed = false;
+            setFixmode();
         }
     }
 
@@ -102,9 +111,10 @@ public class GuideFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.guide_guidetool, container, false);
 
-        //isDestroyed 발생 시 데이터 재설정
+        //isdestroyed가 true일 경우 비워진 해쉬맵을 다시 채워줌, fix모드 적용 안됨
         if(isDestroyed){
-            setGuideData(postId);
+            setGuideContent(id);
+            guideAddButtons.get(0).setVisibility(View.GONE);
         }
 
         //가이드박스 벡터에 저장
@@ -157,16 +167,6 @@ public class GuideFragment extends Fragment {
         guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton7));
         guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton8));
 
-        //메뉴 검사
-        if(MainActivity.getCurrentMenu().equals("posting"))  { setPostingMode(); } //게시글 작성 모드 호출
-        else {Log.d("Guide", "보기 모드 호출 전"); setViewMode(); } //보기 모드 호출
-
-        return view;
-    }
-
-    private void setPostingMode() {
-        guideAddButtons.get(0).setVisibility(View.VISIBLE); //추가 버튼 보이게 함
-
         //addButton에 이벤트리스너 달기
         Iterator<ImageButton> addbuttonIt = guideAddButtons.iterator();
         while (addbuttonIt.hasNext()) {
@@ -174,7 +174,7 @@ public class GuideFragment extends Fragment {
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickAddButton(v);
+                    onClickAdd(v);
                 }
             });
         }
@@ -186,22 +186,95 @@ public class GuideFragment extends Fragment {
             guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
                 @Override
                 public void onClick(View v) {
-                    onClickViewModeGuide(v);
+                    onClickGuide(v);
                 }
             });
 
             guideBox.setOnLongClickListener(new View.OnLongClickListener() { //길게 누르기 이벤트
                 @Override
-                public boolean onLongClick(View v) { onLongClickViewModeGuide(v); return true; }
+                public boolean onLongClick(View v) { onLongClickGuide(v); return true; }
             });
         }
+
+
+
+        //게시글 작성 메뉴가 아닐 경우 -> post일 경우 추가 버튼 나타나게 함
+        if(!MainActivity.getCurrentMenu().equals("posting")) {
+            setFixmode(); //fix모드 메소드 호출
+        }
+        if(MainActivity.getCurrentMenu().equals("posting")) {
+            guideAddButtons.get(0).setVisibility(View.VISIBLE);
+        }
+
+        return view;
     }
 
-    private void setViewMode() {
-        guideAddButtons.get(0).setVisibility(View.GONE); //추가 버튼 보이지 않게 함
-        setGuideData(postId); //데이터 설정
+    //guideBox의 터치 이벤트
+    public void onClickGuide(View view) {
+        //키워드 입력 창 띄우기
+        View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_keyword, null);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setView(guideDialogView);
+        final AlertDialog keywordDialog = dialogBuilder.create();
+        keywordDialog.show();
 
-        //짧게 터치 이벤트리스너 달기
+        //키워드 입력 저장 버튼
+        guideDialogView.findViewById(R.id.editKeyword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String keyword = String.valueOf(((EditText)guideDialogView.findViewById(R.id.guideKeyword)).getText());
+                if( !(keyword.trim().isEmpty() || keyword.equals("키워드")) ) ((Button) view).setText(keyword);
+                keywordDialog.dismiss();
+            }
+        });
+    }
+
+    //guideBox의 길게 누르기 이벤트
+    public void onLongClickGuide(View view) {
+        //설명글 입력창 띄우기
+        View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_inform, null);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setView(guideDialogView);
+        final AlertDialog informDialog = dialogBuilder.create();
+        informDialog.show();
+
+        //설명글 입력 저장 버튼
+        guideDialogView.findViewById(R.id.editInform).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String boxInfo = String.valueOf(((MultiAutoCompleteTextView)guideDialogView.findViewById(R.id.guideInform)).getText()); // 설명글
+                int indexKey = guideBoxViews.indexOf((Button) view); // 가이드박스의 인덱스 번호
+                boxInfos.put(indexKey, boxInfo); //설명글 해시맵에 저장
+                informDialog.dismiss();
+            }
+        });
+    }
+
+    //addButtion의 터치 이벤트
+    public void onClickAdd(View view) {
+        //클릭한 addButtion의 인덱스
+        int indexAdd = guideAddButtons.indexOf((ImageButton) view);
+        //클릭한 addButtion 없애기
+        view.setVisibility(View.GONE);
+        //guideBox 보이게 하기
+        guideBoxViews.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE);
+
+        //line 보이게 하기
+        guideLineViews.get(guideMinNum + indexAdd - 1).setVisibility(View.VISIBLE);
+
+        if(indexAdd == guideMaxNum-guideMinNum-1) //마지막 addbutton일 경우 뒷부분 생략
+            return;
+
+        //다음 addButton 보이게 하기
+        guideAddButtons.get(++indexAdd).setVisibility(View.VISIBLE);
+    }
+
+    //가이드 고정(보여주기) 모드 ->  버튼 숨김이 적용되지 않아 레이아웃 변경 후 post일때만 나타나게 변경.
+    public void setFixmode() {
+        //추가 버튼 나타나지 않게 함
+        //guideAddButtons.get(0).setVisibility(View.GONE);
+
+        //짧게 터치 이벤트 리스너 달기
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
         while (guideboxIt.hasNext()) {
             Button guideBox = guideboxIt.next();
@@ -228,67 +301,14 @@ public class GuideFragment extends Fragment {
         }
     }
 
-    //ViewMode에서 guideBox의 터치 이벤트
-    public void onClickViewModeGuide(View view) {
-        //키워드 입력 창 띄우기
-        View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_keyword, null);
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        dialogBuilder.setView(guideDialogView);
-        final AlertDialog keywordDialog = dialogBuilder.create();
-        keywordDialog.show();
-
-        //키워드 입력 저장 설정
-        guideDialogView.findViewById(R.id.editKeyword).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String keyword = String.valueOf(((EditText)guideDialogView.findViewById(R.id.guideKeyword)).getText());
-                if( !(keyword.trim().isEmpty() || keyword.equals("키워드")) ) ((Button) view).setText(keyword);
-                keywordDialog.dismiss();
-            }
-        });
-    }
-
-    //ViewMode에서 guideBox의 길게 누르기 이벤트
-    public void onLongClickViewModeGuide(View view) {
-        //설명글 입력창 띄우기
-        View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_inform, null);
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        dialogBuilder.setView(guideDialogView);
-        final AlertDialog informDialog = dialogBuilder.create();
-        informDialog.show();
-
-        //설명글 입력 저장 설정
-        guideDialogView.findViewById(R.id.editInform).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String boxInfo = String.valueOf(((MultiAutoCompleteTextView)guideDialogView.findViewById(R.id.guideInform)).getText()); // 설명글
-                int indexKey = guideBoxViews.indexOf((Button) view); // 가이드박스의 인덱스 번호
-                boxInfos.put(indexKey, boxInfo); //설명글 해시맵에 저장
-                informDialog.dismiss();
-            }
-        });
-    }
-
-    //addButtion의 터치 이벤트
-    public void onClickAddButton(View view) {
-        int indexAdd = guideAddButtons.indexOf((ImageButton) view); //클릭한 addButton의 인덱스
-        view.setVisibility(View.GONE); //클릭한 addButton 없애기
-        guideBoxViews.get(guideMinNum+indexAdd).setVisibility(View.VISIBLE); //guideBox 보이게 하기
-        guideLineViews.get(guideMinNum + indexAdd - 1).setVisibility(View.VISIBLE); //line 보이게 하기
-        if(indexAdd == guideMaxNum-guideMinNum-1) return; //마지막 addbutton일 경우 뒷부분 생략
-        guideAddButtons.get(++indexAdd).setVisibility(View.VISIBLE); //다음 addButton 보이게 하기
-    }
-
     //파이어베이스에 가이드 데이터 저장
-    public void regGuideData(String postId) {
+    public void regGuideContent(String postId) {
         Log.d("GuideItem", "regGuideContent called. postId: " + postId);
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
         Log.d("/////////////////", String.valueOf(guideBoxViews.isEmpty()));
-
         while (guideboxIt.hasNext()) {
-            Log.d("guideboxIt","몇 번째인지 알아서 세야함");
             Button guideBox = guideboxIt.next();
 
             // 가이드박스 키워드 가져오기
@@ -310,6 +330,10 @@ public class GuideFragment extends Fragment {
         GuideItem guideItem = new GuideItem(postId, guideBoxItems); // 가이드 객체 생성
         Log.d("",String.valueOf(guideItem.getGuideBoxList()));
         guideDatabaseReference.child(postId).setValue(guideItem); //가이드 객체 DB에 넣기
+
+        //위 코드에서 에러가 발생할 경우 해당 코드로 수정 :
+        //guideDatabaseReference.child(postId).child("guideBox").setValue(guideBoxItems); //가이드박스 리스트 DB에 넣기
+
         Log.d("Guide", "GuideItem registered successfully.");
 
         guideDatabaseReference.addChildEventListener(new ChildEventListener() {
@@ -329,34 +353,28 @@ public class GuideFragment extends Fragment {
     }
 
     //파이어베이스에서 가이드 데이터 가져오기
-    private void setGuideData(String postId) {
-        this.postId = postId;
+    public void setGuideContent(String postId) {
+        id = postId;
         guideDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange (DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) { return; };
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // 데이터가 존재할 경우 처리
+                    DataSnapshot guideSnapshot = dataSnapshot.child(postId).child("guideBoxList");
+                    int numGuideBoxes = (int) guideSnapshot.getChildrenCount();
 
-                DataSnapshot guideSnapshot;
-                int numGuideBoxes;
-                try { // 데이터가 존재할 경우 처리
-                    guideSnapshot = dataSnapshot.child(postId).child("guideBoxList");
-                    numGuideBoxes = (int) guideSnapshot.getChildrenCount();
-                } catch (NullPointerException e) { // 데이터가 없을 경우 처리
-                    Log.d("setGuideData", "데이터가 존재하지 않습니다.");
-                    return;
-                }
-                Log.d("numGuideBoxes", "numGuideBoxes = "+ numGuideBoxes + "///////// postId =" + postId);
-
-                //가이드 박스 개수 맞추기
+                    //가이드 박스 개수 맞추기
                     int addNum = numGuideBoxes - guideMinNum;
                     if(addNum > 0) {
-                        for(int i = 1; i <= addNum; i++) {
-                            guideBoxViews.get(guideMinNum+i).setVisibility(View.VISIBLE); //guideBox 보이게 하기
-                            guideLineViews.get(guideMinNum + i -2).setVisibility(View.VISIBLE); //line 보이게 하기
+                        for(int i = 0; i < addNum; i++) {
+                            //guideBox 보이게 하기
+                            guideBoxViews.get(guideMinNum+i).setVisibility(View.VISIBLE);
+                            //line 보이게 하기
+                            guideLineViews.get(guideMinNum + i - 1).setVisibility(View.VISIBLE);
                         }
                     }
 
-                    //데이터 가져와서 띄우기
+                    //데이터 가져와서 처리
                     Iterator<Button> guideboxIt = guideBoxViews.iterator();
                     int index = 0;
                     while (guideboxIt.hasNext()) {
@@ -365,6 +383,12 @@ public class GuideFragment extends Fragment {
                         boxInfos.put(index, guideSnapshot.child(String.valueOf(index)).child("boxInfo").getValue(String.class)); //해시맵에 설명글 저장
                         index++;
                     }
+
+                } else {
+                    // 데이터가 없을 경우 처리
+                    System.out.println("데이터가 존재하지 않습니다.");
+                    Toast.makeText(getActivity(), "데이터가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -376,4 +400,4 @@ public class GuideFragment extends Fragment {
     }
 
 }
-
+*/
