@@ -127,13 +127,11 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
 
                                 SearchItem searchItem=new SearchItem(postId,title,tag,description,userId,grade);
                                 searchItems.add(searchItem);
-
-                                Log.d("testing2", String.valueOf(searchItems));
                             }
                         }
-                        Log.d("testing3", String.valueOf(searchItems));
+
                         adapter.setSearchItems(searchItems);
-                        Log.d("testingp", "검색 결과 개수: " + searchItems.size());
+
 
                     }
                     @Override
