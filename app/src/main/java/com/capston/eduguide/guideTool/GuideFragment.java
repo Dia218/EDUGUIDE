@@ -49,6 +49,7 @@ public class GuideFragment extends Fragment {
     public boolean isDestroyed = false;
     static String postId; //게시글 아이디
 
+    private View view;
     private Vector<Button> guideBoxViews = new Vector<>(guideMaxNum); // 가이드 박스
     private Vector<Button> guideLineViews = new Vector<>(guideMaxNum-1); // 라인
     private Vector<ImageButton> guideAddButtons = new Vector<>(guideMaxNum-guideMinNum); // 추가 버튼
@@ -57,7 +58,6 @@ public class GuideFragment extends Fragment {
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(); // 파이어베이스 DB
     DatabaseReference guideDatabaseReference = firebaseDatabase.getReference("guide"); // 가이드 DB
 
-    private View view;
     public static GuideFragment newInstance(int param1){
         GuideFragment fg = new GuideFragment();
         Bundle args = new Bundle();
@@ -105,6 +105,7 @@ public class GuideFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        view = null;  // onCreateView() 호출 전 초기화
 
         if (getArguments() != null) {
             int param1 = getArguments().getInt("param1");
@@ -117,18 +118,29 @@ public class GuideFragment extends Fragment {
                 Log.d("GuideFragment", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! GuideFragment 생성 오류!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 게시물 작성 모드가 아닐 경우 생성 시 postID 값을 넘여줘야만 박스를 개수만큼 생성할 수 있음!!!!!!!!!!!!!!!!!");
             }
         }
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.guide_guidetool, container, false);
+        if(view == null) { view = inflater.inflate(R.layout.guide_guidetool, container, false); initGuide(); } // view 초기화
 
         //isDestroyed 발생 시 데이터 재설정
         if(isDestroyed){
             //setGuideData(postId);
         }
+
+        //메뉴 검사
+        if(MainActivity.getCurrentMenu().equals("posting"))  { setPostingMode(); } //게시글 작성 모드 호출
+        else {Log.d("Guide", "보기 모드 호출 전"); setViewMode(); } //보기 모드 호출
+
+        return view;
+    }
+
+    // 가이드 인터페이스 초기화 메소드
+    private void initGuide() {
 
         //가이드박스 벡터에 저장
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox1));
@@ -179,12 +191,6 @@ public class GuideFragment extends Fragment {
         guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton6));
         guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton7));
         guideAddButtons.add((ImageButton) view.findViewById(R.id.addButton8));
-
-        //메뉴 검사
-        if(MainActivity.getCurrentMenu().equals("posting"))  { setPostingMode(); } //게시글 작성 모드 호출
-        else {Log.d("Guide", "보기 모드 호출 전"); setViewMode(); } //보기 모드 호출
-
-        return view;
     }
 
     private void setPostingMode() {
