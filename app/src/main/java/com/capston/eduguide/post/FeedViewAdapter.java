@@ -293,6 +293,10 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
         this.userGrade = userGrade;
         this.userEmail = userEmail;
     }
+    //public FeedViewItem getItem(int position){ return feedViewItemList.get(position); }
+    //public void setItem(int position, FeedViewItem item){ feedViewItemList.set(position, item);}
+    //public int getPosition(){return position;}
+    //public void setPosition(int position) {this.position = position;}
     public void setFeedUserGrade(Integer grade){
         this.feedUserGrade = grade;
     }

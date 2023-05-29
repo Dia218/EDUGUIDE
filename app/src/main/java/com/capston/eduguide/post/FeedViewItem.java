@@ -1,8 +1,6 @@
 package com.capston.eduguide.post;
 
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -10,8 +8,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.guideTool.GuideFragment;
-
-import java.util.ArrayList;
 
 public class FeedViewItem {
     private String feedId;
@@ -24,6 +20,7 @@ public class FeedViewItem {
     private Integer bookmark_count;
     private Integer grade;
     private BannerPagerAdapter viewPagerAdapter;
+    private String userEmail;
 
 
     public void setFeedId(String id) {
@@ -94,9 +91,13 @@ public class FeedViewItem {
         return this.viewPagerAdapter;
     }
 
+    public String getUserEmail() {
+        return userEmail;
+    }
+
     public static class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        GuideFragment guide = new GuideFragment();
+        GuideFragment guide;
         String feedId;
         public Integer adapterId;
 
@@ -115,17 +116,12 @@ public class FeedViewItem {
             if(!(feedId.equals(""))){
                 guide = new GuideFragment(feedId);
             }
-            else if(feedId.equals("feed")){
+            /*else if(feedId.equals("feed")){
 
             }
             else
-                guide = new GuideFragment();
+                guide = new GuideFragment();*/
             return guide;
-        }
-
-        public void getGuide(String postId) {
-            setAdapterId(Integer.parseInt(postId));
-            guide.setGuide(postId);
         }
 
         @Override
