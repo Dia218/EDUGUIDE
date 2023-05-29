@@ -124,7 +124,10 @@ public class CommentSimpleAdapter extends RecyclerView.Adapter<CommentSimpleAdap
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                         HashMap<String, String> value = (HashMap<String, String>)snapshot.getValue();
-                        if(commUserName.equals(value.get("name"))){
+                        if(commUserName == null){
+                            Integer userGrade = 5;
+                            userImage.setImageResource(grade(userGrade));
+                        }else if(commUserName.equals(value.get("name"))){
                             Integer userGrade = Integer.valueOf(value.get("grade"));
                             userImage.setImageResource(grade(userGrade));
                         }

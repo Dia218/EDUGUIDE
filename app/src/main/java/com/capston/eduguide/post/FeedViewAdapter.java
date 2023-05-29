@@ -234,7 +234,7 @@ public class FeedViewAdapter extends RecyclerView.Adapter<FeedViewAdapter.ViewHo
                     }
                 });
                 bpa = new FeedViewItem.BannerPagerAdapter(getFm(),item.getFeedId());
-                bpa = item.getViewPagerAdapter();
+                //bpa = item.getViewPagerAdapter();
             }
         }
 

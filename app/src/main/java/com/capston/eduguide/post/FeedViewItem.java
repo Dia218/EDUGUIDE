@@ -1,6 +1,7 @@
 package com.capston.eduguide.post;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -105,22 +106,14 @@ public class FeedViewItem {
         public BannerPagerAdapter(FragmentManager fm,String feedId) {
             super(fm);
             this.feedId = feedId;
-            if(!MainActivity.getCurrentMenu().equals("posting"))
-                getItem(0);
+            getItem(0);
         }
 
         //뷰페이저가 노출될 때 호출하는 함수로, 노출될 때 한번만 호출된다. 호출될때 feedId가 존재하면
         //오버라이딩 생성자를 통해 데이터가 존재하는 가이드 객체 생성, 아니면 일반 객체 생성
         @Override
         public Fragment getItem(int position) {
-            if(!(feedId.equals(""))){
-                guide = new GuideFragment(feedId);
-            }
-            /*else if(feedId.equals("feed")){
-
-            }
-            else
-                guide = new GuideFragment();*/
+            guide = new GuideFragment(feedId);
             return guide;
         }
 

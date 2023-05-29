@@ -76,6 +76,7 @@ public class GuideFragment extends Fragment {
     public GuideFragment(String feedId) {
         this.postId = feedId; //게시글 아이디
         setGuideData(postId);
+        Log.d("new Test///////",""+postId);
     }
 
     public void onStart(){
@@ -102,10 +103,6 @@ public class GuideFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.guide_guidetool, container, false);
 
-        //isDestroyed 발생 시 데이터 재설정
-        if(isDestroyed){
-            setGuideData(postId);
-        }
 
         //가이드박스 벡터에 저장
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox1));
@@ -199,7 +196,7 @@ public class GuideFragment extends Fragment {
 
     private void setViewMode() {
         guideAddButtons.get(0).setVisibility(View.GONE); //추가 버튼 보이지 않게 함
-        setGuideData(postId); //데이터 설정
+        //setGuideData(postId); //데이터 설정
 
         //짧게 터치 이벤트리스너 달기
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
