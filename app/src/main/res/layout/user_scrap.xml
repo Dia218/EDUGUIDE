@@ -15,12 +15,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/scrap_button"
+            android:id="@+id/second_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="SCRAP GUIDES"
-            android:backgroundTint="#BDD7EE"
+            android:background="@drawable/round_button"
             android:textColor="#000000"
             android:textSize="15sp"
             tools:ignore="VisualLintButtonSize"
@@ -28,11 +28,6 @@
 
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/scraps_layout">
     <!-- 게시물 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_scraps"
@@ -42,7 +37,11 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
         tools:listitem="@layout/user_scrap_grid" />
-    </FrameLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/scraps_layout"/>
 
 </LinearLayout>
