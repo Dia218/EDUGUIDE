@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.capston.eduguide.R;
 import com.capston.eduguide.login.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -64,20 +65,11 @@ public class SettingsActivity extends AppCompatActivity {
         TextView logoutButton = findViewById(R.id.logout_edit);
 
         // 로그아웃 버튼 클릭 리스너 등록하기
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 로그아웃 처리 코드 작성
-                // 예시: SharedPreferences에서 로그인 정보 삭제 후 로그인 화면으로 이동
-                SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
-                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish(); // 현재 액티비티 종료
-            }
+        logoutButton.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut(); // Firebase에서 로그아웃
+            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 로그인 화면으로 이동하면서 이전의 액티비티 스택 제거하지 않음
+            startActivity(intent);
         });
-
     }
 }
