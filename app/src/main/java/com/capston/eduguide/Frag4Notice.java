@@ -50,7 +50,8 @@ public class Frag4Notice extends Fragment {
                 callUserName();
             }
         }
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
         databaseReference.child("notice").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -72,8 +73,11 @@ public class Frag4Notice extends Fragment {
         return view;
     }
     public void showNewCommentNotification(String title){
+       if(userName!=null){
         String notificationText = "'" + title + "' 게시글에 새로운 댓글이 달렸습니다.";
         noticeText.setText(notificationText);
+       }
+
     }
     public void callUserName(){
 
@@ -93,6 +97,7 @@ public class Frag4Notice extends Fragment {
                         userName = "";
 
                     }
+
                 }
 
                 @Override
@@ -103,6 +108,7 @@ public class Frag4Notice extends Fragment {
         }
         else{
             userName = "";
+
         }
     }
 }
