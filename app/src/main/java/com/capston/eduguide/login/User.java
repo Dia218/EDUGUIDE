@@ -109,4 +109,3 @@ public class User {
         databaseRef.child("users").child(id).setValue(this);
     }
 }
-

@@ -1,8 +1,6 @@
 package com.capston.eduguide;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +122,7 @@ public class Frag3Posting extends Fragment {
                 item.setFeedId(fId);
 
                 GuideFragment guideAdapter = (GuideFragment) bannerPagerAdapter.getItem(vp.getCurrentItem());
-                guideAdapter.regGuideContent(fId);
+                guideAdapter.regGuideData(fId);
                 databaseReference.child("post").child(fId).setValue(item);
 
                 MainActivity activity = (MainActivity) getActivity();

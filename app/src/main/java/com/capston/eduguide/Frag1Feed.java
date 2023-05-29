@@ -85,7 +85,7 @@ public class Frag1Feed extends Fragment {
         databaseReference.removeEventListener(mListener);
     }
 
-    //피드 아이템의 등급으로 유저의 뱃지 설정
+    //피드 아이템의 유저 이름으로 등급 검색, 검색된 등급을 피드의 등급에 저장하고 그걸로 뱃지 표시
     public void setUserIconForGrade(FeedViewItem item){
 
         if(item.getGrade()==0){
