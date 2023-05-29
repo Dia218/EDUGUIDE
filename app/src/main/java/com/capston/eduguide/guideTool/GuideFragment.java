@@ -209,13 +209,13 @@ public class GuideFragment extends Fragment {
             guideBox.setOnClickListener(new View.OnClickListener() { //짧게 터치 이벤트
                 @Override
                 public void onClick(View v) {
-                    onClickViewModeGuide(v);
+                    onClickPostingModeGuide(v);
                 }
             });
 
             guideBox.setOnLongClickListener(new View.OnLongClickListener() { //길게 누르기 이벤트
                 @Override
-                public boolean onLongClick(View v) { onLongClickViewModeGuide(v); return true; }
+                public boolean onLongClick(View v) { onLongClickPostingModeGuide(v); return true; }
             });
         }
     }
@@ -245,14 +245,17 @@ public class GuideFragment extends Fragment {
                     guideInformTextView.setText(boxInfos.get(guideBoxViews.indexOf(v)));
                     guideInformTextView.setEnabled(false);
 
+                    //팝업창 등록 버튼 보이지 않게 하기
+                    guideDialogView.findViewById(R.id.editInform).setVisibility(View.INVISIBLE);
+
                     informDialog.show();
                 }
             });
         }
     }
 
-    //ViewMode에서 guideBox의 터치 이벤트
-    public void onClickViewModeGuide(View view) {
+    //PostingMode에서 guideBox의 터치 이벤트
+    public void onClickPostingModeGuide(View view) {
         //키워드 입력 창 띄우기
         View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_keyword, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
@@ -271,8 +274,8 @@ public class GuideFragment extends Fragment {
         });
     }
 
-    //ViewMode에서 guideBox의 길게 누르기 이벤트
-    public void onLongClickViewModeGuide(View view) {
+    //PostingMode에서 guideBox의 길게 누르기 이벤트
+    public void onLongClickPostingModeGuide(View view) {
         //설명글 입력창 띄우기
         View guideDialogView = View.inflate(getContext(), R.layout.guide_guidebox_inform, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
@@ -286,7 +289,7 @@ public class GuideFragment extends Fragment {
             public void onClick(View v) {
                 String boxInfo = String.valueOf(((MultiAutoCompleteTextView)guideDialogView.findViewById(R.id.guideInform)).getText()); // 설명글
                 int indexKey = guideBoxViews.indexOf((Button) view); // 가이드박스의 인덱스 번호
-                boxInfos.put(indexKey, boxInfo); //설명글 해시맵에 저장
+                boxInfos.put(indexKey, boxInfo); // 설명글 해시맵에 저장
                 informDialog.dismiss();
             }
         });
