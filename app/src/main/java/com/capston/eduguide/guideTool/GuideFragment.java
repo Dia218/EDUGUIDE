@@ -65,7 +65,18 @@ public class GuideFragment extends Fragment {
         fg.setArguments(args);
         return fg; }
 
-    //생성자
+    /*
+    public static GuideFragment newInstance(int param1, String postId) {
+        GuideFragment fg = new GuideFragment();
+        Bundle args = new Bundle();
+        args.putInt("param1", param1);
+        args.putString("postId", postId);
+        fg.setArguments(args);
+        return fg; }*/
+
+
+
+        //생성자
     public GuideFragment(){
         if(!MainActivity.getCurrentMenu().equals("posting"))  {
             Toast.makeText(getActivity(), "ERROR 잘못된 접근, 생성 시 postId 필요", Toast.LENGTH_SHORT).show();
@@ -75,13 +86,13 @@ public class GuideFragment extends Fragment {
     } //postID 없이 생성할 경우, 가이드 박스를 가이드 박스 데이터 개수 만큼 배치할 수 없음
     public GuideFragment(String feedId) {
         this.postId = feedId; //게시글 아이디
-        setGuideData(postId);
+        //setGuideData(postId);
     }
 
     public void onStart(){
         super.onStart();
         if(isDestroyed){
-            setGuideData(postId);
+            //setGuideData(postId);
             isDestroyed = false;
         }
     }
@@ -94,6 +105,18 @@ public class GuideFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            int param1 = getArguments().getInt("param1");
+            String postId = getArguments().getString("postId");
+            if (postId != null) {
+                this.postId = postId;
+                //setGuideData(postId);
+            } else {
+                Toast.makeText(getActivity(), "ERROR 잘못된 접근, 생성 시 postId 필요", Toast.LENGTH_SHORT).show();
+                Log.d("GuideFragment", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! GuideFragment 생성 오류!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 게시물 작성 모드가 아닐 경우 생성 시 postID 값을 넘여줘야만 박스를 개수만큼 생성할 수 있음!!!!!!!!!!!!!!!!!");
+            }
+        }
     }
 
     @Nullable
@@ -104,7 +127,7 @@ public class GuideFragment extends Fragment {
 
         //isDestroyed 발생 시 데이터 재설정
         if(isDestroyed){
-            setGuideData(postId);
+            //setGuideData(postId);
         }
 
         //가이드박스 벡터에 저장
@@ -117,7 +140,7 @@ public class GuideFragment extends Fragment {
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox7));
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox8));
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox9));
-        guideBoxViews.add((Button) view.findViewById(R.id.guideBox10));
+        guideBoxViews.add((Button) view.findViewById(R.id.guideBox10)); // 추가, index9
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox11));
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox12));
         guideBoxViews.add((Button) view.findViewById(R.id.guideBox13));
@@ -136,7 +159,7 @@ public class GuideFragment extends Fragment {
         guideLineViews.add((Button) view.findViewById(R.id.line6));
         guideLineViews.add((Button) view.findViewById(R.id.line7));
         guideLineViews.add((Button) view.findViewById(R.id.line8));
-        guideLineViews.add((Button) view.findViewById(R.id.line9));
+        guideLineViews.add((Button) view.findViewById(R.id.line9)); // 추가, index8
         guideLineViews.add((Button) view.findViewById(R.id.line10));
         guideLineViews.add((Button) view.findViewById(R.id.line11));
         guideLineViews.add((Button) view.findViewById(R.id.line12));
@@ -285,15 +308,19 @@ public class GuideFragment extends Fragment {
 
         List<GuideBoxItem> guideBoxItems = new LinkedList<GuideBoxItem>() {}; //가이드 박스 리스트
         Iterator<Button> guideboxIt = guideBoxViews.iterator();
-        Log.d("/////////////////", String.valueOf(guideBoxViews.isEmpty()));
+        Log.d("regGuideData", String.valueOf(guideBoxViews.isEmpty()));
 
         while (guideboxIt.hasNext()) {
-            Log.d("guideboxIt","몇 번째인지 알아서 세야함");
+            Log.d("regGuideData","guideboxIt 순차 검색");
             Button guideBox = guideboxIt.next();
 
             // 가이드박스 키워드 가져오기
             String keyword = String.valueOf(guideBox.getText());
-            if(keyword.replace("단계", "").matches("^[0-9]*$")) { continue; } //미입력 상태인 경우([숫자]단계 형식일 경우), 스킵
+            Log.d("regGuideData", "keyword = " + keyword);
+            if (keyword.trim().isEmpty() || keyword.matches("\\d+단계")) {
+                Log.d("regGuideData", "키워드 저장 조건에 맞지 않아 스킵됨");
+                continue; // "n단계" 형식이 아닌 경우 저장 건너뛰기
+            }
 
             //가이드박스 설명글 가져오기
             int indexKey = guideBoxViews.indexOf(guideBox);
@@ -303,7 +330,7 @@ public class GuideFragment extends Fragment {
             else
                 boxInfo = boxInfos.get(indexKey);
 
-            Log.d("",keyword+boxInfo+"////////////////////////////////");
+            Log.d("regGuideData",keyword+boxInfo+"////////////////////////////////");
             guideBoxItems.add(new GuideBoxItem(keyword, boxInfo)); //리스트에 가이드박스 넣기
         }
 
@@ -351,8 +378,14 @@ public class GuideFragment extends Fragment {
                     int addNum = numGuideBoxes - guideMinNum;
                     if(addNum > 0) {
                         for(int i = 1; i <= addNum; i++) {
-                            guideBoxViews.get(guideMinNum+i).setVisibility(View.VISIBLE); //guideBox 보이게 하기
-                            guideLineViews.get(guideMinNum + i -2).setVisibility(View.VISIBLE); //line 보이게 하기
+                            Log.d("numGuideBoxes", "i = "+i);
+                            Log.d("numGuideBoxes", "guideBoxViews capacity= "+guideBoxViews.capacity());
+                            Log.d("numGuideBoxes", "guideBoxViews size = "+guideBoxViews.size());
+                            Log.d("numGuideBoxes", "guideLineViews capacity = "+guideLineViews.capacity());
+                            Log.d("numGuideBoxes", "guideLineViews size = "+guideLineViews.size());
+                            guideBoxViews.get(guideMinNum+i-1).setVisibility(View.VISIBLE); //guideBox 보이게 하기 //@guideBox10부터, index9
+                            guideLineViews.get(guideMinNum+i-2).setVisibility(View.VISIBLE); //line 보이게 하기 //@line9부터, index8
+                            Log.d("numGuideBoxes", "for문 VISIBLE 수행완료");
                         }
                     }
 

@@ -134,11 +134,16 @@ public class MainActivity extends AppCompatActivity {
                 this.setCurrentMenu("user");
                 ft.commit();
                 break;
-
         }
     }
     //프래그먼트 내에서 다른 프래그먼트로 이동하는 메소드
     public void replaceFragment(Fragment fragment) {
+        if(fragment instanceof Frag1Feed) setCurrentMenu(1);
+        else if(fragment instanceof Frag2Search) setCurrentMenu(2);
+        else if(fragment instanceof Frag3Posting) setCurrentMenu(3);
+        else if(fragment instanceof Frag4Notice) setCurrentMenu(4);
+        else if(fragment instanceof Frag5User) setCurrentMenu(5);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment).commit();      // Fragment로 사용할 MainActivity내의 layout공간을 선택
@@ -147,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
     //현재 메뉴를 설정하는 메소드
     public static void setCurrentMenu(String currentMenu) {
         com.capston.eduguide.MainActivity.currentMenu = currentMenu;
+    }
+    public static void setCurrentMenu(int menuNum) {
+        switch (menuNum) {
+            case 1: com.capston.eduguide.MainActivity.currentMenu = ("feed"); break;
+            case 2: com.capston.eduguide.MainActivity.currentMenu = ("search"); break;
+            case 3: com.capston.eduguide.MainActivity.currentMenu = ("posting"); break;
+            case 4: com.capston.eduguide.MainActivity.currentMenu = ("notice"); break;
+            case 5: com.capston.eduguide.MainActivity.currentMenu = ("user");  break;
+            default: com.capston.eduguide.MainActivity.currentMenu = ("error");  break;
+        }
     }
 
     //현재 메뉴를 반환하는 메소드
