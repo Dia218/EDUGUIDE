@@ -55,6 +55,7 @@ public class CommentSimple extends Fragment {
     private ImageView userImage;
     private String userName;
     private String userEmail;
+    private String title;
     private Integer userGrade;
     private ImageView feedUserImage;
     private String feedUserName;
@@ -112,6 +113,7 @@ public class CommentSimple extends Fragment {
             String tagStr = bundle.getString("tag_text");
             String userName = bundle.getString("feedUser_name");
             feedUserName = bundle.getString("feedUser_name");
+            title = bundle.getString("title_text");
             main.setText(mainStr);
             tag.setText(tagStr);
             username.setText(userName);
@@ -224,6 +226,8 @@ public class CommentSimple extends Fragment {
 
                 //파이어베이스에 데이터 입력
                 DatabaseReference.child("comment").child(fId).setValue(comments);
+
+                DatabaseReference.child("notice").child(feedUserName).setValue(title);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
