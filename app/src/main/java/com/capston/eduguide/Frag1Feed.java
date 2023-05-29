@@ -36,7 +36,9 @@ public class Frag1Feed extends Fragment {
     String userName;
     String userEmail;
     Integer userGrade;
+
     Integer feedUserGrade;
+
     public static Frag1Feed newInstance(){
         return new Frag1Feed();
     }
@@ -83,8 +85,23 @@ public class Frag1Feed extends Fragment {
         databaseReference.removeEventListener(mListener);
     }
 
-    //피드 아이템의 등급으로 유저의 뱃지 설정
+    //피드 아이템의 유저 이름으로 등급 검색, 검색된 등급을 피드의 등급에 저장하고 그걸로 뱃지 표시
     public void setUserIconForGrade(FeedViewItem item){
+
+        if(item.getGrade()==0){
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seed, null));
+        }
+        else if (item.getGrade()==1) {
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.sprout, null));
+        }
+        else if (item.getGrade()==2) {
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seedling, null));
+        }
+        else if (item.getGrade()==3) {
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.tree, null));
+        }
+        else
+            item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
 
         String feedUserName = item.getUserName();
         feedUserGrade = 5;
