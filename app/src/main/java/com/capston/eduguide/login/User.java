@@ -10,6 +10,7 @@ public class User {
     private String phone;
     private String name;
     private String age;
+    private String grade;
 
     public User(String id, String password, String email, String phone, String name, String age) {
         this.id = id;
@@ -18,6 +19,7 @@ public class User {
         this.phone = phone;
         this.name = name;
         this.age = age;
+        this.grade = "0"; //기본 등급 0으로 설정
     }
 
     public String getId() {
@@ -68,6 +70,11 @@ public class User {
         this.age = age;
     }
 
+    public String getGrade() { return  grade; }
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
 
     public void saveToFirebase() {
         // Get the Firebase database reference
@@ -77,4 +84,3 @@ public class User {
         databaseRef.child("users").child(id).setValue(this);
     }
 }
-
