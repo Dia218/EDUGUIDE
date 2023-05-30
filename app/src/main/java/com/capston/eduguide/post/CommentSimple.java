@@ -226,7 +226,12 @@ public class CommentSimple extends Fragment {
                 //파이어베이스에 데이터 입력
                 DatabaseReference.child("comment").child(fId).setValue(comments);
 
-                DatabaseReference.child("notice").child(feedUserName).setValue(title);
+                //댓글 입력시 notice 데이터 저장
+                DatabaseReference noticeRef = DatabaseReference.child("notice");
+                DatabaseReference feedUserNameRef = noticeRef.child(feedUserName);
+                DatabaseReference titleRef = feedUserNameRef.push();
+
+                titleRef.setValue(title);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

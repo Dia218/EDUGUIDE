@@ -5,19 +5,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.capston.eduguide.notice.NoticeAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class Frag4Notice extends Fragment {
 
@@ -25,7 +32,11 @@ public class Frag4Notice extends Fragment {
 
     private View view;
 
-    private TextView noticeText;
+    private RecyclerView recyclerView;
+
+    private NoticeAdapter noticeAdapter;
+
+    private List<String> noticeList;
 
     private DatabaseReference databaseReference;
 
@@ -41,7 +52,17 @@ public class Frag4Notice extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag4_notice, container, false);
-        noticeText = view.findViewById(R.id.notice_text);
+
+        recyclerView = view.findViewById(R.id.notice_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        noticeList = new ArrayList<>();
+        noticeAdapter = new NoticeAdapter(noticeList);
+        recyclerView.setAdapter(noticeAdapter);
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
 
         Bundle bundle = getArguments();
         if (userEmail == null){
@@ -50,20 +71,25 @@ public class Frag4Notice extends Fragment {
                 callUserName();
             }
         }
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
         databaseReference.child("notice").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String feedUserId = dataSnapshot.getKey();
                     if (userName.equals(feedUserId)) {
-                        String title = dataSnapshot.child("title").getValue(String.class);
-                        showNewCommentNotification(title);
-                    }
-                }
-            }
+                        for(DataSnapshot noticeSnapshot:dataSnapshot.getChildren()){
+                        String title=noticeSnapshot.getValue(String.class);
+                        noticeList.add(title);
+                        }
 
+
+                    }
+
+                }
+
+                recyclerView.setAdapter(noticeAdapter);
+                noticeAdapter.notifyDataSetChanged();
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -72,13 +98,7 @@ public class Frag4Notice extends Fragment {
 
         return view;
     }
-    public void showNewCommentNotification(String title){
-       if(userName!=null){
-        String notificationText = "'" + title + "' 게시글에 새로운 댓글이 달렸습니다.";
-        noticeText.setText(notificationText);
-       }
 
-    }
     public void callUserName(){
 
         if(userEmail != null){
