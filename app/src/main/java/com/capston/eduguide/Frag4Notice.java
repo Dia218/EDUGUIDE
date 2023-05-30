@@ -74,6 +74,7 @@ public class Frag4Notice extends Fragment {
         databaseReference.child("notice").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                noticeList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String feedUserId = dataSnapshot.getKey();
                     if (userName.equals(feedUserId)) {
