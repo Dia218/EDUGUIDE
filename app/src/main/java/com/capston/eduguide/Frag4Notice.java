@@ -11,10 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.notice.NoticeAdapter;
+import com.capston.eduguide.notice.NoticeItem;
+import com.capston.eduguide.post.CommentSimple;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,8 +82,8 @@ public class Frag4Notice extends Fragment {
                     String feedUserId = dataSnapshot.getKey();
                     if (userName.equals(feedUserId)) {
                         for(DataSnapshot noticeSnapshot:dataSnapshot.getChildren()){
-                        String title=noticeSnapshot.getValue(String.class);
-                        noticeList.add(title);
+                            String title=noticeSnapshot.getValue(String.class);
+                            noticeList.add(title);
                         }
 
 
@@ -96,7 +99,52 @@ public class Frag4Notice extends Fragment {
 
             }
         });
+    noticeAdapter.setOnItemClickListener(new NoticeAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(int position, String title) {
+            //post 노드에서 해당 제목과 일치하는 데이터 찾기
+            DatabaseReference postRef = databaseReference.child("post");
+            postRef.orderByChild("title").equalTo(title).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        //post의 필요한 데이터 가져오기
+                        String postId = dataSnapshot.getKey();
+                        String title = dataSnapshot.child("title").getValue(String.class);
+                        String tag = dataSnapshot.child("tag").getValue(String.class);
+                        String text = dataSnapshot.child("text").getValue(String.class);
+                        String userName = dataSnapshot.child("userName").getValue(String.class);
+                        Integer grade = dataSnapshot.child("grade").getValue(Integer.class);
 
+                        Fragment fragment = new CommentSimple();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("feedId", postId);
+                        bundle.putString("title_text", title);
+                        bundle.putString("tag_text", tag);
+                        bundle.putString("main_text", text);
+                        bundle.putString("feedUser_name", userName);
+                        bundle.putInt("feedUser_grade", grade);
+                        bundle.putString("userEmail", userEmail);
+                        bundle.putInt("userGrade", userGrade);
+
+                        fragment.setArguments(bundle);
+
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        transaction.replace(R.id.main_frame, fragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    });
         return view;
     }
 
