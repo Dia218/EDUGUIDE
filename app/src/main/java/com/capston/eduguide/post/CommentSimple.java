@@ -227,11 +227,13 @@ public class CommentSimple extends Fragment {
                 DatabaseReference.child("comment").child(fId).setValue(comments);
 
                 //댓글 입력시 notice 데이터 저장
-                DatabaseReference noticeRef = DatabaseReference.child("notice");
-                DatabaseReference feedUserNameRef = noticeRef.child(feedUserName);
-                DatabaseReference titleRef = feedUserNameRef.push();
+                if(feedUserName!=userName) {
+                    DatabaseReference noticeRef = DatabaseReference.child("notice");
+                    DatabaseReference feedUserNameRef = noticeRef.child(feedUserName);
+                    DatabaseReference titleRef = feedUserNameRef.push();
 
-                titleRef.setValue(title);
+                    titleRef.setValue(title);
+                }
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

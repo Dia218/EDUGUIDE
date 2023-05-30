@@ -13,10 +13,18 @@ import com.capston.eduguide.R;
 import java.util.List;
 
 public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder> {
-    private List<String> noticeList;
+    private static List<String> noticeList;
+    private static OnItemClickListener onItemClickListener;
 
     public NoticeAdapter(List<String> noticeList){
         this.noticeList= noticeList;
+
+    }
+    public interface OnItemClickListener{
+        void onItemClick(int position,String title);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.onItemClickListener=listener;
     }
     @NonNull
     @Override
@@ -39,6 +47,19 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             titleTextView = itemView.findViewById(R.id.title_text_view);
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    if(onItemClickListener !=null){
+                        int position = getAdapterPosition();
+                        if(position!=RecyclerView.NO_POSITION){
+                            String title = noticeList.get(position);
+                            onItemClickListener.onItemClick(position,title);
+                        }
+                    }
+                }
+            });
         }
     }
 }
