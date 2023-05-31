@@ -37,7 +37,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.capston.eduguide.notice.NotificationHelper;
 import java.util.ArrayList;
 
 public class CommentSimple extends Fragment {
@@ -60,11 +59,12 @@ public class CommentSimple extends Fragment {
     private String feedUserName;
     private String fId;
 
+    private String title;
+
     FeedViewItem item;
     CommentSimpleAdapter adapter;
     BannerPagerAdapter bpa;
 
-    private NotificationHelper notificationHelper; //알림
     ArrayList<CommentItem> comments = new ArrayList<>();
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference DatabaseReference = firebaseDatabase.getReference("");
@@ -85,7 +85,7 @@ public class CommentSimple extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-        notificationHelper=new NotificationHelper(requireContext()); //알림
+
     }
 
     @Nullable
@@ -112,6 +112,7 @@ public class CommentSimple extends Fragment {
             String tagStr = bundle.getString("tag_text");
             String userName = bundle.getString("feedUser_name");
             feedUserName = bundle.getString("feedUser_name");
+            title = bundle.getString("title_text");
             main.setText(mainStr);
             tag.setText(tagStr);
             username.setText(userName);
@@ -225,6 +226,15 @@ public class CommentSimple extends Fragment {
                 //파이어베이스에 데이터 입력
                 DatabaseReference.child("comment").child(fId).setValue(comments);
 
+                //댓글 입력시 notice 데이터 저장
+                if(feedUserName!=userName) {
+                    DatabaseReference noticeRef = DatabaseReference.child("notice");
+                    DatabaseReference feedUserNameRef = noticeRef.child(feedUserName);
+                    DatabaseReference titleRef = feedUserNameRef.push();
+
+                    titleRef.setValue(title);
+                }
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -281,6 +291,5 @@ public class CommentSimple extends Fragment {
             return R.drawable.grade1;
     }
 
-    //알림 관련 메소드
 
 }

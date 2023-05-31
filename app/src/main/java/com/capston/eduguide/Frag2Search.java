@@ -121,19 +121,17 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                             if(tag!=null&& tag.contains(query.toLowerCase())){
                                 String title=snapshot.child("title").getValue(String.class);
                                 String postId=snapshot.getKey();
-                                String description = snapshot.child("description").getValue(String.class);
-                                String userId = snapshot.child("userId").getValue(String.class);
+                                String description = snapshot.child("text").getValue(String.class);
+                                String userId = snapshot.child("userName").getValue(String.class);
                                 Integer grade=snapshot.child("grade").getValue(Integer.class);
 
                                 SearchItem searchItem=new SearchItem(postId,title,tag,description,userId,grade);
                                 searchItems.add(searchItem);
-
-                                Log.d("testing2", String.valueOf(searchItems));
                             }
                         }
-                        Log.d("testing3", String.valueOf(searchItems));
+
                         adapter.setSearchItems(searchItems);
-                        Log.d("testingp", "검색 결과 개수: " + searchItems.size());
+
 
                     }
                     @Override
