@@ -28,8 +28,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -163,25 +167,36 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) { //update ui code here
+    private void updateUI(FirebaseUser user) {
         if (user != null) {
-
-
             String id = user.getUid();
             String email = user.getEmail();
             String name = user.getDisplayName();
 
-            // Create a User object
-            User newUser = new User(id, "", email, "", name, "");
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+            Query query = userRef.orderByChild("email").equalTo(email);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (!snapshot.exists()) {
+                        // User is not registered, create a new user
+                        User newUser = new User(id, "", email, "", name, "");
+                        newUser.setGrade("0");
+                        newUser.saveToFirebase();
+                    }
 
-            // Save the User object to Firebase
-            newUser.saveToFirebase();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("userEmail", email);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("userEmail", email);
-            setResult(RESULT_OK, intent);
-            finish();
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Error handling
+                }
+            });
         }
-
     }
+
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,14 +40,13 @@ public class Frag5User extends Fragment {
 
     private TextView profileNameTextView;
     private TextView selfIntroTextView;
+    private ImageView gradeImageView;
 
     ArrayList<FeedViewItem> items;
     UserFeedViewAdapter adapter;
 
     private String userEmail;
-    private String feedId;
-    private Integer userGrade;
-    private Integer feedUserGrade;
+
     private DatabaseReference userDatabaseReference;
     private FirebaseDatabase database;
 
@@ -74,6 +74,7 @@ public class Frag5User extends Fragment {
         // 저장된 닉네임과 자기소개 가져와서 TextView에 반영하기
         profileNameTextView = view.findViewById(R.id.profile_name);
         selfIntroTextView = view.findViewById(R.id.self_intro);
+        gradeImageView = view.findViewById(R.id.profile_image);
 
         updateProfileInfo();
 
@@ -112,6 +113,31 @@ public class Frag5User extends Fragment {
         return view;
     }
 
+    private void setUserIconForGrade(int gradeInt) {
+        int iconResId;
+        switch (gradeInt) {
+            case 0:
+                iconResId = R.drawable.seed;
+                break;
+            case 1:
+                iconResId = R.drawable.sprout;
+                break;
+            case 2:
+                iconResId = R.drawable.seedling;
+                break;
+            case 3:
+                iconResId = R.drawable.tree;
+                break;
+            case 5:
+                iconResId = R.drawable.grade1;
+                break;
+            default:
+                iconResId = R.drawable.grade1;
+                break;
+        }
+        gradeImageView.setImageResource(iconResId);
+    }
+
     private void loadUserPosts(String userId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("post");
 
@@ -121,7 +147,9 @@ public class Frag5User extends Fragment {
                 items.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     FeedViewItem item = dataSnapshot.getValue(FeedViewItem.class);
-                    items.add(item);
+                    if (item != null) {
+                        items.add(item);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -131,55 +159,8 @@ public class Frag5User extends Fragment {
                 // 처리 중단 또는 에러 처리
             }
         });
-
     }
 
-
-    //피드 아이템의 유저 이름으로 등급 검색, 검색된 등급을 피드의 등급에 저장하고 그걸로 뱃지 표시
-    public void setUserIconForGrade(FeedViewItem item){
-
-        String feedUserName = item.getUserName();
-        feedUserGrade = 5;
-
-        userDatabaseReference = database.getReference("users");
-        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    HashMap<String, String> value = (HashMap<String, String>)dataSnapshot.getValue();
-                    if(String.valueOf(feedUserName).equals(value.get("name"))){
-                        feedUserGrade = Integer.parseInt(value.get("grade"));
-                        item.setGrade(feedUserGrade);
-                        break;
-                    }
-                    else if(String.valueOf(feedUserName).equals("null")){
-                        feedUserGrade = 5;
-                        item.setGrade(feedUserGrade);
-                        break;
-                    }
-                }
-                if(feedUserGrade==0){
-                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seed, null));
-                }
-                else if (feedUserGrade==1) {
-                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.sprout, null));
-                }
-                else if (feedUserGrade==2) {
-                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.seedling, null));
-                }
-                else if (feedUserGrade==3) {
-                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.tree, null));
-                }
-                else if (feedUserGrade==5)
-                    item.setUserIcon(ResourcesCompat.getDrawable(requireActivity().getResources(), R.drawable.grade1, null));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     private void updateProfileInfo() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -194,6 +175,13 @@ public class Frag5User extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         User user = snapshot.getValue(User.class);
+
+                        String grade = snapshot.child("grade").getValue(String.class);
+                        if (grade != null) {
+                            int gradeInt = Integer.parseInt(grade);
+                            setUserIconForGrade(gradeInt);
+                        }
+
                         if (user != null) {
                             String nickname = user.getNickname();
                             String intro = user.getIntro();
