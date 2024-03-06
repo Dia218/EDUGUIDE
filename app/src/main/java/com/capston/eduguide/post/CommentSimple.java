@@ -1,22 +1,22 @@
 package com.capston.eduguide.post;
 
-import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -28,9 +28,15 @@ import com.capston.eduguide.Frag1Feed;
 import com.capston.eduguide.Frag4Notice;
 import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
-import com.capston.eduguide.guideTool.GuideTool;
-import com.capston.eduguide.notice.NotificationHelper;
+import com.capston.eduguide.guideTool.GuideFragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class CommentSimple extends Fragment {
@@ -38,18 +44,31 @@ public class CommentSimple extends Fragment {
     /*public static Comment newInstance(){
         return new Comment();
     }*/
-    private View view;
     private TextView main;
     private TextView tag;
     private TextView username;
+    LinearLayout commentInput;
     private ViewPager vp;
     private EditText comm;
     private Integer gradeInt;
     private ImageView userImage;
+    private String userName;
+    private String userEmail;
+    private Integer userGrade;
     private ImageView feedUserImage;
+    private String feedUserName;
+    private String fId;
 
-    private NotificationHelper notificationHelper;
+    private String title;
+
+    FeedViewItem item;
+    CommentSimpleAdapter adapter;
+    BannerPagerAdapter bpa;
+
     ArrayList<CommentItem> comments = new ArrayList<>();
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference DatabaseReference = firebaseDatabase.getReference("");
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,12 +76,16 @@ public class CommentSimple extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // 뒤로가기 버튼을 누르면 메인피드로 화면 전환
-                ((MainActivity)getActivity()).replaceFragment(new Frag1Feed());
+                // 뒤로가기 버튼을 누르면 메인피드로 화면 전환. 전환될 때 새로운 피드 객체를 생성하므로 번들로 userName과 grade 전달.
+                Bundle bundle = new Bundle();
+                bundle.putString("userEmail",userEmail);
+                Frag1Feed feed = new Frag1Feed();
+                feed.setArguments(bundle);
+                ((MainActivity) requireActivity()).replaceFragment(feed);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-        notificationHelper=new NotificationHelper(requireContext());
+
     }
 
     @Nullable
@@ -76,57 +99,141 @@ public class CommentSimple extends Fragment {
         comm = view.findViewById(R.id.commentDetail);
         feedUserImage = view.findViewById(R.id.feedUserImage);
         userImage = view.findViewById(R.id.userImage);
-        Button back = (Button)view.findViewById(R.id.back);
+        Button delete = (Button)view.findViewById(R.id.back);
         Button input = (Button) view.findViewById(R.id.commentInput);
+
+        //FeedViewAdapter에서 번들로 여러가지 값을 받아오고 저장.
         Bundle bundle = getArguments();
         if (getArguments() != null)
         {
-            String mainStr = bundle.getString("main_text"); // 피드에서 받아온 값 넣기
-            main.setText(mainStr);
+            userName = bundle.getString("userName");
+            userEmail = bundle.getString("userEmail");
+            String mainStr = bundle.getString("main_text");
             String tagStr = bundle.getString("tag_text");
+            String userName = bundle.getString("feedUser_name");
+            feedUserName = bundle.getString("feedUser_name");
+            title = bundle.getString("title_text");
+            main.setText(mainStr);
             tag.setText(tagStr);
-            String usernameStr = bundle.getString("user_name");
-            username.setText(usernameStr);
-            gradeInt =  bundle.getInt("user_grade");
+            username.setText(userName);
+            gradeInt =  bundle.getInt("feedUser_grade");
             feedUserImage.setImageResource(grade(gradeInt));
-            //사용자의 뱃지 이미지. 일단은 게시글 유저의 등급 받아옴 - 추후에 db에서 사용자의 등급 받아와야함
-            userImage.setImageResource(grade(gradeInt));
+            fId = bundle.getString("feedId");
+            userGrade = bundle.getInt("userGrade");
+            userImage.setImageResource(grade(userGrade));
         }
+
+        /*DatabaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()){
+                    HashMap<String, Object> user = (HashMap<String, Object>)userSnapshot.getValue();
+                    if(userEmail!=null) {
+                        if (userEmail.equals((String) user.get("email"))) {
+                            userName = (String)user.get("name");
+                            userGrade = Integer.parseInt((String) user.get("grade"));
+                            userImage.setImageResource(grade(userGrade));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+
+        //번들로 받아온 fId를 통해 오버라이딩한 생성자로 가이드객체 생성.
         vp = (ViewPager) view.findViewById(R.id.vp);
-        vp.setAdapter(new BannerPagerAdapter(getChildFragmentManager()));
+        bpa = new BannerPagerAdapter(getChildFragmentManager(),fId);
+        vp.setAdapter(bpa);
         vp.setCurrentItem(0);
 
-        back.setOnClickListener(new View.OnClickListener() {              //피드 메인으로 돌아가는 버튼 이벤트
+        //fId에 해당하는 댓글 전체 불러오기
+        ValueEventListener mListener = new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                //((MainActivity)getActivity()).replaceFragment(Frag1Feed.newInstance());
-                Frag1Feed feed = new Frag1Feed();
-                AppCompatActivity activity = (AppCompatActivity)v.getContext();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,feed).commit();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                comments.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    CommentItem comm = snapshot.getValue(CommentItem.class);
+                    comments.add(comm);
+                }
+                adapter.notifyDataSetChanged();
             }
-        });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        };
+        DatabaseReference.child("comment").child(fId).addValueEventListener(mListener);      //댓글 불러오기
 
         // 댓글 리사이클러뷰 참조
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.commentList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // 댓글 리사이클러뷰에 Adapter 객체 지정
-        CommentSimpleAdapter adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
+        adapter = new CommentSimpleAdapter(getContext(),comments,getChildFragmentManager());
+        adapter.setUserName(userName);
+        adapter.setFeedId(fId);
         recyclerView.setAdapter(adapter);
+
+        //유저 데이터가 존재하고 이름이 같을때만 삭제 버튼 활성화
+        if(userName!=null){
+            Log.d("//////////////", userName+"  "+feedUserName);
+            if(userName.equals(feedUserName)){
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        database.getReference().child("post").child(fId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                database.getReference().child("guide").child(fId).removeValue();
+                                database.getReference().child("comment").child(fId).removeValue();
+                                database.getReference().child("bookmark").child(userEmail.substring(0,userEmail.lastIndexOf("."))).child(fId).removeValue();
+                                database.getReference().child("like").child(userName).child(fId).removeValue();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("userEmail",userEmail);
+                                Frag1Feed feed = new Frag1Feed();
+                                feed.setArguments(bundle);
+                                ((MainActivity) requireActivity()).replaceFragment(feed);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) { Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show(); }
+                        });
+                    }
+                });
+            }
+            else{ delete.setVisibility(View.GONE); }
+        }
+        else{
+            Log.d("//////////////", String.valueOf(userName)+"  "+feedUserName);
+            delete.setVisibility(View.GONE);
+            input.setVisibility(View.GONE);
+            comm.setClickable(false);
+        }
 
         input.setOnClickListener(new View.OnClickListener() {                      //댓글 입력시 이벤트
             @Override
             public void onClick(View v) {
                 String comment = comm.getText().toString();
-                //유저 db가 생기면 db에서 데이터 받아오기. 현재는 게시글의 데이터 받아옴
-                String userId = bundle.getString("user_name");
-                Integer userGrade = bundle.getInt("user_grade");
+                String userName = bundle.getString("userName");;             //어댑터로 받아온 유저네임 등록
                 comm.setText("");
-                adapter.addComment(comments,ResourcesCompat.getDrawable(requireActivity().getResources(),grade(userGrade),null),userId,comment);
-                //comments.add(new CommentItem(ResourcesCompat.getDrawable(requireActivity().getResources(),grade(gradeInt),null), comment,userId));
+                adapter.addComment(comments,userName,comment);
                 adapter.notifyItemInserted(comments.size());
                 recyclerView.setAdapter(adapter);
 
+                //파이어베이스에 데이터 입력
+                DatabaseReference.child("comment").child(fId).setValue(comments);
+
+                //댓글 입력시 notice 데이터 저장
+                if(feedUserName!=userName) {
+                    DatabaseReference noticeRef = DatabaseReference.child("notice");
+                    DatabaseReference feedUserNameRef = noticeRef.child(feedUserName);
+                    DatabaseReference titleRef = feedUserNameRef.push();
+
+                    titleRef.setValue(title);
+                }
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -135,13 +242,33 @@ public class CommentSimple extends Fragment {
                     }
                 }, 200);
 
-                sendNotification(main.getText().toString(),userId);
 
                 //recyclerView.scrollToPosition(comments.size()-1);
             }
         });
-
         return view;
+    }
+    private class BannerPagerAdapter extends FragmentPagerAdapter {
+        GuideFragment guide;
+        String feedId;
+
+        public BannerPagerAdapter(FragmentManager fm,String feedId){
+            super(fm);
+            this.feedId = feedId;
+            //if(!MainActivity.getCurrentMenu().equals("posting"))
+            //getItem(0);
+        }
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            if(!(feedId.equals(""))){ guide = new GuideFragment(feedId); }
+            return guide;
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
     }
 
     @Override
@@ -150,55 +277,19 @@ public class CommentSimple extends Fragment {
     }
 
     private int grade(Integer gradeInt) {
-        if(gradeInt < 10)
-            return R.drawable.grade1;
-        else if(gradeInt < 20)
-            return R.drawable.grade1;
-        else if(gradeInt < 30)
-            return R.drawable.grade1;
-        else if(gradeInt < 40)
+        if(gradeInt == 0)
+            return R.drawable.seed;
+        else if(gradeInt == 1)
+            return R.drawable.sprout;
+        else if(gradeInt == 2)
+            return R.drawable.seedling;
+        else if(gradeInt == 3)
+            return R.drawable.tree;
+        else if(gradeInt == 5)
             return R.drawable.grade1;
         else
             return R.drawable.grade1;
     }
 
-    private class BannerPagerAdapter extends FragmentPagerAdapter {
 
-        public BannerPagerAdapter(FragmentManager fm){
-            super(fm);
-        }
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return GuideTool.newInstance(position);
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
-    }
-    private void sendNotification(String title,String userId){
-        String channelId="comment_channel";
-        String channelName="Comment Notification";
-        String channelDescription="Receive notification for new comments";
-        int notificationId=1;
-
-        notificationHelper.createNotificationChannel(channelId,channelName,channelDescription);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(),channelId)
-                .setContentTitle(title)
-                .setContentText("게시글에 새로운 댓글이 달렸습니다")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true);
-
-        NotificationManager notificationManager = notificationHelper.getNotificationManager();
-        notificationManager.notify(notificationId,builder.build());
-
-        Frag4Notice noticeFragment = (Frag4Notice) getChildFragmentManager().findFragmentByTag("noticeFragment");
-        if (noticeFragment != null) {
-            String noticeMessage = "'" + title + "' 게시글에 새로운 댓글이 달렸습니다";
-            noticeFragment.updateNotice(noticeMessage);
-        }
-    }
 }

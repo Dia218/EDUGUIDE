@@ -11,7 +11,9 @@
     <color name="gray">#808080</color>
     <color name="dark_gray">#555555</color>
 
-	<color name="mainColor">#FF16163E</color>
-	<color name="guideColor">#FFBDD7EE</color>
 	<color name="emptyColor">#00FFFFFF</color>
+    <color name="background_color">#EDF1D6</color>
+    <color name="text_color">#40513B</color>
+    <color name="button_color">#AFCAA1</color>
+    <color name="comment_color">#609966</color>
 </resources>

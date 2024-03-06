@@ -6,7 +6,8 @@
     android:layout_margin="5dp"
     android:background="@drawable/stroke"
     android:padding="3dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:backgroundTint="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,14 +17,17 @@
         <ImageView
             android:id="@+id/feedUserImage"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_margin="5dp"/>
 
         <TextView
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="TextView" />
+            android:textColor="@color/text_color"
+            android:text="유저 아이디"
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
@@ -36,85 +40,79 @@
 
     </com.capston.eduguide.post.MeasuredViewPager>
 
-
-    <!--<ImageView
-        android:id="@+id/guideImage"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>-->
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/like_button"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentLeft="true"
-                    android:background="@drawable/post_like_icon"/>
-                <TextView
-                    android:id="@+id/like_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/like_button"
-                    android:text="0"/>
-                <Button
-                    android:id="@+id/bookmark_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_toRightOf="@id/like_count"
-                    android:background="@drawable/post_bookmark_icon"/>
-                <TextView
-                    android:id="@+id/bookmark_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/bookmark_button"
-                    android:text="0"/>
-                <!--<Button
-                    android:id="@+id/delete_feed"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
-                    android:text="삭제"/>-->
-            </RelativeLayout>
-
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/like_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/post_like_icon"/>
             <TextView
-                android:id="@+id/guideTitle"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-
-                android:gravity="center_vertical"
-                android:text="Title text"
-                android:textColor="#000000"
-                android:textSize="22sp" />
-
-            <!--<TextView
-                android:id="@+id/guideDesc"
-                android:layout_width="match_parent"
+                android:id="@+id/like_count"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:gravity="center_vertical"
-                android:text="guide desc/ 가이드에 대한 설명 추가\n\n"
-                android:textColor="#000000"
-                android:textSize="18sp" />-->
-
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/like_button"
+                android:text="0"/>
+            <Button
+                android:id="@+id/bookmark_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@id/like_count"
+                android:background="@drawable/post_bookmark_icon"/>
             <TextView
-                android:id="@+id/tag"
-                android:layout_width="match_parent"
+                android:id="@+id/bookmark_count"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#tag1 #tag2"
-                android:textColor="#666666"
-                android:textSize="16sp" />
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/bookmark_button"
+                android:text="0"/>
+            <!--<Button
+                android:id="@+id/delete_feed"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:text="삭제"/>-->
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/guideTitle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+
+            android:gravity="center_vertical"
+            android:text="Title text"
+            android:textColor="@color/text_color"
+            android:textSize="22sp" />
+
+        <!--<TextView
+            android:id="@+id/guideDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center_vertical"
+            android:text="guide desc/ 가이드에 대한 설명 추가\n\n"
+            android:textColor="#000000"
+            android:textSize="18sp" />-->
+
+        <TextView
+            android:id="@+id/tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="#tag1 #tag2"
+            android:textColor="@color/comment_color"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

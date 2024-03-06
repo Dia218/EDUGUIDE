@@ -5,12 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-
 import androidx.fragment.app.Fragment;
-
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClickListenr {
@@ -34,6 +32,11 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
     private RecyclerView recyclerView;
     private SearchView searchView;
     private SearchAdapter adapter;
+
+    String userEmail;
+    String userName;
+
+    Integer userGrade;
 
     public Frag2Search() {
 
@@ -68,6 +71,13 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                 return true;
             }
         });
+        Bundle bundle = getArguments();
+        if (userEmail == null){
+            if(bundle.getString("userEmail")!= null) {
+                userEmail = bundle.getString("userEmail");
+                callUserName();
+            }
+        }
 
         return view;
     }
@@ -76,12 +86,15 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
         Fragment fragment = new CommentSimple();
 
         Bundle bundle = new Bundle();
-        bundle.putString("position",searchItem.getPostId());
+        bundle.putString("feedId",searchItem.getPostId());
         bundle.putString("title_text",searchItem.getTitle());
         bundle.putString("tag_text",searchItem.getTag());
         bundle.putString("main_text",searchItem.getDescription());
-        bundle.putString("user_name", searchItem.getUserId());
-
+        bundle.putString("feedUser_name", searchItem.getUserId());
+        bundle.putInt("feedUser_grade",searchItem.getGrade());
+        bundle.putString("userEmail",userEmail);
+        bundle.putInt("userGrade",userGrade);
+        bundle.putString("userName",userName);
         fragment.setArguments(bundle);
 
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -108,18 +121,17 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                             if(tag!=null&& tag.contains(query.toLowerCase())){
                                 String title=snapshot.child("title").getValue(String.class);
                                 String postId=snapshot.getKey();
-                                String description = snapshot.child("description").getValue(String.class);
-                                String userId = snapshot.child("userId").getValue(String.class);
-                                Log.d("testing1","태그:"+tag+"제목:"+title+postId);
-                                SearchItem searchItem=new SearchItem(postId,title,tag,description,userId);
-                                searchItems.add(searchItem);
+                                String description = snapshot.child("text").getValue(String.class);
+                                String userId = snapshot.child("userName").getValue(String.class);
+                                Integer grade=snapshot.child("grade").getValue(Integer.class);
 
-                                Log.d("testing2", String.valueOf(searchItems));
+                                SearchItem searchItem=new SearchItem(postId,title,tag,description,userId,grade);
+                                searchItems.add(searchItem);
                             }
                         }
-                        Log.d("testing3", String.valueOf(searchItems));
+
                         adapter.setSearchItems(searchItems);
-                        Log.d("testingp", "검색 결과 개수: " + searchItems.size());
+
 
                     }
                     @Override
@@ -127,5 +139,35 @@ public class Frag2Search extends Fragment{ //implements SearchAdapter.OnItemClic
                         Log.e("Frag2Search","onCancelled",databaseError.toException());
                     }
                 });
+    }
+    public void callUserName(){
+
+        if(userEmail != null){
+            databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        HashMap<String, String> value = (HashMap<String, String>)dataSnapshot.getValue();
+                        if(userEmail.equals(value.get("email"))){
+                            userName = value.get("name");
+                            userGrade = Integer.parseInt(value.get("grade"));
+
+                        }
+                    }
+                    if(userName == null){
+                        userName = "";
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else{
+            userName = "";
+        }
     }
 }

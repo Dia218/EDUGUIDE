@@ -1,18 +1,14 @@
 package com.capston.eduguide.search;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.eduguide.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +40,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     @Override
     public void onBindViewHolder(@NonNull SearchViewHolder holder,int position){
         SearchItem searchItem =searchItems.get(position) ;
-        Log.d("SearchAdapter", "onBindViewHolder: " + searchItem.getTitle() + ", " + searchItem.getTag());
         holder.bind(searchItem);
-        Log.d("SearchAdapter", "onBindViewHolder position: " + position);
         holder.itemView.setOnClickListener(v-> onItemClickListener.onItemClick(searchItem));
     }
     public int getItemCount(){

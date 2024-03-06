@@ -1,35 +1,49 @@
 package com.capston.eduguide.login;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.capston.eduguide.MainActivity;
 import com.capston.eduguide.R;
-import com.capston.eduguide.db.DatabaseHelper;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button loginButton;
-    Button signUpButton;
+    private FirebaseAuth mAuth = null;
+    private EditText etEmail, etPassword;
+    private Button btnLogin, btnSignUp;
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 9001;
+    //private Button signInButton;
 
-    EditText id;
-    EditText password;
-
-    String userId;
-
-    boolean userExit;
-
-    SQLiteDatabase userDB;
-    DatabaseHelper helper;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,59 +51,152 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_log_in_form);
 
-        helper = new DatabaseHelper(this, "userDB", null, 1);
+        mAuth = FirebaseAuth.getInstance();
+        SignInButton signInButton = findViewById(R.id.btn_google_sign_in); //구글 로그인 버튼
 
-        loginButton = (Button) findViewById(R.id.btn_login);
-        signUpButton = (Button) findViewById(R.id.btn_go_signUp);
-
-        id = (EditText) findViewById(R.id.login_id);
-        password = (EditText) findViewById(R.id.login_password);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        //로그인
+        btnLogin = findViewById(R.id.btn_login);
+        etEmail = findViewById(R.id.login_email);
+        etPassword = findViewById(R.id.login_password);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userExit = false;
-
-                String isID = id.getText().toString().trim();
-                String isPass = password.getText().toString().trim();
-
-                if (isID.length() > 4 && isPass.length() > 4) {
-                    searchData(isID, isPass);
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        intent.putExtra("userEmail", email);
+                                        //startActivity(intent);
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 } else {
-                    Toast.makeText(LoginActivity.this, "입력이 잘못되었습니다", Toast.LENGTH_SHORT).show();
-                }
-
-                if (userExit) {
-                    Intent intent = new Intent();
-                    intent.putExtra("userId", userId);
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "아이디 혹은 비밀번호가" + "없거나 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        //회원가입으로 이동
+        btnSignUp = findViewById(R.id.btn_go_signUp);
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }
         });
-    }
 
-    public void searchData (String isID, String isPass){
-        userDB = helper.getReadableDatabase();
-        String sql = ("select userId, password from userTBL where userId=? and password=?");
-        Cursor cursor = userDB.rawQuery(sql, new String[] {isID, isPass});
+        Glide.with(this)
+                .load("http://goo.gl/gEgYUd")
+                .override(300, 200)
+                .fitCenter();
 
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            userId = cursor.getString(0);
-            userExit = true;
+
+        if (mAuth.getCurrentUser() != null) {
+            Intent intent = new Intent();
+            Log.d("유저 정보 테스트",mAuth.getCurrentUser().getEmail());
+            intent.putExtra("userEmail", mAuth.getCurrentUser().getEmail());
+            setResult(RESULT_OK, intent);
+            finish();
         }
-        userExit = true; //로그인 강제 성공 코드
-        cursor.close(); // cursor를 닫아주는 코드
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
+
+
     }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(…);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user
+                            updateUI(null);
+                        }
+                    }
+                });
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            String id = user.getUid();
+            String email = user.getEmail();
+            String name = user.getDisplayName();
+
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+            Query query = userRef.orderByChild("email").equalTo(email);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (!snapshot.exists()) {
+                        // User is not registered, create a new user
+                        User newUser = new User(id, "", email, "", name, "");
+                        newUser.setGrade("0");
+                        newUser.saveToFirebase();
+                    }
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("userEmail", email);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Error handling
+                }
+            });
+        }
+    }
+
 }
